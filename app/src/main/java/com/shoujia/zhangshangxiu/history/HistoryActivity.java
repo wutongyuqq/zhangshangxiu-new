@@ -1,5 +1,6 @@
 package com.shoujia.zhangshangxiu.history;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,16 +18,20 @@ import android.widget.TextView;
 
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseActivity;
+import com.shoujia.zhangshangxiu.car.CarListActivity;
 import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.entity.ManageInfo;
 import com.shoujia.zhangshangxiu.entity.OrderBean;
 import com.shoujia.zhangshangxiu.history.adapter.HistoryListAdapter;
 import com.shoujia.zhangshangxiu.history.help.HistoryDataHelper;
 import com.shoujia.zhangshangxiu.manager.help.ManageDataHelper;
+import com.shoujia.zhangshangxiu.order.ProjectOrderActivity;
 import com.shoujia.zhangshangxiu.order.adapter.WxgzListAdapter;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
+import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.DateUtil;
+import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
 import com.shoujia.zhangshangxiu.view.CustomDatePicker;
 
@@ -60,6 +65,7 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 	}
 
 	private void initView() {
+
 		mInfoList = new ArrayList<>();
 		navSupport = new NavSupport(this,19);
 		mListview = findViewById(R.id.listview);
@@ -76,6 +82,20 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 		select_date_end.setOnClickListener(this);
 		query_btn.setOnClickListener(this);
 		select_gz.setOnClickListener(this);
+		mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				ManageInfo info = mInfoList.get(i);
+				SharePreferenceManager sp = new SharePreferenceManager(HistoryActivity.this);
+				sp.putString(Constance.JSD_ID,info.getJsd_id());
+				sp.putString(Constance.CHEJIAHAO,info.getCjhm());
+				sp.putString(Constance.CURRENTCP,info.getCp());
+				sp.putString(Constance.CHEXING,info.getCx());
+				sp.putString(Constance.JIECHEDATE,info.getJc_date());
+				sp.putString(Constance.YUWANGONG,info.getYwg_date());
+				startActivity(new Intent(HistoryActivity.this,ProjectOrderActivity.class));
+			}
+		});
 	}
 
 	//初始化数据

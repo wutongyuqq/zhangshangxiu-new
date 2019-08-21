@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dp"
+                android:paddingLeft="5dp"
                 android:textColor="#ffffff"
                 android:textSize="12sp" />
 
@@ -54,8 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="5dp"
                 android:textColor="#ffffff"
+                android:paddingLeft="5dp"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>

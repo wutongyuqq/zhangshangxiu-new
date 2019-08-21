@@ -1421,7 +1421,7 @@ public class DBManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         db.beginTransaction();
         try {
-            String sql = "SELECT  distinct wxgz  FROM " + DBHelper.MANAGER_INFO_TABLE_NAME;
+            String sql = "SELECT  distinct wxgz  FROM " + DBHelper.FIRST_ICON_TABLE_NAME;
             Cursor cursor = db.rawQuery(sql, null, null);//db.query(DBHelper.TABLE_NAME,null,nameStr,typeArr,null,null,"watch_num",limit);
             //String sql = "select * from "+DBHelper.TABLE_NAME+" where videotype";
             //Cursor cursor = db.rawQuery()

@@ -285,7 +285,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void rightBtnClick() {
                 deletePeijianData(position);
-                mPeijianAdapter.notifyDataSetChanged();
+                //mPeijianAdapter.notifyDataSetChanged();
             }
         });
         dialog.show();

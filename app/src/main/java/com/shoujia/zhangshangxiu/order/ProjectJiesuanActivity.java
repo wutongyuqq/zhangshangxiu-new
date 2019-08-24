@@ -302,7 +302,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
          */
 
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("db", "sjsoft_SQL");
         dataMap.put("function", "sp_fun_check_service_validity");
         dataMap.put("data_source", sp.getString(Constance.FACTORYNAME));
         dataMap.put("operater_code", sp.getString(Constance.USERNAME));
@@ -450,6 +450,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
                     printData();
                 break;
             case R.id.cancle_jiesuan:
+                finish();
                 break;
             default:
 

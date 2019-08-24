@@ -60,7 +60,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     private ListView listview;
     private List<ManageInfo> manageInfos;
     private LinearLayout select_all;
-    private TextView tv_linggong,tv_hr,tv_jr,tv_tg,tv_sgwb,tv_qxjy,tv_go_tender,tv_jytg,tv_fg;
+    private TextView tv_linggong,tv_hr,tv_jr,tv_tg,tv_sgwb,tv_qxjy,tv_go_tender,tv_jytg,tv_fg,tv_tzpg;
     private String mStates;
     private int mCurIndex;
     LinearLayout first_page,second_page,third_page,fourth_page;
@@ -107,6 +107,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         tv_sgwb = findViewById(R.id.tv_sgwb);
         tv_qxjy = findViewById(R.id.tv_qxjy);
         tv_jytg = findViewById(R.id.tv_jytg);
+        tv_tzpg = findViewById(R.id.tv_tzpg);
         tv_go_tender = findViewById(R.id.tv_go_tender);
         tv_fg = findViewById(R.id.tv_fg);
         mAdapter = new ManagerLinggongAdapter(this,manageInfos);
@@ -129,6 +130,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         tv_go_tender.setOnClickListener(this);
         tv_jytg.setOnClickListener(this);
         tv_fg.setOnClickListener(this);
+        tv_tzpg.setOnClickListener(this);
         mStates = getIntent().getStringExtra("state");
         mCurIndex = getIntent().getIntExtra("curIndex",0);
         setViewVisible();
@@ -272,10 +274,17 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
                 case R.id.tv_fg:
                 fanGong();
                 break;
+                case R.id.tv_tzpg:
+                toPaigong();
+                break;
             default:
 
                 break;
         }
+    }
+
+    private void toPaigong() {
+        startActivity(new Intent(this,ProjectPaigongActivity.class));
     }
 
     private void fanGong() {

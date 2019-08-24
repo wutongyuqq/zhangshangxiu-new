@@ -83,6 +83,16 @@ public class TabSupport implements View.OnClickListener{
         iv_four_txt.setTextColor(mFromType==4?Color.parseColor("#60b9e7"):Color.parseColor("#898989"));
         iv_five_txt.setTextColor(mFromType==5?Color.parseColor("#60b9e7"):Color.parseColor("#898989"));
     }
+
+    public void chooseManagerTab(){
+        setTabImage(2);
+        ((HomeActivity)mActivity).setTittle("车间管理");
+        ((HomeActivity)mActivity).getSupportFragmentManager()    //
+                .beginTransaction()
+                .replace(R.id.fragment_tab,fragmentList.get(1))   // 此处的R.id.fragment_container是要盛放fragment的父容器
+                .commit();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

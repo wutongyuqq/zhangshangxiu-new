@@ -25,6 +25,7 @@ import com.shoujia.zhangshangxiu.entity.PartsBean;
 import com.shoujia.zhangshangxiu.entity.PeijianBean;
 import com.shoujia.zhangshangxiu.entity.ProjectBean;
 import com.shoujia.zhangshangxiu.entity.RepairInfo;
+import com.shoujia.zhangshangxiu.home.HomeActivity;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.order.adapter.PeijianOrderProAdapter;
@@ -54,6 +55,7 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
     private ProjectOrderPaigongAdapter mAdapter;
     List<PaigongInfo> mPaigongList;
     private String choosePersonStr="";
+    TextView car_manager;
 
 
     @Override
@@ -73,10 +75,13 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
 
         listview = findViewById(R.id.listview);
         TextView tv_pg = findViewById(R.id.tv_pg);
+        TextView car_manager = findViewById(R.id.car_manager);
+
         mPaigongList = new ArrayList<>();
         mAdapter = new ProjectOrderPaigongAdapter(this,mPaigongList);
         listview.setAdapter(mAdapter);
         tv_pg.setOnClickListener(this);
+        car_manager.setOnClickListener(this);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -177,6 +182,11 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
                 });
 
                 dialog.show();
+                break;
+            case R.id.car_manager:
+                Intent intent = new Intent(ProjectPaigongActivity.this,HomeActivity.class);
+                intent.putExtra("from","paigong");
+                startActivity(intent);
                 break;
             default:
 

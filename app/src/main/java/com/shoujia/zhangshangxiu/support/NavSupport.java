@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shoujia.zhangshangxiu.R;
+import com.shoujia.zhangshangxiu.home.HomeActivity;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 
@@ -35,8 +36,10 @@ public class NavSupport  implements View.OnClickListener{
         left_btn.setOnClickListener(this);
         if(mFromType==1){
             setTittle("车辆接待");
+            setLeftBtnVisible(false);
         }else if(mFromType==2){
             setTittle("业务导航");
+            setLeftBtnVisible(true);
         }else if(mFromType==3){
             setTittle("在厂车辆");
             setLeftBtnVisible(true);
@@ -69,10 +72,10 @@ public class NavSupport  implements View.OnClickListener{
             setLeftBtnVisible(true);
         }else if(mFromType==16){
             setTittle("项目选择");
-            setLeftBtnVisible(false);
+            setLeftBtnVisible(true);
         }else if(mFromType==17){
             setTittle("领工");
-            setLeftBtnVisible(false);
+            setLeftBtnVisible(true);
         }else if(mFromType==18){
             setTittle("工单查询");
             setLeftBtnVisible(true);
@@ -84,6 +87,8 @@ public class NavSupport  implements View.OnClickListener{
 
     public void setLeftBtnVisible(boolean isVisible){
         left_btn.setVisibility(isVisible?View.VISIBLE:View.GONE);
+        right_btn.setVisibility(isVisible?View.VISIBLE:View.GONE);
+
     }
 
 
@@ -100,9 +105,17 @@ public class NavSupport  implements View.OnClickListener{
         Intent intent;
         switch (view.getId()) {
 
-
             case R.id.left_btn:
                 mActivity.finish();
+                break;
+
+            case R.id.right_btn:
+                intent = new Intent(mActivity,HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                mActivity.startActivity(intent);
+                if(mActivity!=null) {
+                    mActivity.finish();
+                }
                 break;
             default:
                 break;

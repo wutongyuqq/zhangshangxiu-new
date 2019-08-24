@@ -2,6 +2,7 @@ package com.shoujia.zhangshangxiu.home;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -41,17 +42,22 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home);
 
-		new TabSupport(this);
+		TabSupport tabSupport = new TabSupport(this);
 		navSupport = new NavSupport(this,1);
 		//initData();
 		final RelativeLayout root_view = findViewById(R.id.root_view);
 		final RelativeLayout rl_bottom = findViewById(R.id.rl_bottom);
 		final LinearLayout ll_top_title = findViewById(R.id.ll_top_title);
-		LinearLayout fragment_tab = findViewById(R.id.fragment_tab);
-		getSupportFragmentManager()    //
-				.beginTransaction()
-				.add(R.id.fragment_tab,new HomeZsxFragment())   // 此处的R.id.fragment_container是要盛放fragment的父容器
-				.commit();
+		String fromStr = getIntent().getStringExtra("from");
+		if(!TextUtils.isEmpty(fromStr)&&fromStr.equals("paigong")){
+			tabSupport.chooseManagerTab();
+
+		}else {
+			getSupportFragmentManager()    //
+					.beginTransaction()
+					.add(R.id.fragment_tab, new HomeZsxFragment())   // 此处的R.id.fragment_container是要盛放fragment的父容器
+					.commit();
+		}
 
 		root_view.getViewTreeObserver().addOnGlobalLayoutListener(
 				new ViewTreeObserver.OnGlobalLayoutListener(){

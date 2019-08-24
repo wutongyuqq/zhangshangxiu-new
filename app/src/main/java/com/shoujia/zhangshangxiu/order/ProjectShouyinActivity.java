@@ -503,6 +503,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
         dataMap.put("czy", sp.getString(Constance.USERNAME));
         dataMap.put("ysje", mShouyinBean.zje);
+        dataMap.put("plate_number", sp.getString(Constance.CURRENTCP));
         dataMap.put("yhje",totalZk);
         dataMap.put("sxf", Util.getDoubleStr(sxf+""));
         dataMap.put("ssje",  Util.getDoubleStr(ssje+""));

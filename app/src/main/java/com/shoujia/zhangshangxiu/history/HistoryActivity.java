@@ -104,7 +104,7 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 		String endDate = DateUtil.getCurrentDate();
 		String startDate = endDate.substring(0,endDate.length()-2)+"01";
 		select_date_end.setText(endDate);
-		select_date_start.setText(startDate);
+		select_date_start.setText("2017-01-01");
     	getData();
 		getWxgzList();
 	}

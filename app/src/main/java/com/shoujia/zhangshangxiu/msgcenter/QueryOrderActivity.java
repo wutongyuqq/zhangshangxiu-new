@@ -143,7 +143,9 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 				mTotalBeans = orderBeans;
 				mOrderBeans.clear();
 				mOrderBeans.addAll(orderBeans);
-				mHandler.sendEmptyMessage(2);
+				if(mHandler!=null) {
+                    mHandler.sendEmptyMessage(2);
+                }
 			}
 		});
 	}

@@ -114,6 +114,7 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 	@Override
 	protected void updateUIThread(int msgInt){
 		if(msgInt==302){
+			dismissDialog();
 			String gzStr = select_gz.getText().toString();
 			if(mQueryType != 0){
 				mInfoList.clear();
@@ -132,6 +133,7 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 
 	private void getData(){
 		mInfoList.clear();
+		showDialog(this);
 		HistoryDataHelper carDataHelper = new HistoryDataHelper(this);
 		carDataHelper.setPreZero();
 		String startDate = select_date_start.getText().toString();
@@ -151,6 +153,11 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 					mHandler.sendEmptyMessage(302);
 				}
 
+			}
+
+			@Override
+			public void onFail() {
+				mHandler.sendEmptyMessage(302);
 			}
 		});
 	}
@@ -196,7 +203,6 @@ private void getWxgzList(){
 
 
 	private void initPopWindow(){
-
 
 		// 用于PopupWindow的View
 		View contentView=LayoutInflater.from(this).inflate(R.layout.popwindow_bank_rate, null, false);

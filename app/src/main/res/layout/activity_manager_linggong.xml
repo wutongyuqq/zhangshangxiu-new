@@ -24,6 +24,7 @@
                 android:background="@drawable/car_bk_yel"
                 >
                 <TextView
+                    android:id="@+id/cp_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -67,12 +68,14 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#666666"
                     android:text="进厂时间：2019-06-15"/>
 
                 <TextView
+                    android:id="@+id/end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#666666"

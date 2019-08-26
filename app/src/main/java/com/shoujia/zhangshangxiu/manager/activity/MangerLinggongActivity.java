@@ -60,7 +60,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     private ListView listview;
     private List<ManageInfo> manageInfos;
     private LinearLayout select_all;
-    private TextView tv_linggong,tv_hr,tv_jr,tv_tg,tv_sgwb,tv_qxjy,tv_go_tender,tv_jytg,tv_fg,tv_tzpg;
+    private TextView tv_linggong,tv_hr,tv_jr,tv_tg,tv_sgwb,tv_qxjy,tv_go_tender,tv_jytg,tv_fg,cp_name,start_time,end_time,tv_tzpg;
     private String mStates;
     private int mCurIndex;
     LinearLayout first_page,second_page,third_page,fourth_page;
@@ -107,9 +107,12 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         tv_sgwb = findViewById(R.id.tv_sgwb);
         tv_qxjy = findViewById(R.id.tv_qxjy);
         tv_jytg = findViewById(R.id.tv_jytg);
-        tv_tzpg = findViewById(R.id.tv_tzpg);
         tv_go_tender = findViewById(R.id.tv_go_tender);
         tv_fg = findViewById(R.id.tv_fg);
+        tv_tzpg = findViewById(R.id.tv_tzpg);
+        cp_name.setText(sp.getString(Constance.CURRENTCP));
+        start_time.setText("进厂时间："+sp.getString(Constance.JIECHEDATE));
+        end_time.setText("预计提车："+sp.getString(Constance.YUWANGONG));
         mAdapter = new ManagerLinggongAdapter(this,manageInfos);
         listview.setAdapter(mAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -133,6 +136,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         tv_tzpg.setOnClickListener(this);
         mStates = getIntent().getStringExtra("state");
         mCurIndex = getIntent().getIntExtra("curIndex",0);
+
         setViewVisible();
     }
 
@@ -165,7 +169,9 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<ManageInfo> projectBeans = JSONArray.parseArray(dataArray.toJSONString(), ManageInfo.class);
                     manageInfos.addAll(projectBeans);
-                    mHandler.sendEmptyMessage(100);
+                    if(mHandler!=null) {
+                        mHandler.sendEmptyMessage(100);
+                    }
                 } else {
                     if(resMap.get("msg")!=null) {
                         toastMsg = (String) resMap.get("msg");

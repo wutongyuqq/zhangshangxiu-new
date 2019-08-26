@@ -40,7 +40,7 @@ public class BaseActivity extends Activity implements OnClickListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHandler = null;
+       // mHandler = null;
     }
 
     protected class MyHandler extends Handler{

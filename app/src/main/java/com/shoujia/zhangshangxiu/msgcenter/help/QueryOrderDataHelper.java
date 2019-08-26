@@ -36,13 +36,14 @@ public class QueryOrderDataHelper extends BaseHelper {
 
     }
 
-    //获取车辆数据
+    //获取车辆数据？？？？？？
+
     public void getListData(String dates,String datee, final GetDataListener listener){
         String[] strArr = {"待领工","修理中","待质检","已完工"};
 
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_query_repair_history");
+        dataMap.put("function", "c");
         dataMap.put("company_code", sp.getString(Constance.COMP_CODE));
         dataMap.put("dates",dates);
         dataMap.put("datee", datee);

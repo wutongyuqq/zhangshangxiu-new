@@ -75,6 +75,7 @@ public class HistoryDataHelper extends BaseHelper {
 
             @Override
             public void onFail() {
+                dataListener.onFail();
 
             }
         });
@@ -87,5 +88,6 @@ public class HistoryDataHelper extends BaseHelper {
     public interface GetDataListener{
         public static final int TYPE_UN_IN = 1;//车辆已进厂未完工
         void getData(List<ManageInfo> manageInfoList);
+        void onFail();
     }
 }

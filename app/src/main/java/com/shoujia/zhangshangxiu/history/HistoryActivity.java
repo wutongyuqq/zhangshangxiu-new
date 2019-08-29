@@ -142,15 +142,7 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 		mInfoList.clear();
 		showDialog(this);
 		HistoryDataHelper carDataHelper = new HistoryDataHelper(this);
-		carDataHelper.setPreZero();
-		String startDate = select_date_start.getText().toString();
-		String endDate = select_date_end.getText().toString();
-		String startDateStr = startDate+" 00:00:00";
-		String endDateStr = endDate+" 23:59:59";
-		if(typeStr==null){
-			typeStr="";
-		}
-		carDataHelper.getCardList(typeStr,startDateStr, endDateStr,new HistoryDataHelper.GetDataListener() {
+		carDataHelper.setPreZero(new HistoryDataHelper.GetDataListener() {
 			@Override
 			public void getData(List<ManageInfo> manageInfoList) {
 				if(manageInfoList!=null) {
@@ -167,6 +159,14 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 				mHandler.sendEmptyMessage(302);
 			}
 		});
+		String startDate = select_date_start.getText().toString();
+		String endDate = select_date_end.getText().toString();
+		String startDateStr = startDate+" 00:00:00";
+		String endDateStr = endDate+" 23:59:59";
+		if(typeStr==null){
+			typeStr="";
+		}
+		carDataHelper.getCardList(startDateStr, endDateStr);
 	}
 
     @Override

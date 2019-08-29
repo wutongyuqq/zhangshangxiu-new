@@ -26,8 +26,8 @@ public class QueryOrderDataHelper extends BaseHelper {
     private String pre_row_number = "0";
     private  List<OrderBean> manageInfos;
 
-
-
+    List<OrderBean> mManageInfos;
+    GetDataListener mDataListener;
     public QueryOrderDataHelper(Activity activity){
         super(activity);
         this.mActivity = activity;
@@ -36,17 +36,31 @@ public class QueryOrderDataHelper extends BaseHelper {
 
     }
 
-    //获取车辆数据？？？？？？
 
-    public void getListData(String dates,String datee, final GetDataListener listener){
-        String[] strArr = {"待领工","修理中","待质检","已完工"};
+    public void setPreZero(GetDataListener dataListener){
+        manageInfos.clear();
+        pre_row_number = "0";
+        this.mDataListener = dataListener;
+    }
+
+
+
+    //获取车辆数据
+    public void getListData(final String dates,final String datee){
+        if(pre_row_number!=null&&pre_row_number.equals("end")){
+            if(mDataListener!=null){
+                mDataListener.getData(manageInfos);
+                return;
+            }
+        }
 
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "c");
+        dataMap.put("function", "sp_fun_query_repair_history");
         dataMap.put("company_code", sp.getString(Constance.COMP_CODE));
         dataMap.put("dates",dates);
         dataMap.put("datee", datee);
+        dataMap.put("pre_row_number", pre_row_number);
 
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
@@ -54,12 +68,16 @@ public class QueryOrderDataHelper extends BaseHelper {
             public void onSuccess(String json) {
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
+                pre_row_number = (String) resMap.get("pre_row_number");
                 if ( "ok".equals(state)) {
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<OrderBean> dataList = JSONArray.parseArray(dataArray.toJSONString(),OrderBean.class);
                     manageInfos.addAll(dataList);
-                    listener.getData(manageInfos);
+                }else{
+                    pre_row_number = "end";
                 }
+
+                getListData(dates,datee);
             }
 
             @Override
@@ -76,4 +94,5 @@ public class QueryOrderDataHelper extends BaseHelper {
     public interface GetDataListener{
         void getData(List<OrderBean> manageInfos);
     }
+
 }

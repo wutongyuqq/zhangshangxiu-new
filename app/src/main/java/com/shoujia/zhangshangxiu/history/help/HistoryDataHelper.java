@@ -23,35 +23,24 @@ public class HistoryDataHelper extends BaseHelper {
 
     private SharePreferenceManager sp;
     private String pre_row_number="0";
-    private List<ManageInfo> manageInfos;
-
+     GetDataListener mDataListener;
 
 
     public HistoryDataHelper(Activity activity){
         super(activity);
         this.mActivity = activity;
         sp = new SharePreferenceManager(mActivity);
-        manageInfos = new ArrayList<>();
     }
 
-    public void setPreZero(){
-        manageInfos.clear();
+    public void setPreZero(GetDataListener dataListener){
         pre_row_number = "0";
+        this.mDataListener = dataListener;
     }
 
 
     //获取车辆数据
-    public void getCardList(final String chooseName,String startDateStr, String endDateStr,final GetDataListener dataListener){
+    public void getCardList(final String startDateStr, final String endDateStr){
 
-
-        /*
-        *
-        *   db: locals.get("Data_Source_name"),
-            function: "sp_fun_down_repair_history",
-            customer_id: carInfo.customer_id,
-            dates: startData,
-            datee: endData
-        * */
 
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
@@ -71,7 +60,7 @@ public class HistoryDataHelper extends BaseHelper {
 
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<ManageInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(),ManageInfo.class);
-                    dataListener.getData(dataList);
+                    mDataListener.getData(dataList);
                 }
             }
 

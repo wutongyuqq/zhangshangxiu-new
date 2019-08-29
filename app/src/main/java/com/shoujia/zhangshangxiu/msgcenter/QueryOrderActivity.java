@@ -137,7 +137,7 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 		String startDateStr = startDate+" 00:00:00";
 		String endDateStr = endDate+" 23:59:59";
 		QueryOrderDataHelper helper = new QueryOrderDataHelper(this);
-		helper.getListData(startDateStr,endDateStr,new QueryOrderDataHelper.GetDataListener() {
+		helper.setPreZero(new QueryOrderDataHelper.GetDataListener() {
 			@Override
 			public void getData(List<OrderBean> orderBeans) {
 				mTotalBeans = orderBeans;
@@ -146,6 +146,7 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 				mHandler.sendEmptyMessage(2);
 			}
 		});
+		helper.getListData(startDateStr,endDateStr);
 	}
 
 

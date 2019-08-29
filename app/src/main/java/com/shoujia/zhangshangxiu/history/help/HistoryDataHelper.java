@@ -23,53 +23,44 @@ public class HistoryDataHelper extends BaseHelper {
 
     private SharePreferenceManager sp;
     private String pre_row_number="0";
-    private List<ManageInfo> manageInfos;
-
+     GetDataListener mDataListener;
 
 
     public HistoryDataHelper(Activity activity){
         super(activity);
         this.mActivity = activity;
         sp = new SharePreferenceManager(mActivity);
-        manageInfos = new ArrayList<>();
     }
 
-    public void setPreZero(){
-        manageInfos.clear();
+    public void setPreZero(GetDataListener dataListener){
         pre_row_number = "0";
+        this.mDataListener = dataListener;
     }
 
 
     //获取车辆数据
-    public void getCardList(final String chooseName,String startDateStr, String endDateStr,final GetDataListener dataListener){
+    public void getCardList(final String startDateStr, final String endDateStr){
 
 
-        /*
-        *
-        *   db: locals.get("Data_Source_name"),
-            function: "sp_fun_down_repair_history",
-            customer_id: carInfo.customer_id,
-            dates: startData,
-            datee: endData
-        * */
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_repair_history");
         dataMap.put("customer_id", sp.getString(Constance.CUSTOMER_ID));
         dataMap.put("dates", startDateStr);
         dataMap.put("datee", endDateStr);
+        dataMap.put("pre_row_number", pre_row_number);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
-
+                pre_row_number = (String) resMap.get("pre_row_number");
                 if ( "ok".equals(state)) {
-                    pre_row_number = (String) resMap.get("pre_row_number");
+
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<ManageInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(),ManageInfo.class);
-                    dataListener.getData(dataList);
+                    mDataListener.getData(dataList);
                 }
             }
 

@@ -545,7 +545,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
                     }
 
                     if(xhStr.endsWith(",")){
-                        xhStr = xhStr.substring(0,choosePersonStr.length()-1);
+                        xhStr = xhStr.substring(0,xhStr.length()-1);
                     }
 
                     realReplaceMan(xhStr,choosePersonStr);

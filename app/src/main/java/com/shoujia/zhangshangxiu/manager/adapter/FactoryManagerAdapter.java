@@ -12,6 +12,7 @@ import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
 import com.shoujia.zhangshangxiu.entity.ManageInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,8 +41,11 @@ public class FactoryManagerAdapter extends BaseAdapter {
         }
         if(listData!=null){
             listData.clear();
+        }else{
+            listData = new ArrayList<>();
         }
         listData.addAll(carInfos);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -56,9 +60,9 @@ public class FactoryManagerAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final Hodler hodler;
+        final MyHodler hodler;
         if (convertView == null) {
-            hodler = new Hodler();
+            hodler = new MyHodler();
             convertView = LayoutInflater.from(context).inflate(
                     R.layout.factory_manager_item, null);
             hodler.tv_cp_name = convertView.findViewById(R.id.tv_cp_name);
@@ -72,7 +76,7 @@ public class FactoryManagerAdapter extends BaseAdapter {
             hodler.enter_date = convertView.findViewById(R.id.enter_date);
             convertView.setTag(hodler);
         }else{
-            hodler = (Hodler) convertView.getTag();
+            hodler = (MyHodler) convertView.getTag();
         }
        ManageInfo info = listData.get(position);
         hodler.tv_cp_name.setText("车牌："+info.getCp());
@@ -92,7 +96,7 @@ public class FactoryManagerAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class Hodler {
+    class MyHodler {
         TextView tv_cp_name;
         TextView tv_jsd_id;
         TextView car_num;

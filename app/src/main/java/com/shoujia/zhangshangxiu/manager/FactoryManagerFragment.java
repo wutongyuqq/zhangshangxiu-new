@@ -22,15 +22,11 @@ import android.widget.TextView;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
 import com.shoujia.zhangshangxiu.db.DBManager;
-import com.shoujia.zhangshangxiu.entity.CarInfo;
 import com.shoujia.zhangshangxiu.entity.ManageInfo;
-import com.shoujia.zhangshangxiu.home.adapter.HomeCarInfoAdapter;
 import com.shoujia.zhangshangxiu.manager.activity.MangerLinggongActivity;
 import com.shoujia.zhangshangxiu.manager.adapter.FactoryManagerAdapter;
 import com.shoujia.zhangshangxiu.manager.help.ManageDataHelper;
-import com.shoujia.zhangshangxiu.order.adapter.BankListAdapter;
 import com.shoujia.zhangshangxiu.order.adapter.WxgzListAdapter;
-import com.shoujia.zhangshangxiu.order.entity.RateBean;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -56,6 +52,8 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
     String cp;
     String assign;
     String orderStr;
+    ManageDataHelper mHelper;
+
 
 
     @Override
@@ -70,18 +68,24 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
     public void updateUIThread(Message msg) {
         int msgInt = msg.what;
         if(msgInt==201){
-            if(manageInfoList!=null) {
-                //managerAdapter.setListData(manageInfoList);
+            dismissDialog();
+
+            if(manageInfoList!=null&&manageInfoList.size()>0){
+                listview.setVisibility(View.VISIBLE);
                 managerAdapter.notifyDataSetChanged();
             }else{
-                //managerAdapter.setListData(new ArrayList<ManageInfo>());
-                managerAdapter.notifyDataSetChanged();
+                listview.setVisibility(View.GONE);
             }
+
         }
     }
 
     private void initView() {
         listview = mView.findViewById(R.id.listview);
+        View emptyView = View.inflate(getActivity(), R.layout.no_network_view, null);
+        emptyView.setVisibility(View.GONE);
+        ((ViewGroup)listview.getParent()).addView(emptyView);
+        listview.setEmptyView(emptyView);
         prepare_work = mView.findViewById(R.id.prepare_work);
         doing_work = mView.findViewById(R.id.doing_work);
         prepare_check = mView.findViewById(R.id.prepare_check);
@@ -92,8 +96,6 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
         my_renwu = mView.findViewById(R.id.my_renwu);
         xuanzegongzhong = mView.findViewById(R.id.xuanzegongzhong);
 
-
-        listview = mView.findViewById(R.id.listview);
         search_btn = mView.findViewById(R.id.search_btn);
         search_cp = mView.findViewById(R.id.search_cp);
         manageInfoList = new ArrayList<>();
@@ -162,6 +164,9 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
     }
 
     private void getListData(int index){
+        manageInfoList.clear();
+        managerAdapter.setListData(new ArrayList<ManageInfo>());
+        showDialog(getActivity());
         assign="";
         wxgz="";
         orderStr="";
@@ -170,21 +175,29 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
         search_cp.setText("");
         my_renwu.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.right_now_no), null, null, null);
         my_renwu.setTag("0");
+        if(mHelper==null) {
+            mHelper = new ManageDataHelper(getActivity());
 
-        ManageDataHelper helper = new ManageDataHelper(getActivity());
-        helper.setPreZero();
-        helper.getListData(index, new ManageDataHelper.GetDataListener() {
-            @Override
-            public void getData(List<ManageInfo> manageInfos) {
-                manageInfoList.clear();
-                if(manageInfos!=null) {
-                    manageInfoList.addAll(manageInfos);
+            mHelper.setGetDataListener(new ManageDataHelper.GetDataListener() {
+                @Override
+                public void getData(List<ManageInfo> manageInfos) {
+
+                    if (manageInfos != null && manageInfos.size() > 0) {
+                        manageInfoList.addAll(manageInfos);
+                        DBManager dbManager = DBManager.getInstanse(getActivity());
+                        dbManager.insertManagerListData(manageInfos);
+                    } else {
+                        DBManager dbManager = DBManager.getInstanse(getActivity());
+                        dbManager.insertManagerListData(new ArrayList<ManageInfo>());
+                    }
+
+                    mHandler.sendEmptyMessage(201);
                 }
-                DBManager dbManager = DBManager.getInstanse(getActivity());
-                dbManager.insertManagerListData(manageInfos);
-                mHandler.sendEmptyMessage(201);
-            }
-        });
+            });
+        }
+        mHelper.setPreZero();
+        mHelper.getListData(index);
+
     }
 
     @Override
@@ -341,7 +354,7 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
                 manageInfoList.clear();
 
                 List<ManageInfo> manageInfos = dbManager.queryManagerListData(cp, info, assign, orderStr);
-                if(manageInfos!=null) {
+                if(manageInfos!=null&&manageInfos.size()>0) {
                     manageInfoList.addAll(manageInfos);
                 }
                 //managerAdapter.setListData(manageInfoList);

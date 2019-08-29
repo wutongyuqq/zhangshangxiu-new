@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -68,6 +69,11 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_query_order);
 		listview = findViewById(R.id.listview);
+		View emptyView = View.inflate(this, R.layout.no_network_view, null);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup)listview.getParent()).addView(emptyView);
+		listview.setEmptyView(emptyView);
+
 		select_date_start = findViewById(R.id.select_date_start);
 		select_date_end = findViewById(R.id.select_date_end);
 		query_btn = findViewById(R.id.query_btn);

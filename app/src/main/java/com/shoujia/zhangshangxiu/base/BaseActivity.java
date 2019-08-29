@@ -56,6 +56,7 @@ public class BaseActivity extends Activity implements OnClickListener{
             if(activity!=null){
                 if(msg.what==TOAST_MSG){
                     Toast.makeText(BaseActivity.this,toastMsg,Toast.LENGTH_LONG).show();
+                    dismissDialog();
                 }else{
                     updateUIThread(msg.what);
                 }

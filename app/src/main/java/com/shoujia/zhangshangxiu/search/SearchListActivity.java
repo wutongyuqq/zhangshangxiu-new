@@ -3,6 +3,7 @@ package com.shoujia.zhangshangxiu.search;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -43,6 +44,10 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
 	private void initView() {
 		mInfoList = new ArrayList<>();
 		mListview = findViewById(R.id.listview);
+		View emptyView = View.inflate(this, R.layout.no_network_view, null);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup)mListview.getParent()).addView(emptyView);
+		mListview.setEmptyView(emptyView);
 		carListAdapter = new SearchListAdapter(this,mInfoList);
 		mListview.setAdapter(carListAdapter);
 		new NavSupport(this,6);

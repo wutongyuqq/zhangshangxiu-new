@@ -65,6 +65,7 @@ public class ManagerLinggongAdapter extends BaseAdapter {
             hodler.repair_type = convertView.findViewById(R.id.repair_type);
             hodler.repair_name = convertView.findViewById(R.id.repair_name);
             hodler.iv_select = convertView.findViewById(R.id.iv_select);
+            hodler.repair_xlg = convertView.findViewById(R.id.repair_xlg);
             convertView.setTag(hodler);
         }else{
             hodler = (Hodler) convertView.getTag();
@@ -73,6 +74,7 @@ public class ManagerLinggongAdapter extends BaseAdapter {
         hodler.repair_name.setText(info.getXlxm());
         hodler.repair_type.setText(info.getWxgz());
         hodler.repair_assign.setText("指派给："+info.getAssign());
+        hodler.repair_xlg.setText("修理工："+info.getXlg());
         if(info.isChecked()){
             hodler.iv_select.setImageResource(R.drawable.right_now);
         }else{
@@ -86,6 +88,7 @@ public class ManagerLinggongAdapter extends BaseAdapter {
         TextView repair_assign;
         TextView repair_type;
         TextView repair_name;
+        TextView repair_xlg;
         ImageView iv_select;
     }
 }

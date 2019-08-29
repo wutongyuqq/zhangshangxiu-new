@@ -86,6 +86,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
 
             //manageInfos.addAll(infos);
             mAdapter.notifyDataSetChanged();
+            dismissDialog();
         }
     }
 
@@ -110,6 +111,9 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         tv_go_tender = findViewById(R.id.tv_go_tender);
         tv_fg = findViewById(R.id.tv_fg);
         tv_tzpg = findViewById(R.id.tv_tzpg);
+        start_time = findViewById(R.id.start_time);
+        end_time = findViewById(R.id.end_time);
+        cp_name = findViewById(R.id.cp_name);
         cp_name.setText(sp.getString(Constance.CURRENTCP));
         start_time.setText("进厂时间："+sp.getString(Constance.JIECHEDATE));
         end_time.setText("预计提车："+sp.getString(Constance.YUWANGONG));
@@ -152,6 +156,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     }
 
     private void getLinggongData(){
+        showDialog(this);
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_repair_project_schedule");
@@ -638,9 +643,10 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
 
 
     private void realAddMan(String xhStr,String choosePerson){
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_update_jsdmx_xlxm_xlg");
+        dataMap.put("function", "sp_fun_update_jsdmx_xlxm_xlg_add");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
         dataMap.put("xh_list", xhStr);
         dataMap.put("assign", choosePerson);

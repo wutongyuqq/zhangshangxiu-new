@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -70,6 +71,12 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
 		navSupport = new NavSupport(this,19);
 		mListview = findViewById(R.id.listview);
 		carListAdapter = new HistoryListAdapter(this,mInfoList);
+
+		View emptyView = View.inflate(this, R.layout.no_network_view, null);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup)mListview.getParent()).addView(emptyView);
+		mListview.setEmptyView(emptyView);
+
 		mListview.setAdapter(carListAdapter);
 		new InfoSupport(this);
 		mTotalBeans = new ArrayList<>();
@@ -188,7 +195,8 @@ private void getWxgzList(){
 	manageInfoList = new ArrayList<>();
 	ManageDataHelper helper = new ManageDataHelper(this);
         helper.setPreZero();
-        helper.getListData(0, new ManageDataHelper.GetDataListener() {
+        helper.getListData(0);
+	helper.setGetDataListener(new ManageDataHelper.GetDataListener() {
 		@Override
 		public void getData(List<ManageInfo> manageInfos) {
 			manageInfoList.clear();

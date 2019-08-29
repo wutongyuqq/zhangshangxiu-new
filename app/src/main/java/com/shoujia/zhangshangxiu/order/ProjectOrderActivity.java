@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -94,7 +95,13 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         sp = new SharePreferenceManager(this);
         navSupport = new NavSupport(this, 11);
         listview = findViewById(R.id.listview);
+        View emptyView = View.inflate(this, R.layout.no_network_view, null);
+        emptyView.setVisibility(View.GONE);
+        ((ViewGroup)listview.getParent()).addView(emptyView);
+        listview.setEmptyView(emptyView);
+
         listview2 = findViewById(R.id.listview2);
+        listview2.setEmptyView(emptyView);
         temp_pro = findViewById(R.id.temp_pro);
         pro_btn_lay = findViewById(R.id.pro_btn_lay);
         pj_btn_lay = findViewById(R.id.pj_btn_lay);

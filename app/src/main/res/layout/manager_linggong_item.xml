@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#eeeeee"
+    android:paddingBottom="10dp"
     >
   
 
@@ -67,10 +68,37 @@
                     android:drawableLeft="@drawable/person"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:drawablePadding="5dp"
                     android:text="指派给："/>
 
             </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/repair_xlg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/person"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:drawablePadding="5dp"
+                    android:text="修理工："/>
+
+
+            </RelativeLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 

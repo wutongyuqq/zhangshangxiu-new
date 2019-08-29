@@ -38,8 +38,13 @@ public class ManageDataHelper extends BaseHelper {
     public void setPreZero(){
         pre_row_number = "0";
     }
+
+    GetDataListener mGetDataListener;
+    public void setGetDataListener(GetDataListener getDataListener){
+        this.mGetDataListener = getDataListener;
+    }
     //获取车辆数据
-    public void getListData(final int index, final GetDataListener listener){
+    public void getListData(final int index){
         String[] strArr = {"待领工","修理中","待质检","已完工"};
         if(pre_row_number.equals("0")){
             if(manageInfos!=null) {
@@ -48,7 +53,9 @@ public class ManageDataHelper extends BaseHelper {
         }
        if(pre_row_number.equals("end")){
            //manageInfos;
-           listener.getData(manageInfos);
+           if(mGetDataListener!=null) {
+               mGetDataListener.getData(manageInfos);
+           }
             return;
         }
         Map<String, String> dataMap = new HashMap<>();
@@ -78,7 +85,7 @@ public class ManageDataHelper extends BaseHelper {
                 }else{
                     pre_row_number = "end";
                 }
-                getListData(index,listener);
+                getListData(index);
             }
 
             @Override

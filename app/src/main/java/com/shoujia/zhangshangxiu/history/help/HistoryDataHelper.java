@@ -52,21 +52,23 @@ public class HistoryDataHelper extends BaseHelper {
             dates: startData,
             datee: endData
         * */
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_repair_history");
         dataMap.put("customer_id", sp.getString(Constance.CUSTOMER_ID));
         dataMap.put("dates", startDateStr);
         dataMap.put("datee", endDateStr);
+        dataMap.put("pre_row_number", pre_row_number);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
-
+                pre_row_number = (String) resMap.get("pre_row_number");
                 if ( "ok".equals(state)) {
-                    pre_row_number = (String) resMap.get("pre_row_number");
+
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<ManageInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(),ManageInfo.class);
                     dataListener.getData(dataList);

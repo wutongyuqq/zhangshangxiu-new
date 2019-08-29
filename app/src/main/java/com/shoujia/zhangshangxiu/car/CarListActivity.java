@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -79,6 +80,10 @@ public class CarListActivity extends BaseActivity implements View.OnClickListene
 		mInfoList = new ArrayList<>();
 		navSupport = new NavSupport(this,3);
 		mListview = findViewById(R.id.listview);
+		View emptyView = View.inflate(this, R.layout.no_network_view, null);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup)mListview.getParent()).addView(emptyView);
+		mListview.setEmptyView(emptyView);
 		select_name = findViewById(R.id.select_name);
 		select_down = findViewById(R.id.select_down);
 		jc_date_view = findViewById(R.id.jc_date_view);
@@ -132,21 +137,26 @@ public class CarListActivity extends BaseActivity implements View.OnClickListene
 	@Override
 	protected void updateUIThread(int msgInt) {
 		super.updateUIThread(msgInt);
+		dismissDialog();
 		if(mInfoList!=null&&mInfoList.size()>0){
 			if(msgInt==302){
 				//carListAdapter.setListData(mInfoList);
+
 				carListAdapter.notifyDataSetChanged();
 
 			}
 		}
 	}
 	private void getData(String chooseName){
+		mInfoList.clear();
+		carListAdapter.notifyDataSetChanged();
+    	showDialog(this);
 		CarDataHelper carDataHelper = new CarDataHelper(this);
 		carDataHelper.setPreZero();
 		carDataHelper.getCardList(chooseName, new CarDataHelper.GetDataListener() {
 			@Override
 			public void getData(List<ManageInfo> manageInfoList) {
-				mInfoList.clear();
+
 				if(manageInfoList!=null&&manageInfoList.size()>0) {
 					DBManager dbManager = DBManager.getInstanse(CarListActivity.this);
 					dbManager.insertManagerListData(manageInfoList);

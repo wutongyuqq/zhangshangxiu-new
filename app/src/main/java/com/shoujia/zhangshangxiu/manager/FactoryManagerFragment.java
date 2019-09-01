@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shoujia.zhangshangxiu.R;
@@ -48,6 +49,7 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
     FactoryManagerAdapter managerAdapter;
     private int mCurIndex;
     SharePreferenceManager sp;
+    RelativeLayout net_work_tip;
     String wxgz;
     String cp;
     String assign;
@@ -72,9 +74,11 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
 
             if(manageInfoList!=null&&manageInfoList.size()>0){
                 listview.setVisibility(View.VISIBLE);
+                net_work_tip.setVisibility(View.GONE);
                 managerAdapter.notifyDataSetChanged();
             }else{
                 listview.setVisibility(View.GONE);
+                net_work_tip.setVisibility(View.VISIBLE);
             }
 
         }
@@ -82,15 +86,12 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
 
     private void initView() {
         listview = mView.findViewById(R.id.listview);
-        View emptyView = View.inflate(getActivity(), R.layout.no_network_view, null);
-        emptyView.setVisibility(View.GONE);
-        ((ViewGroup)listview.getParent()).addView(emptyView);
-        listview.setEmptyView(emptyView);
         prepare_work = mView.findViewById(R.id.prepare_work);
         doing_work = mView.findViewById(R.id.doing_work);
         prepare_check = mView.findViewById(R.id.prepare_check);
         done_work = mView.findViewById(R.id.done_work);
         jinchangshijian = mView.findViewById(R.id.jinchangshijian);
+        net_work_tip = mView.findViewById(R.id.net_work_tip);
         //,,
         jiaocheshijian = mView.findViewById(R.id.jiaocheshijian);
         my_renwu = mView.findViewById(R.id.my_renwu);
@@ -164,6 +165,9 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
     }
 
     private void getListData(int index){
+        listview.setVisibility(View.VISIBLE);
+        net_work_tip.setVisibility(View.GONE);
+
         manageInfoList.clear();
         managerAdapter.setListData(new ArrayList<ManageInfo>());
         showDialog(getActivity());

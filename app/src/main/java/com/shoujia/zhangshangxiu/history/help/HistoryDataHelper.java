@@ -48,7 +48,6 @@ public class HistoryDataHelper extends BaseHelper {
         dataMap.put("customer_id", sp.getString(Constance.CUSTOMER_ID));
         dataMap.put("dates", startDateStr);
         dataMap.put("datee", endDateStr);
-        dataMap.put("pre_row_number", pre_row_number);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -61,12 +60,14 @@ public class HistoryDataHelper extends BaseHelper {
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<ManageInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(),ManageInfo.class);
                     mDataListener.getData(dataList);
+                }else {
+                    mDataListener.getData(new ArrayList<ManageInfo>());
                 }
             }
 
             @Override
             public void onFail() {
-                dataListener.onFail();
+                mDataListener.onFail();
 
             }
         });

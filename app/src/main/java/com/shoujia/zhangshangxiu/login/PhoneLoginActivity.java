@@ -139,6 +139,10 @@ public class PhoneLoginActivity extends BaseActivity implements OnClickListener 
                     } else {
                         login(factoryName,userName, pwd);
                     }
+                } else {
+
+                    toastMsg = "服务异常" + (resMap.get("msg") != null ? (":" + resMap.get("msg")) : "");
+                    mHandler.sendEmptyMessage(TOAST_MSG);
                 }
             }
 

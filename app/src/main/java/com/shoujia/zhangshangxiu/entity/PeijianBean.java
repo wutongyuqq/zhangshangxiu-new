@@ -33,7 +33,7 @@ public class PeijianBean {
 	}
 
 	public String getCk() {
-		return ck;
+		return ck==null?"":ck;
 	}
 
 	public void setCk(String ck) {
@@ -49,7 +49,7 @@ public class PeijianBean {
 	}
 
 	public String getPjbm() {
-		return pjbm;
+		return pjbm==null?"":pjbm;
 	}
 
 	public void setPjbm(String pjbm) {

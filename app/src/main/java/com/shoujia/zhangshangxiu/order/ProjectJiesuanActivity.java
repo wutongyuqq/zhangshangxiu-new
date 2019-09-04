@@ -2,6 +2,7 @@ package com.shoujia.zhangshangxiu.order;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
     float totalPartSl = 0;
     double totalPartMoney = 0;
     double totalCb = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,11 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         jsd_id_view.setText("结算单号："+sp.getString(Constance.JSD_ID));
         factoy_name.setText(sp.getString(Constance.FACTORYNAME));
         dytime.setText("打印时间："+DateUtil.getCurDate());
+        String jsdStatuStr = getIntent().getStringExtra("jsdStatu");
+        if(jsdStatuStr.equals("审核已结算")){
+            start_sy.setClickable(false);
+            start_sy.setBackgroundColor(Color.parseColor("#cccccc"));
+        }
     }
 
     @Override

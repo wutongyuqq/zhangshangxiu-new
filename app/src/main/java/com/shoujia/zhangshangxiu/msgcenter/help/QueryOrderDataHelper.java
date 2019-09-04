@@ -28,6 +28,7 @@ public class QueryOrderDataHelper extends BaseHelper {
 
     List<OrderBean> mManageInfos;
     GetDataListener mDataListener;
+    private boolean isDestroy;
     public QueryOrderDataHelper(Activity activity){
         super(activity);
         this.mActivity = activity;
@@ -50,8 +51,9 @@ public class QueryOrderDataHelper extends BaseHelper {
         if(pre_row_number!=null&&pre_row_number.equals("end")){
             if(mDataListener!=null){
                 mDataListener.getData(manageInfos);
-                return;
+
             }
+            return;
         }
 
         Map<String, String> dataMap = new HashMap<>();
@@ -76,8 +78,9 @@ public class QueryOrderDataHelper extends BaseHelper {
                 }else{
                     pre_row_number = "end";
                 }
-
-                getListData(dates,datee);
+                if(!isDestroy) {
+                    getListData(dates, datee);
+                }
             }
 
             @Override
@@ -93,6 +96,10 @@ public class QueryOrderDataHelper extends BaseHelper {
 
     public interface GetDataListener{
         void getData(List<OrderBean> manageInfos);
+    }
+
+    public void onDestroy(){
+        isDestroy = true;
     }
 
 }

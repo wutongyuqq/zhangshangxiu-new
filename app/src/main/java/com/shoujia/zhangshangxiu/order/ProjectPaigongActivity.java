@@ -100,7 +100,7 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
     }
 
     private void initData(){
-        mPaigongList.clear();
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_jsdmx_xlxm_assign");
@@ -110,6 +110,7 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
+
                 Log.d("onSuccess--json", json);
                 System.out.println("11111");
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
@@ -118,12 +119,13 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
                         JSONArray dataArray = (JSONArray) resMap.get("data");
                         List<PaigongInfo> projectBeans = JSONArray.parseArray(dataArray.toJSONString(), PaigongInfo.class);
                         if(projectBeans!=null&&projectBeans.size()>0){
+                            mPaigongList.clear();
                             mPaigongList.addAll(projectBeans);
                         mHandler.sendEmptyMessage(101);
                     } else {
 
                     }
-                    mHandler.sendEmptyMessage(100);
+                   // mHandler.sendEmptyMessage(100);
                 } else {
                     if(resMap.get("msg")!=null) {
                         toastMsg = (String) resMap.get("msg");
@@ -150,7 +152,8 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
             mAdapter.notifyDataSetChanged();
         }
     }
-
+    int postNum = 0;
+    int postSuccsess = 0;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -170,8 +173,11 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
                                 choosePersonStr = choosePersonStr.substring(0,choosePersonStr.length()-1);
                             }
                             if(mPaigongList!=null&&mPaigongList.size()>0){
+                                postSuccsess = 0;
+                                postNum = 0;
                                 for(PaigongInfo info:mPaigongList){
                                     if(info!=null&&info.isChecked()) {
+                                        postNum++;
                                         toPGDataToServer(info);
                                     }
                                 }
@@ -211,7 +217,10 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
                 if ("ok".equals(state)) {
-                    initData();
+                    postSuccsess++;
+                    if(postNum<=postSuccsess) {
+                        initData();
+                    }
                 } else {
                     if(resMap.get("msg")!=null) {
                         toastMsg = (String) resMap.get("msg");

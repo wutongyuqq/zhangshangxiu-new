@@ -57,6 +57,8 @@ public class BaseActivity extends Activity implements OnClickListener{
                 if(msg.what==TOAST_MSG){
                     Toast.makeText(BaseActivity.this,toastMsg,Toast.LENGTH_LONG).show();
                     dismissDialog();
+                }else if(msg.what==999){
+                    dismissDialog();
                 }else{
                     updateUIThread(msg.what);
                 }
@@ -66,7 +68,7 @@ public class BaseActivity extends Activity implements OnClickListener{
 
 
 
-    public static void showDialog(Context cont) {
+    public void showDialog(Context cont) {
         try {
             if (waitingDialog == null) {
                 waitingDialog = WaitProgressDialog.createDialog(cont);
@@ -74,6 +76,7 @@ public class BaseActivity extends Activity implements OnClickListener{
             }
             waitingDialog.setCanceledOnTouchOutside(false);
             waitingDialog.show();
+            mHandler.sendEmptyMessageDelayed(999,3000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,7 +84,7 @@ public class BaseActivity extends Activity implements OnClickListener{
 
 
 
-    public static void dismissDialog() {
+    public void dismissDialog() {
         try {
             if (waitingDialog != null) {
                 // waitingDialog.dismiss();

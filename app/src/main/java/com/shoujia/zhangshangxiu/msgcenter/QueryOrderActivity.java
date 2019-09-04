@@ -135,15 +135,15 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 		select_date_start.setText(startDate);
 		getListData();
 	}
-
+	QueryOrderDataHelper queryHelper;
 
 	private void getListData(){
 		String startDate = select_date_start.getText().toString();
 		String endDate = select_date_end.getText().toString();
 		String startDateStr = startDate+" 00:00:00";
 		String endDateStr = endDate+" 23:59:59";
-		QueryOrderDataHelper helper = new QueryOrderDataHelper(this);
-		helper.setPreZero(new QueryOrderDataHelper.GetDataListener() {
+		queryHelper = new QueryOrderDataHelper(this);
+		queryHelper.setPreZero(new QueryOrderDataHelper.GetDataListener() {
 			@Override
 			public void getData(List<OrderBean> orderBeans) {
 				mTotalBeans = orderBeans;
@@ -154,7 +154,7 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
                 }
 			}
 		});
-		helper.getListData(startDateStr,endDateStr);
+		queryHelper.getListData(startDateStr,endDateStr);
 	}
 
 
@@ -171,6 +171,8 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 		},"2007-01-01 00:00","2025-12-31 00:00");
 		customDatePicker.show();
 	}
+
+
 
 
     @Override
@@ -248,6 +250,7 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		queryHelper.onDestroy();
 	}
 
 	@Override

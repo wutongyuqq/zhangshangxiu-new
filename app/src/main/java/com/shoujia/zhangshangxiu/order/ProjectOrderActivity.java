@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -22,6 +23,7 @@ import com.shoujia.zhangshangxiu.dialog.OrderAddTmpDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderPeijianEditDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderTempEditDialog;
+import com.shoujia.zhangshangxiu.dialog.PeijianTipDialog;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
 import com.shoujia.zhangshangxiu.entity.PeijianBean;
 import com.shoujia.zhangshangxiu.entity.ProjectBean;
@@ -72,11 +74,13 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     TextView tv_pro, tv_pj,temp_pro,peijianku,project_ck,car_home_page,paigong,total_jiesuan,total_jiesuan2,car_home_page2;
     LinearLayout pro_btn_lay,pj_btn_lay;
     String gdStatu="";
+    boolean isToPaigong;
     private boolean djztUnable = false;
     private boolean notDelete = false;
     private boolean yccType = false;
     private OrderCarInfo mOrderCarInfo;
     private boolean isToPeijian;
+    private boolean isToJiesuan;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,13 +99,9 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         sp = new SharePreferenceManager(this);
         navSupport = new NavSupport(this, 11);
         listview = findViewById(R.id.listview);
-        View emptyView = View.inflate(this, R.layout.no_network_view, null);
-        emptyView.setVisibility(View.GONE);
-        ((ViewGroup)listview.getParent()).addView(emptyView);
-        listview.setEmptyView(emptyView);
 
         listview2 = findViewById(R.id.listview2);
-        listview2.setEmptyView(emptyView);
+
         temp_pro = findViewById(R.id.temp_pro);
         pro_btn_lay = findViewById(R.id.pro_btn_lay);
         pj_btn_lay = findViewById(R.id.pj_btn_lay);
@@ -208,6 +208,15 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         tv_pjfZk = footView2.findViewById(R.id.tv_pjfZk);
         listview2.addFooterView(footView2);
         listview2.addHeaderView(headView2);
+
+        listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                PeijianBean peijianBean = mPeiJianList.get(i-1);
+                PeijianTipDialog dialog = new PeijianTipDialog(ProjectOrderActivity.this,peijianBean);
+                dialog.show();
+            }
+        });
     }
 
     private void showEditDialog(final int position) {
@@ -414,6 +423,10 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 wxfTotal.setText("总计:"+totalXlf);
                 zongyingshou.setText("总计:"+(totalXlf - totalXlfZk));
                 tv_xlfZk.setText(totalXlfZk+"");
+            }else{
+                wxfTotal.setText("总计:0");
+                zongyingshou.setText("总计:0");
+                tv_xlfZk.setText("0");
             }
         }else if(msgInt==101){
             if(mPeiJianList!=null&&mPeiJianList.size()>0){
@@ -426,6 +439,9 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 float totalPjfMoney = (float)(Math.round(totalMoneyFloat*100))/100;
                 pjfTotal.setText(totalPjfMoney+"");
                 zongyingshou2.setText(totalPjfMoney+"");
+            }else{
+                pjfTotal.setText("0");
+                zongyingshou2.setText("0");
             }
         }else if(msgInt==109){
             if(mOrderCarInfo==null){
@@ -443,6 +459,10 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             beizhu.setText("备注:"+mOrderCarInfo.getMemo());
             wxfTotal.setText("总计:"+mOrderCarInfo.getWxfzj());
             zongyingshou.setText("总计:"+mOrderCarInfo.getZje());
+            car_home_page.setClickable(true);
+            car_home_page.setBackgroundColor(Color.parseColor("#89c997"));
+            car_home_page2.setClickable(true);
+            car_home_page2.setBackgroundColor(Color.parseColor("#89c997"));
             if (mOrderCarInfo.getDjzt().equals("待修")) {
                 paigong.setText("派工");
                // $scope.djzt = '派工';
@@ -457,6 +477,10 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 djztUnable = true;
                 OrderBeanInfo.allBtnUnable = true;
                 paigong.setText("取消完工");
+                car_home_page2.setClickable(false);
+                car_home_page2.setBackgroundColor(Color.parseColor("#cccccc"));
+                car_home_page.setClickable(false);
+                car_home_page.setBackgroundColor(Color.parseColor("#cccccc"));
                /* $scope.showFloatImg = true;
                 $scope.djzt = '取消完工';
                 $scope.djztUnable = 1;
@@ -478,13 +502,21 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 yccType = true;
                 djztUnable = true;
                 total_jiesuan.setEnabled(false);
+                total_jiesuan2.setEnabled(false);
                 project_ck.setEnabled(false);
                 temp_pro.setEnabled(false);
                 peijianku.setEnabled(false);
                 total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
+                total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
                 project_ck.setBackgroundColor(Color.parseColor("#cccccc"));
                 temp_pro.setBackgroundColor(Color.parseColor("#cccccc"));
                 peijianku.setBackgroundColor(Color.parseColor("#cccccc"));
+
+                car_home_page2.setClickable(false);
+                car_home_page2.setBackgroundColor(Color.parseColor("#cccccc"));
+                car_home_page.setClickable(false);
+                car_home_page.setBackgroundColor(Color.parseColor("#cccccc"));
+
                 mOrderAdapter.notifyDataSetChanged();
                 mPeijianAdapter.notifyDataSetChanged();
                /* $scope.showFloatImg = true;
@@ -496,12 +528,15 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             }
 
         }else if(msgInt == 111){
+            paigong.setText("取消完工");
             total_jiesuan.setEnabled(false);
+            total_jiesuan2.setEnabled(false);
             project_ck.setEnabled(false);
             temp_pro.setEnabled(false);
             peijianku.setEnabled(false);
             OrderBeanInfo.allBtnUnable = true;
             total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
+            total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
             project_ck.setBackgroundColor(Color.parseColor("#cccccc"));
             temp_pro.setBackgroundColor(Color.parseColor("#cccccc"));
             peijianku.setBackgroundColor(Color.parseColor("#cccccc"));
@@ -509,11 +544,13 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             mPeijianAdapter.notifyDataSetChanged();
         }else if(msgInt == 112){
             total_jiesuan.setEnabled(true);
+            total_jiesuan2.setEnabled(true);
             project_ck.setEnabled(true);
             temp_pro.setEnabled(true);
             peijianku.setEnabled(true);
             OrderBeanInfo.allBtnUnable = false;
             total_jiesuan.setBackgroundColor(Color.parseColor("#89c997"));
+            total_jiesuan2.setBackgroundColor(Color.parseColor("#89c997"));
             project_ck.setBackgroundColor(Color.parseColor("#89c997"));
             temp_pro.setBackgroundColor(Color.parseColor("#89c997"));
             peijianku.setBackgroundColor(Color.parseColor("#89c997"));
@@ -527,7 +564,10 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         djztUnable = isEnable;
         total_jiesuan.setEnabled(!isEnable);
         total_jiesuan.setBackgroundColor(isEnable?Color.parseColor("#89c997"):Color.parseColor("#cccccc"));
+        total_jiesuan2.setEnabled(!isEnable);
+        total_jiesuan2.setBackgroundColor(isEnable?Color.parseColor("#89c997"):Color.parseColor("#cccccc"));
     }
+    String djzt="";
     private void getJsdInfo() {
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
@@ -646,7 +686,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
 
     private void judgeToStatu(){
         gdStatu = paigong.getText().toString();
-
+        isToPaigong = true;
             if(gdStatu.equals("派工")) {
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectPaigongActivity.class));
             //去派工页面
@@ -666,7 +706,8 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                         Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                         String state = (String) resMap.get("state");
                         if ("ok".equals(state)) {
-
+                            toastMsg = "已完工";
+                            mHandler.sendEmptyMessage(TOAST_MSG);
                             mHandler.sendEmptyMessage(111);
                         } else {
                             if (resMap.get("msg") != null) {
@@ -920,7 +961,12 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.total_jiesuan:
             case R.id.total_jiesuan2:
-                startActivity(new Intent(ProjectOrderActivity.this,ProjectJiesuanActivity.class));
+                isToJiesuan=true;
+                Intent intent = new Intent(ProjectOrderActivity.this,ProjectJiesuanActivity.class);
+                if(mOrderCarInfo!=null) {
+                    intent.putExtra("jsdStatu", mOrderCarInfo.getDjzt());
+                }
+                startActivity(intent);
                 break;
             default:
 
@@ -944,5 +990,16 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             isToPeijian = false;
             getPjListData();
         }
+        if(isToPaigong){
+            isToPaigong = false;
+            getJsdInfo();
+            getProjectListData();
+        }
+
+        if(isToJiesuan){
+            isToJiesuan=false;
+            getJsdInfo();
+        }
+
     }
 }

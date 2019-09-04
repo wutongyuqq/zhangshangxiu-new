@@ -88,7 +88,7 @@ public class OrderCarInfo implements Serializable {
     }
 
     public String getDjzt() {
-        return djzt;
+        return djzt==null?"":djzt;
     }
 
     public void setDjzt(String djzt) {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.entity.PeijianBean;
 import com.shoujia.zhangshangxiu.entity.ProjectBean;
+import com.shoujia.zhangshangxiu.util.Util;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class PeijianOrderProAdapter extends BaseAdapter {
         if (convertView == null) {
             hodler = new Hodler();
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.order_pro_item, null);
+                    R.layout.peijian_pro_item, null);
             hodler.tv_num = convertView.findViewById(R.id.tv_num);
             hodler.pro_name = convertView.findViewById(R.id.pro_name);
             hodler.pro_type = convertView.findViewById(R.id.pro_type);
@@ -87,11 +88,12 @@ public class PeijianOrderProAdapter extends BaseAdapter {
         }
         PeijianBean bean = listData.get(position);
         hodler.tv_num.setText((position+1)+"");
-        hodler.pro_name.setText(bean.getPjmc());
-        hodler.pro_type.setText(bean.getPjbm());
-        hodler.tv_xlf.setText(bean.getSl());
-        hodler.tv_zk.setText(bean.getSsj());
+        hodler.pro_name.setText(bean.getPjmc()+" "+bean.getPjbm());
+        hodler.pro_type.setText(bean.getSl());
+        hodler.tv_xlf.setText(bean.getSsj());
         float totalMoney = Float.parseFloat(bean.getSl()) * Float.parseFloat(bean.getSsj());
+
+        hodler.tv_zk.setText(Util.getDoubleStr(totalMoney+""));
         //hodler.tv_hj.setText( (float)(Math.round(totalMoney*100))/100+"");
         hodler.tv_edit.setOnClickListener(new View.OnClickListener() {
             @Override

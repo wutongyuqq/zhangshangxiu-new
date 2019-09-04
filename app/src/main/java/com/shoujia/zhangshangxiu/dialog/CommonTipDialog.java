@@ -2,7 +2,6 @@ package com.shoujia.zhangshangxiu.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -13,9 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shoujia.zhangshangxiu.R;
-import com.shoujia.zhangshangxiu.util.Util;
+import com.shoujia.zhangshangxiu.entity.PeijianBean;
 
-public class CommonTipDialog{
+public class CommonTipDialog {
     private Context mContext;
     Dialog mDialog;
     private TextView title, content_line_one, content_line_two, btn_left, btn_right;
@@ -118,3 +117,8 @@ public class CommonTipDialog{
     }
 
 }
+
+
+
+
+

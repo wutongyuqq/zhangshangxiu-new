@@ -436,7 +436,7 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
                 if ("ok".equals(state)) {
-                    toastMsg = "领工成功";
+                    toastMsg = "完工审核成功";
                     mHandler.sendEmptyMessage(TOAST_MSG);
                     manageInfos.clear();
                     getLinggongData();

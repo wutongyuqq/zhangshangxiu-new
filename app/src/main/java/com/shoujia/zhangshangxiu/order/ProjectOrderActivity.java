@@ -627,7 +627,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                     if (projectBeans != null) {
                         mProjectList.addAll(projectBeans);
                     }
-                    mHandler.sendEmptyMessage(100);
+                    mHandler.sendEmptyMessageDelayed(100,100);
                 } else {
                     if(resMap.get("msg")!=null) {
                         toastMsg = (String) resMap.get("msg");
@@ -668,7 +668,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                     if (projectBeans != null) {
                         mPeiJianList.addAll(projectBeans);
                     }
-                    mHandler.sendEmptyMessage(101);
+                    mHandler.sendEmptyMessageDelayed(101,100);
                 } else {
                     if(resMap.get("msg")!=null) {
                         toastMsg = (String) resMap.get("msg");

@@ -42,7 +42,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
 
 
     private SharePreferenceManager sp;
-    private TextView start_sy,sing_print,double_print,cancle_jiesuan;
+    private TextView start_sy,sing_print,double_print,cancle_jiesuan,zongyingshou3;
     JsBaseBean mJsBaseBean = new JsBaseBean();
     JsCompBean mJsCompBean;
     List<JsPartBean> mPartBeans = new ArrayList<>();
@@ -78,6 +78,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         sing_print = findViewById(R.id.sing_print);
         double_print = findViewById(R.id.double_print);
         cancle_jiesuan = findViewById(R.id.cancle_jiesuan);
+        zongyingshou3 = findViewById(R.id.zongyingshou3);
         start_sy.setOnClickListener(this);
         sing_print.setOnClickListener(this);
         double_print.setOnClickListener(this);
@@ -122,6 +123,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
             jclc_name.setText(mJsBaseBean.jclc);
             gz_name.setText(mJsBaseBean.car_fault);
             memoView.setText("备注："+mJsBaseBean.memo);
+            zongyingshou3.setText("应收总计：￥"+mJsBaseBean.zje);
             mJsBaseBean.compName = sp.getString(Constance.FACTORYNAME);
             mJsBaseBean.printDate = DateUtil.getCurDate();
             mJsBaseBean.jsd_id = sp.getString(Constance.JSD_ID);
@@ -471,10 +473,10 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_update_repair_main_money");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
-        dataMap.put("zje", Float.parseFloat(totalPartMoney+totalXlf+"")+"");
-        dataMap.put("wxfzj", Float.parseFloat(totalXlf+"")+"");
-        dataMap.put("clfzj", Float.parseFloat(totalPartMoney+"")+"");
-        dataMap.put("totalCb", Float.parseFloat(totalCb+"")+"");
+        dataMap.put("zje", Util.getDoubleStr(totalPartMoney+totalXlf+""));
+        dataMap.put("wxfzj",  Util.getDoubleStr(totalXlf+"")+"");
+        dataMap.put("clfzj",  Util.getDoubleStr(totalPartMoney+"")+"");
+        dataMap.put("totalCb",  Util.getDoubleStr(totalCb+"")+"");
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override

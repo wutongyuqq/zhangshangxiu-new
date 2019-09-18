@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
-   >
+    android:gravity="center_horizontal">
     <include layout="@layout/nav_support"/>
     <include layout="@layout/info_support"/>
     <LinearLayout
@@ -96,7 +96,7 @@
         android:rowCount="6"/>
 
 
-        <GridLayout
+       <!-- <GridLayout
             android:id="@+id/gridlayout2"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -105,7 +105,25 @@
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:rowCount="100"/>
+            android:rowCount="100"/>-->
+
+        <com.shoujia.zhangshangxiu.view.ZnFlowLayout
+            android:id="@+id/gridlayout2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            app:hor_space="1dp"
+            app:ver_space="1dp"
+            android:visibility="gone"
+            app:flow_style="multi"
+            app:line_item_num="3"
+            app:flow_tag_background="@drawable/grid_select"
+            android:layout_margin="1dp"
+
+            />
+
+
     </LinearLayout>
     </ScrollView>
 

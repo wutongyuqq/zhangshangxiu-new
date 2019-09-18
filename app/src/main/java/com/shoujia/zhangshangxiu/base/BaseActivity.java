@@ -37,6 +37,10 @@ public class BaseActivity extends Activity implements OnClickListener{
 
     }
 
+    protected void updateUIThread(Message msg,int msgInt){
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -61,6 +65,7 @@ public class BaseActivity extends Activity implements OnClickListener{
                     dismissDialog();
                 }else{
                     updateUIThread(msg.what);
+                    updateUIThread(msg,msg.what);
                 }
             }
         }

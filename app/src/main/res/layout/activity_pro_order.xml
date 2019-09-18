@@ -57,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="80dp"
+            android:listSelector="@color/transparent"
             android:scrollbars="none"/>
 
             <ListView
@@ -65,6 +66,7 @@
                 android:layout_height="match_parent"
                 android:visibility="gone"
                 android:layout_marginBottom="80dp"
+                android:listSelector="@color/transparent"
                 android:scrollbars="none"/>
 
     </LinearLayout>

@@ -148,7 +148,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
             View partView = View.inflate(this,R.layout.view_pro_item,null);
             String slStr = bean.xlf;
             float tmpSl = Float.parseFloat(slStr);
-            totalXlf+=tmpSl;
+            totalXlf+=Float.parseFloat(slStr);
 
             String moneyStr = bean.zk;
             double tmpDob = Double.parseDouble(moneyStr);
@@ -163,7 +163,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         }
         View totalView = View.inflate(this,R.layout.view_pro_item,null);
         TextView part_num = totalView.findViewById(R.id.xm_money);
-        part_num.setText(totalXlf+"");
+        part_num.setText(Util.getDoubleStr(totalXlf+""));
         TextView money_total = totalView.findViewById(R.id.xm_yh_money);
         TextView xm_name = totalView.findViewById(R.id.xm_name);
         money_total.setText(Util.getDoubleStr(totalZkMoney+""));

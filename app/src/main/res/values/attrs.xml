@@ -5,4 +5,23 @@
         <attr name="border_color" format="color" />
         <attr name="border_overlay" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ZnFlowLayout">
+        <attr name="ver_space" format="dimension" />
+        <attr name="hor_space" format="dimension" />
+        <attr name="line_item_num" format="integer" />
+        <attr name="fit_space" format="boolean" />
+        <attr name="flow_tag_background" format="reference" />
+        <attr name="flow_tag_text_color" format="reference" />
+        <attr name="flow_tag_layout" format="reference" />
+        <attr name="flow_tag_text_size" format="dimension" />
+        <attr name="flow_style" format="enum" >
+            <enum name="nomal" value="0"/>
+            <enum name="single" value="1"/>
+            <enum name="multi" value="2"/>
+
+        </attr>
+
+    </declare-styleable>
+
 </resources>

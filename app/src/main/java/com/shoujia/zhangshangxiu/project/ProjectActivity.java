@@ -177,7 +177,7 @@ public class ProjectActivity extends BaseActivity implements View.OnClickListene
     }
 
     //获取车辆数据
-    public void getCardList(String keyName,String keyValue){
+    public void getCardList(final String keyName, final String keyValue){
 
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
@@ -195,6 +195,9 @@ public class ProjectActivity extends BaseActivity implements View.OnClickListene
                 if(resMap!=null&&resMap.get("state")!=null){
                     String state = (String) resMap.get("state");
                     if (state.equals("ok")) {
+                        if(keyName.equals("jclc")){
+                            sp.putString(Constance.GONGLISHU,keyValue);
+                        }
                         toastMsg = "修改成功";
                         mHandler.sendEmptyMessage(TOAST_MSG);
                         //Toast.makeText(ProjectActivity.this,"修改成功",Toast.LENGTH_SHORT).show();

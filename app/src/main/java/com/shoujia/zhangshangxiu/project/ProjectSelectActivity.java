@@ -3,6 +3,7 @@ package com.shoujia.zhangshangxiu.project;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.GridLayout;
@@ -26,9 +27,12 @@ import com.shoujia.zhangshangxiu.support.NavSupport;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
+import com.shoujia.zhangshangxiu.view.ZnFlowLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +44,13 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
 	private final String TAG = "ProjectSelectActivity";
   private NavSupport navSupport;
   private TextView confirm_order,tv_kj,tv_cg,tv_by;
-	SecondIconInfo mSecondIconInfo;
-  private GridLayout gridLayout1,gridLayout2;
+
+  private GridLayout gridLayout1;
+  ZnFlowLayout gridLayout2;
 	private SharePreferenceManager sp;
 	InfoSupport mInFoupport;
 	List<SecondIconInfo> secondIconInfos = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,69 +74,90 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
 
 	}
 
-	@Override
-	protected void updateUIThread(int msgInt) {
-		super.updateUIThread(msgInt);
-		if(msgInt==101){
-			gridLayout2.removeAllViews();
-			gridLayout1.setVisibility(View.GONE);
-			gridLayout2.setVisibility(View.VISIBLE);
-			if(secondIconInfos!=null&&secondIconInfos.size()>0) {
-				gridLayout2.setRowCount(100);
-				gridLayout2.setColumnCount(3);
-				final List<View> subViewArr = new ArrayList<>();
-				for (int i = 0; i < secondIconInfos.size(); i++) {
 
-					final View subView = View.inflate(this, R.layout.view_grid_item, null);
-					TextView name = subView.findViewById(R.id.name);
-					ImageView imageView = subView.findViewById(R.id.tv_fold_img);
-					if(i==0){
-						imageView.setImageResource(R.drawable.fold_back_img);
-						name.setText("返回");
-						subView.setTag(-1);
-						gridLayout2.addView(subView);
-					}else {
-						subView.setBackground(getResources().getDrawable(R.drawable.pro_select));
-						if(secondIconInfos!=null&&secondIconInfos.get(i)!=null) {
-							name.setText(secondIconInfos.get(i).getMc());
-							imageView.setImageResource(R.drawable.file_img);
-							subView.setTag(secondIconInfos.get(i).getId());
-							gridLayout2.addView(subView);
-						}
-						subViewArr.add(subView);
-					}
+	private void initFlowData(){
 
-					subView.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							int tag = (int) view.getTag();
-							if(tag!=-1) {
-								DBManager dbManager = DBManager.getInstanse(ProjectSelectActivity.this);
-								mSecondIconInfo = dbManager.querySecondIconData(tag);
-								for(View view1:subViewArr){
-									view1.setBackgroundColor(Color.parseColor("#00000000"));
-								}
-								view.setBackgroundColor(Color.parseColor("#cccccc"));
-							}else{
-								//view.requestFocus();
-								gridLayout1.setVisibility(View.VISIBLE);
-								gridLayout2.setVisibility(View.GONE);
-								mSecondIconInfo = null;
 
-							}
-						}
-					});
-				}
-			}
-		}
 	}
 
+	@Override
+	protected void updateUIThread(Message msg,int msgInt) {
+		super.updateUIThread(msgInt);
+		if(msgInt==101) {
+			gridLayout1.setVisibility(View.GONE);
+			gridLayout2.setVisibility(View.VISIBLE);
+			List<String> gridList = new ArrayList<>();
+			if (secondIconInfos != null && secondIconInfos.size() > 0) {
+				for (int i = 0; i < secondIconInfos.size(); i++) {
+					gridList.add(secondIconInfos.get(i).getMc());
+
+				}
+			}
+			gridLayout2.setData(gridList);
+			gridLayout2.setItemWidth(100);
+			gridLayout2.setOnItemSelectListener(new ZnFlowLayout.OnItemSelectListener() {
+				@Override
+				public void onItemSelect(int pos, View view, String data, boolean isSelect) {
+					if (secondIconInfos == null || pos >= secondIconInfos.size()) {
+						return;
+					}
+
+					if (("返回").equals(secondIconInfos.get(pos).getMc())) {
+						secondIconInfos.clear();
+						gridLayout1.setVisibility(View.VISIBLE);
+						gridLayout2.setVisibility(View.GONE);
+					} else {
+						secondIconInfos.get(pos).setSelected(isSelect);
+					}
+
+				}
+			});
+		}
+
+			}
+
+
+	private class TagBean{
+    	public int tag;
+    	public boolean isSelected;
+	}
+
+	int postNum=0;
+    int responseNum=0;
+
 	private void upLoadServer(){
-		if(mSecondIconInfo==null){
+		if(secondIconInfos==null||secondIconInfos.size()==0){
 			toastMsg ="您还未选择项目";
 			mHandler.sendEmptyMessage(TOAST_MSG);
 			return;
 		}
+		List<SecondIconInfo> newInfos = new ArrayList<>();
+
+		for(SecondIconInfo mSecondIconInfo:secondIconInfos){
+			if(mSecondIconInfo.isSelected()){
+				newInfos.add(mSecondIconInfo);
+			}
+		}
+
+		if(newInfos==null||newInfos.size()==0){
+			toastMsg ="您还未选择项目";
+			mHandler.sendEmptyMessage(TOAST_MSG);
+			return;
+		}
+
+		 postNum=0;
+		 responseNum=0;
+		for(SecondIconInfo mSecondIconInfo:newInfos){
+			if(mSecondIconInfo.isSelected()) {
+				postNum++;
+				uploadSinglePro(mSecondIconInfo);
+			}
+		}
+
+	}
+
+	private void uploadSinglePro(SecondIconInfo mSecondIconInfo){
+
 		Map<String, String> dataMap = new HashMap<>();
 		dataMap.put("db", sp.getString(Constance.Data_Source_name));
 		dataMap.put("function", "sp_fun_upload_maintenance_project_detail");
@@ -151,14 +178,17 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
 				System.out.println("11111");
 				Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
 				String state = (String) resMap.get("state");
-
 				if ( "ok".equals(state)) {
-					Intent intent2 = new Intent(ProjectSelectActivity.this,ProjectOrderActivity.class);
-					startActivity(intent2);
-
-
+					responseNum++;
+					if(responseNum == postNum) {
+						Intent intent2 = new Intent(ProjectSelectActivity.this, ProjectOrderActivity.class);
+						startActivity(intent2);
+					}
 				}else{
-
+					if(resMap.get("msg")!=null) {
+						toastMsg = (String) resMap.get("msg");
+						mHandler.sendEmptyMessage(TOAST_MSG);
+					}
 				}
 			}
 			@Override
@@ -168,6 +198,7 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
 			}
 		});
 	}
+
 	private void initView() {
 		gridLayout1.setVisibility(View.VISIBLE);
 		gridLayout2.setVisibility(View.GONE);
@@ -178,18 +209,20 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
 			gridLayout1.setColumnCount(3);
 			for (int i = 0; i < firstIconInfos.size(); i++) {
 				View subView = View.inflate(this, R.layout.view_grid_item, null);
-				TextView name = subView.findViewById(R.id.name);
+				TextView name = subView.findViewById(R.id.tv_item);
 				name.setText(firstIconInfos.get(i).getWxgz());
 				gridLayout1.addView(subView);
 				subView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						TextView view1 = view.findViewById(R.id.name);
+						TextView view1 = view.findViewById(R.id.tv_item);
 						if(view1!=null&& view1.getText()!=null){
 							String name = view1.getText().toString();
 							DBManager dbManager = DBManager.getInstanse(ProjectSelectActivity.this);
 							secondIconInfos.clear();
-							secondIconInfos.add(null);
+							SecondIconInfo info = new SecondIconInfo();
+							info.setMc("返回");
+							secondIconInfos.add(info);
 							secondIconInfos.addAll(dbManager.querySecondIconListData(name));
 							mHandler.sendEmptyMessage(101);
 

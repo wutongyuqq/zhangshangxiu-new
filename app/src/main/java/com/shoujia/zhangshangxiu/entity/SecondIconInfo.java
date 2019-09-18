@@ -12,6 +12,7 @@ public class SecondIconInfo {
     String tybz;
     String wxgz;
     String xlf;
+    boolean isSelected;
 
 
     public int getId() {
@@ -100,5 +101,13 @@ public class SecondIconInfo {
 
     public void setXlf(String xlf) {
         this.xlf = xlf;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

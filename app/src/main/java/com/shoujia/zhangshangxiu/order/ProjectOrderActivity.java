@@ -349,8 +349,8 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     private void deletePeijianData(int position) {
 
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put("db","sjsoft_SQL");
-        dataMap.put("function", "sp_fun_delete_maintenance_project_detail");
+        dataMap.put("db",sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_delete_parts_project_detail");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
         dataMap.put("xh", mPeiJianList.get(position).getXh());
         HttpClient client = new HttpClient();
@@ -424,6 +424,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 zongyingshou.setText("总计:"+(totalXlf - totalXlfZk));
                 tv_xlfZk.setText(totalXlfZk+"");
             }else{
+                mOrderAdapter.notifyDataSetChanged();
                 wxfTotal.setText("总计:0");
                 zongyingshou.setText("总计:0");
                 tv_xlfZk.setText("0");
@@ -440,6 +441,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 pjfTotal.setText(totalPjfMoney+"");
                 zongyingshou2.setText(totalPjfMoney+"");
             }else{
+                mPeijianAdapter.notifyDataSetChanged();
                 pjfTotal.setText("0");
                 zongyingshou2.setText("0");
             }
@@ -606,6 +608,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
 
     private void getProjectListData() {
         mProjectList.clear();
+        mHandler.sendEmptyMessage(100);
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_jsdmx_xlxm");
@@ -647,6 +650,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
 
     private void getPjListData(){
         mPeiJianList.clear();
+        mHandler.sendEmptyMessage(101);
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_jsdmx_pjclmx");

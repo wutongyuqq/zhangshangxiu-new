@@ -126,7 +126,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:drawableRight="@drawable/edit"
                     android:paddingRight="10dp"
                     android:text="" />
 

@@ -34,6 +34,7 @@
             android:textColor="#999999" />
 
         <TextView
+            android:id="@+id/danjia"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"

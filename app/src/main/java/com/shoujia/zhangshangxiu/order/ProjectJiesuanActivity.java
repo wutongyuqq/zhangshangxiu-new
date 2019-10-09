@@ -183,23 +183,27 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         part_lay.removeAllViews();
         for(JsPartBean bean:mPartBeans){
             View partView = View.inflate(this,R.layout.view_part_item,null);
-            String slStr = bean.sl;
+            String slStr = bean.getSl();
             float tmpSl = Float.parseFloat(slStr);
             totalPartSl+=tmpSl;
             String moneyStr = bean.ssj;
             double tmpDob = Double.parseDouble(moneyStr);
-            totalPartMoney+=tmpDob;
+            totalPartMoney+=tmpDob * tmpSl;
             totalCb += Double.parseDouble(TextUtils.isEmpty(bean.cb)?"0":bean.cb);
             TextView part_num = partView.findViewById(R.id.part_num);
             TextView money_total = partView.findViewById(R.id.part_money_total);
             TextView part_name = partView.findViewById(R.id.part_name);
+            TextView danjia = partView.findViewById(R.id.danjia);
             part_num.setText(Util.getDoubleStr(slStr));
-            money_total.setText(Util.getDoubleStr(moneyStr));
+            danjia.setText(Util.getDoubleStr(bean.ssj));
+            money_total.setText(Util.getDoubleStr((tmpDob * tmpSl)+""));
             part_name.setText(bean.pjmc);
             part_lay.addView(partView);
         }
         View totalView = View.inflate(this,R.layout.view_part_item,null);
         TextView part_num = totalView.findViewById(R.id.part_num);
+        TextView danjia = totalView.findViewById(R.id.danjia);
+        danjia.setVisibility(View.INVISIBLE);
         part_num.setText(totalPartSl+"");
         TextView money_total = totalView.findViewById(R.id.part_money_total);
         TextView part_name = totalView.findViewById(R.id.part_name);

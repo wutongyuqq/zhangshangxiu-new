@@ -591,7 +591,6 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                     }else{
                         CarInfo car = new CarInfo();
                         car.setMc(cpStr);
-                        db.insertOrUpdateCarInfo(car);
                         setFormData(car);
                     }
 

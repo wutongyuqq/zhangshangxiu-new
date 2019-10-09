@@ -15,6 +15,7 @@ public class PeijianBean {
 	private String sl;
 	private String ssj;
 	private String xh;
+	private boolean isSaveNewPrice;
 
 	public String getCb() {
 		return cb;
@@ -66,7 +67,10 @@ public class PeijianBean {
 
 	public String getSl() {
 		if(TextUtils.isEmpty(sl)){
-			return "0";
+			return "1";
+		}
+		if(Float.parseFloat(sl)<=0){
+			return "1";
 		}
 		return sl;
 	}
@@ -87,10 +91,18 @@ public class PeijianBean {
 	}
 
 	public String getXh() {
-		return xh;
+		return TextUtils.isEmpty(xh)?"0":xh;
 	}
 
 	public void setXh(String xh) {
 		this.xh = xh;
+	}
+
+	public boolean isSaveNewPrice() {
+		return isSaveNewPrice;
+	}
+
+	public void setSaveNewPrice(boolean saveNewPrice) {
+		isSaveNewPrice = saveNewPrice;
 	}
 }

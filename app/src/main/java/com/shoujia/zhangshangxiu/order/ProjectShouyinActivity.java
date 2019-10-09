@@ -484,8 +484,8 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
                 skfs1= "";
                 skje1 =  0;
                 sxf1=0;
-                skfs2="";
-                skje2 =  0;
+                skfs2="0";
+                skje2 = 0;
                 sxf2=0;
             }else if(newMoneyArr.size()==0){
                 Toast.makeText(this,"请未填写付款方式或付款金额", Toast.LENGTH_SHORT).show();

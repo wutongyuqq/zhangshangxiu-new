@@ -237,7 +237,10 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             public void rightBtnClick(PeijianBean newBean) {
                 mPeiJianList.set(position,newBean);
                 mPeijianAdapter.notifyDataSetChanged();
+                addPjToServer(newBean);
             }
+
+
         });
         editDialog.show();
     }
@@ -805,7 +808,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-/*
+
     //增加临时项目
     private void addPjToServer(final PeijianBean bean){
 
@@ -835,8 +838,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
                 if ( "ok".equals(state)) {
-                    mPeiJianList.add(bean);
-                    mHandler.sendEmptyMessage(111);
+                   getPjListData();
                 }else{
 
                 }
@@ -847,7 +849,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 mHandler.sendEmptyMessage(TOAST_MSG);
             }
         });
-    }*/
+    }
 
 
 

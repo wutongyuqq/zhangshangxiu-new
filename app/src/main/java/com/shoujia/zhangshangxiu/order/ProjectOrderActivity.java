@@ -81,7 +81,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     private OrderCarInfo mOrderCarInfo;
     private boolean isToPeijian;
     private boolean isToJiesuan;
-
+    InfoSupport infoSupport;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +125,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         total_jiesuan.setOnClickListener(this);
         total_jiesuan2.setOnClickListener(this);
         paigong.setOnClickListener(this);
-        new InfoSupport(this);
+        infoSupport = new InfoSupport(this);
         mOrderAdapter = new ProjectOrderProAdapter(this, mProjectList);
         mPeijianAdapter = new PeijianOrderProAdapter(this, mPeiJianList);
         listview.setAdapter(mOrderAdapter);
@@ -463,11 +463,8 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             sp.putString(Constance.CHEJIAHAO,mOrderCarInfo.getCjhm());
             beizhu.setText("备注:"+mOrderCarInfo.getMemo());
             wxfTotal.setText("总计:"+mOrderCarInfo.getWxfzj());
+            infoSupport.setCz(mOrderCarInfo.getCz());
             zongyingshou.setText("总计:"+mOrderCarInfo.getZje());
-            car_home_page.setClickable(true);
-            car_home_page.setBackgroundColor(Color.parseColor("#89c997"));
-            car_home_page2.setClickable(true);
-            car_home_page2.setBackgroundColor(Color.parseColor("#89c997"));
             if (mOrderCarInfo.getDjzt().equals("待修")) {
                 paigong.setText("派工");
                // $scope.djzt = '派工';
@@ -482,10 +479,6 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 djztUnable = true;
                 OrderBeanInfo.allBtnUnable = true;
                 paigong.setText("取消完工");
-                car_home_page2.setClickable(false);
-                car_home_page2.setBackgroundColor(Color.parseColor("#cccccc"));
-                car_home_page.setClickable(false);
-                car_home_page.setBackgroundColor(Color.parseColor("#cccccc"));
                /* $scope.showFloatImg = true;
                 $scope.djzt = '取消完工';
                 $scope.djztUnable = 1;
@@ -516,12 +509,6 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 project_ck.setBackgroundColor(Color.parseColor("#cccccc"));
                 temp_pro.setBackgroundColor(Color.parseColor("#cccccc"));
                 peijianku.setBackgroundColor(Color.parseColor("#cccccc"));
-
-                car_home_page2.setClickable(false);
-                car_home_page2.setBackgroundColor(Color.parseColor("#cccccc"));
-                car_home_page.setClickable(false);
-                car_home_page.setBackgroundColor(Color.parseColor("#cccccc"));
-
                 mOrderAdapter.notifyDataSetChanged();
                 mPeijianAdapter.notifyDataSetChanged();
                /* $scope.showFloatImg = true;
@@ -591,6 +578,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                     List<OrderCarInfo> projectBeans = JSONArray.parseArray(dataArray.toJSONString(), OrderCarInfo.class);
                     if(projectBeans!=null&&projectBeans.size()>0){
                         mOrderCarInfo = projectBeans.get(0);
+
                         //getGuzhang();
                     }
                     mHandler.sendEmptyMessage(109);
@@ -692,8 +680,12 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void judgeToStatu(){
+        if(djztUnable){
+            return;
+        }
         gdStatu = paigong.getText().toString();
         isToPaigong = true;
+
             if(gdStatu.equals("派工")) {
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectPaigongActivity.class));
             //去派工页面

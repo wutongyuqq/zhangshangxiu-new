@@ -2,6 +2,7 @@ package com.shoujia.zhangshangxiu.search;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -13,11 +14,14 @@ import com.shoujia.zhangshangxiu.base.BaseActivity;
 import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
 import com.shoujia.zhangshangxiu.entity.ManageInfo;
+import com.shoujia.zhangshangxiu.entity.ReciveInfo;
+import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.search.adapter.SearchListAdapter;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,6 +34,7 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
   private List<CarInfo> mInfoList;
   private SearchListAdapter carListAdapter;
 	ListView mListview;
+	HomeDataHelper mHomeDataHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,9 +82,38 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
 	private void getData(String chooseName){
 		DBManager db = DBManager.getInstanse(this);
 		mInfoList = db.querySearchListData(chooseName);
-		carListAdapter.setListData(mInfoList);
-		carListAdapter.notifyDataSetChanged();
+		if(mInfoList!=null && mInfoList.size()>0){
+			carListAdapter.setListData(mInfoList);
+			carListAdapter.notifyDataSetChanged();
+		}else{
+			//新车
+			getHomeHelper().getSearchCarList(chooseName, new HomeDataHelper.SearchDataListener() {
+				@Override
+				public void onSuccess(List<CarInfo> carInfos) {
+					if(mInfoList==null){
+						mInfoList = new ArrayList<>();
+					}
+					carListAdapter.setListData(mInfoList);
+					carListAdapter.notifyDataSetChanged();
+				}
+
+				@Override
+				public void onFail() {
+
+				}
+			});
+		}
+
 	}
+
+
+	private HomeDataHelper getHomeHelper(){
+		if(mHomeDataHelper==null){
+			mHomeDataHelper = new HomeDataHelper(this);
+		}
+		return mHomeDataHelper;
+	}
+
 
 
 	public void setTittle(String title){

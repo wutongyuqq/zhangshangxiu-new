@@ -434,6 +434,46 @@ public class HomeDataHelper extends BaseHelper {
         });
     }
 
+
+
+    public void getSearchCarList(final String searchName,final SearchDataListener listener) {
+        if(TextUtils.isEmpty(searchName)){
+            return;
+        }
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_down_plate_number_other");
+        dataMap.put("parameter", searchName);
+        dataMap.put("company_code", sp.getString(Constance.COMP_CODE));
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                previous_xh1 = (String) resMap.get("Previous_xh");
+                if ( state!=null&&"ok".equals(state)) {
+                    JSONArray dataArray = (JSONArray) resMap.get("data");
+                    List<CarInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(), CarInfo.class);
+                    if (dataList != null && dataList.size() > 0) {
+                        DBManager.getInstanse(getActivity()).insertListData(dataList);
+                        //carInfoList.addAll(dataList);
+                        if(listener!=null){
+                            listener.onSuccess(dataList);
+                        }
+                    }
+                }
+
+            }
+            @Override
+            public void onFail() {
+                toastMsg ="网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+    }
+
+
     private void checkHasNotComplete(final CarInfo carInfo,final GetDataListener listener){
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
@@ -700,5 +740,10 @@ public class HomeDataHelper extends BaseHelper {
         void onFail();
     }
 
+
+    public interface SearchDataListener{
+        void onSuccess(List<CarInfo> carInfos);
+        void onFail();
+    }
 
 }

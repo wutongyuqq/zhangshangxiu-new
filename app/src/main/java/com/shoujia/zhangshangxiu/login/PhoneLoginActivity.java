@@ -153,6 +153,17 @@ public class PhoneLoginActivity extends BaseActivity implements OnClickListener 
         });
     }
 
+    /**
+     * dataMap.put("db", sp.getString(Constance.Data_Source_name));
+     *         dataMap.put("function", "sp_fun_check_user_state_login");
+     *         dataMap.put("operater_code", userName);
+     *         dataMap.put("operater_ip", "121.43.148.193");
+     *         dataMap.put("password", password);
+     * @param factoryName
+     * @param userName
+     * @param password
+     */
+
     private void login(final String factoryName,final String userName, final String password) {
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));

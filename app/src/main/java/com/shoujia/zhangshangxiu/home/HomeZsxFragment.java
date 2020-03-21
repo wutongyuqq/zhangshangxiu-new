@@ -536,18 +536,20 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                     DBManager db = DBManager.getInstanse(getActivity());
                     carInfoList = db.queryListData(proStr);
                     if(carInfoList==null||carInfoList.size()==0||isCpClick){
+
                         return;
-                    }
-                    showCarInfoList.clear();
-                    showCarInfoList.addAll(carInfoList);
-                    homeCarInfoAdapter.notifyDataSetChanged();
-                    if (carInfoList != null && carInfoList.size() > 0 && !TextUtils.isEmpty(proSimple) && !TextUtils.isEmpty(editable.toString())) {
-                        int[] location = new int[2];
-                        et_province_cp.getLocationOnScreen(location); //获取在当前窗口内的绝对坐标,当前activity显示的大小
-                        int yOff = location[1] + Util.dp2px(getContext(), 50);
-                        mPopupWindow.dismiss();
-                        if (getActivity() != null && et_province_cp!=null) {
-                            mPopupWindow.showAsDropDown(et_province_cp);
+                    }else {
+                        showCarInfoList.clear();
+                        showCarInfoList.addAll(carInfoList);
+                        homeCarInfoAdapter.notifyDataSetChanged();
+                        if (carInfoList != null && carInfoList.size() > 0 && !TextUtils.isEmpty(proSimple) && !TextUtils.isEmpty(editable.toString())) {
+                            int[] location = new int[2];
+                            et_province_cp.getLocationOnScreen(location); //获取在当前窗口内的绝对坐标,当前activity显示的大小
+                            int yOff = location[1] + Util.dp2px(getContext(), 50);
+                            mPopupWindow.dismiss();
+                            if (getActivity() != null && et_province_cp != null) {
+                                mPopupWindow.showAsDropDown(et_province_cp);
+                            }
                         }
                     }
                 }

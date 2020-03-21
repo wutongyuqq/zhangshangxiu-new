@@ -32,7 +32,7 @@ public class OrderCarInfo implements Serializable {
     }
 
     public String getCz() {
-        return cz;
+        return cz==null?"":cz;
     }
 
     public void setCz(String cz) {

@@ -30,7 +30,7 @@ public class FactoryIntroduceFragment extends BaseFragment implements OnClickLis
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = View.inflate(getActivity(), R.layout.fragment_factory_introduce, null);
         initView();
-        initData();
+
 
         return mView;
     }
@@ -51,6 +51,12 @@ public class FactoryIntroduceFragment extends BaseFragment implements OnClickLis
             }
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 
     private View findViewById(int id){

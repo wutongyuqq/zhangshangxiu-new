@@ -91,10 +91,11 @@ public class DBManager {
             if(TextUtils.isEmpty(param)){
 
             }else{
-                sql = "SELECT  *  FROM " + DBHelper.TABLE_NAME + " WHERE mc like '%"+param+"%'" +" LIMIT "+limitStr;
+                //select *, count(distinct name) from table group by name
+                sql = "SELECT  *,count(distinct mc)  FROM " + DBHelper.TABLE_NAME + " WHERE mc like '%"+param+"%'" +" group by mc  LIMIT "+limitStr;
             }
             if(!isLike){
-                sql = "SELECT  *  FROM " + DBHelper.TABLE_NAME + " WHERE mc = '"+param+"'" +" LIMIT "+limitStr;
+                sql = "SELECT  *,count(distinct mc)   FROM " + DBHelper.TABLE_NAME + " WHERE mc = '"+param+"'" +" group by mc  LIMIT "+limitStr;
             }
             Cursor cursor = db.rawQuery(sql, null, null);//db.query(DBHelper.TABLE_NAME,null,nameStr,typeArr,null,null,"watch_num",limit);
             //String sql = "select * from "+DBHelper.TABLE_NAME+" where videotype";
@@ -660,6 +661,25 @@ public class DBManager {
 
         }
         return beanList;
+    }
+
+    public void deleteData(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try {
+
+            db.beginTransaction();
+            db.execSQL("delete from " + DBHelper.FIRST_ICON_TABLE_NAME);
+            db.execSQL("delete from " + DBHelper.SECOND_ICON_TABLE_NAME);
+            db.execSQL("delete from " + DBHelper.PARTS_INFO_TABLE_NAME);
+            db.execSQL("delete from " + DBHelper.REPAIR_TABLE_NAME);
+            db.execSQL("delete from " + DBHelper.TABLE_NAME);
+        }catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            //db.close();
+        }
+
     }
 
 

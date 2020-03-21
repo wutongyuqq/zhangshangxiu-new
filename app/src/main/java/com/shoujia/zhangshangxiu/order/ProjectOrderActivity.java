@@ -224,7 +224,10 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         editDialog.setOnClickListener(new OrderTempEditDialog.OnClickListener() {
             @Override
             public void rightBtnClick(ProjectBean newBean) {
-                saveNewPrice(newBean,position);
+                if(newBean.isSaveNewPrice()) {
+                    saveNewPrice(newBean, position);
+                }
+                addProjectDetailServer(position,newBean);
             }
         });
         editDialog.show();
@@ -763,6 +766,45 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             }
 
     }
+
+
+
+    //更新项目详情
+    private void addProjectDetailServer(final int position,final ProjectBean bean){
+
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_upload_maintenance_project_detail");
+        dataMap.put("jsd_id",sp.getString(Constance.JSD_ID));
+        dataMap.put("xlxm",bean.getXlxm());
+        dataMap.put("xlf",bean.getXlf());
+        dataMap.put("zk",bean.getZk());
+        dataMap.put("wxgz",bean.getWxgz());
+
+        dataMap.put("xh",bean.getXh());
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                if ( "ok".equals(state)) {
+                    mProjectList.set(position,bean);
+                    mHandler.sendEmptyMessage(100);
+                }else{
+
+                }
+            }
+            @Override
+            public void onFail() {
+                toastMsg ="网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+    }
+
+
 
 //增加临时项目
     private void addTmpServer(final ProjectBean bean){

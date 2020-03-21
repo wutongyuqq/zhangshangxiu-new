@@ -13,6 +13,7 @@ public class ProjectBean {
 	private String xlxm;
 	private String zk;
 	private String cb;
+	private boolean isSaveNewPrice;
 
 	public String getSsje() {
 		return TextUtils.isEmpty(ssje)?"0":ssje;
@@ -68,5 +69,13 @@ public class ProjectBean {
 
 	public void setCb(String cb) {
 		this.cb = cb;
+	}
+
+	public boolean isSaveNewPrice() {
+		return isSaveNewPrice;
+	}
+
+	public void setSaveNewPrice(boolean saveNewPrice) {
+		isSaveNewPrice = saveNewPrice;
 	}
 }

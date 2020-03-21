@@ -79,6 +79,7 @@ public class OrderTempEditDialog {
                         mProjectBean.setZk(edit_pro_lb.getText().toString());
                     }
                     if(save_new_price.getTag().equals("1")){
+                        mProjectBean.setSaveNewPrice(true);
                         DBManager dbManager = DBManager.getInstanse(mContext);
                         dbManager.updatePartsData(mProjectBean);
 

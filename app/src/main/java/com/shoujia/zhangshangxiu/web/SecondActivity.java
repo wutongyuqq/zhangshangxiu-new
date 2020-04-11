@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -29,6 +30,7 @@ public class SecondActivity extends Activity {
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 						| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		setContentView(R.layout.activity_second);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		backBtn = findViewById(R.id.back_btn);
 		codeImage = findViewById(R.id.code_image);
 		init();

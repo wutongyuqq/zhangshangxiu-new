@@ -4,6 +4,7 @@ public class FirstIconInfo {
     int id;
     String imageurl;
     String wxgz;
+    String tcmc;
 
     public int getId() {
         return id;
@@ -27,5 +28,13 @@ public class FirstIconInfo {
 
     public void setWxgz(String wxgz) {
         this.wxgz = wxgz;
+    }
+
+    public String getTcmc() {
+        return tcmc;
+    }
+
+    public void setTcmc(String tcmc) {
+        this.tcmc = tcmc;
     }
 }

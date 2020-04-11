@@ -1,5 +1,6 @@
 package com.shoujia.zhangshangxiu.setting;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -116,7 +118,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                         dismissDialog();
                        // DBManager.getInstanse(getActivity()).close();
                         toastMsg = "更新修理数据成功";
-                        mHandler.sendEmptyMessage(TOAST_MSG);
+                        mHandler.sendEmptyMessageDelayed(TOAST_MSG,2000);
                     }
                 });
                 helper.getPartsList(new HomeDataHelper.UpdateDataListener() {
@@ -125,7 +127,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                         dismissDialog();
                        // DBManager.getInstanse(getActivity()).close();
                         toastMsg = "更新配件数据成功";
-                        mHandler.sendEmptyMessage(TOAST_MSG);
+                        mHandler.sendEmptyMessageDelayed(TOAST_MSG,1000);
                     }
                 });
                 helper.getSecondIconList(new HomeDataHelper.UpdateDataListener() {
@@ -314,7 +316,24 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     }
     private String SDPath = "/mnt/sdcard/zsx/";
     int progressInt = 0;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+    private boolean checkPermission(){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), PERMISSIONS_STORAGE, 1);
+                return false;
+            }
+        }
+        return true;
+
+    }
     public void download(final String url) {
+        if(!checkPermission()){
+            return;
+        }
         File file = new File(SDPath + "zhangshangxiu.apk");
         if (file.exists()) {
             file.delete();
@@ -345,6 +364,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                         total = response.body().contentLength();
 
                         File file = new File(saveDir, "zhangshangxiu.apk");
+                        if(!file.exists()){
+                            file.createNewFile();
+                        }
                         fos = new FileOutputStream(file);
                         long sum = 0;
                         while ((len = is.read(buf)) != -1) {

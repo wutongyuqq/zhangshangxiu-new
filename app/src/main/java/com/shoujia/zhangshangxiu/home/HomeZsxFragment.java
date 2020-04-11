@@ -259,6 +259,17 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
              isCpClick = false;
          }else if(msgInt==19){
             dismissDialog();
+         }else if(msgInt==20){
+             homeCarInfoAdapter.notifyDataSetChanged();
+             if (carInfoList != null && carInfoList.size() > 0) {
+                 int[] location = new int[2];
+                 et_province_cp.getLocationOnScreen(location); //获取在当前窗口内的绝对坐标,当前activity显示的大小
+                 int yOff = location[1] + Util.dp2px(getContext(), 50);
+                 mPopupWindow.dismiss();
+                 if (getActivity() != null && et_province_cp != null) {
+                     mPopupWindow.showAsDropDown(et_province_cp);
+                 }
+             }
          }
     }
 
@@ -536,7 +547,23 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                     DBManager db = DBManager.getInstanse(getActivity());
                     carInfoList = db.queryListData(proStr);
                     if(carInfoList==null||carInfoList.size()==0||isCpClick){
+                        //新车
+                        getHomeHelper().getSearchCarList(proSimple, new HomeDataHelper.SearchDataListener() {
+                            @Override
+                            public void onSuccess(List<CarInfo> carInfos) {
+                              if(carInfos==null||carInfos.size()==0){
+                                  return;
+                              }
+                                showCarInfoList.clear();
+                                showCarInfoList.addAll(carInfos);
+                                mHandler.sendEmptyMessage(20);
+                            }
 
+                            @Override
+                            public void onFail() {
+
+                            }
+                        });
                         return;
                     }else {
                         showCarInfoList.clear();

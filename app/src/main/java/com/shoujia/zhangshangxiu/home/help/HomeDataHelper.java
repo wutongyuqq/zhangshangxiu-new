@@ -201,7 +201,39 @@ public class HomeDataHelper extends BaseHelper {
             }
         });
     }
-//获取第一页数据
+
+
+
+    //获取第一页数据
+    public void getBaoyangIconList(final GetBaoyangDataListener listener){
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_down_maintenance_category_maintain");
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+
+                if (state!=null&& "ok".equals(state)) {
+                    JSONArray dataArray = (JSONArray) resMap.get("data");
+                    List<FirstIconInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(),FirstIconInfo.class);
+                    listener.onSuccess(dataList);
+                }else{
+                    listener.onFail();
+                }
+            }
+            @Override
+            public void onFail() {
+                listener.onFail();
+            }
+        });
+    }
+
+
+
+    //获取第一页数据
     public void getFirstIconList(final UpdateDataListener listener){
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
@@ -737,6 +769,12 @@ public class HomeDataHelper extends BaseHelper {
 
     public interface InsertDataListener{
         void onSuccess();
+        void onFail();
+    }
+
+
+    public interface GetBaoyangDataListener{
+        void onSuccess(List<FirstIconInfo> dataList);
         void onFail();
     }
 

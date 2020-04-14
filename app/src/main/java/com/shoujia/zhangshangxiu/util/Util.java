@@ -191,14 +191,14 @@ public class Util {
 						+ (wxgz.length() < 10 ? ((wxgz + "              ")
 						.substring(0, 10)) : wxgz)
 						+ " "
-						+ (zk.length() < 10 ? ((zk + "").substring(0, 10)) : zk)
+						+ (zk.length() < 10 ? ((zk + "               ").substring(0, 10)) : zk)
 						+ "\r";
 			}
 			content += "小计              "
 					+ (totalXlf.length() < 10 ? ((totalXlf + "              ")
 					.substring(0, 10)) : totalXlf)
 					+ " "
-					+ (totalZk.length() < 10 ? ((totalZk + "").substring(0, 10))
+					+ (totalZk.length() < 10 ? ((totalZk + "              ").substring(0, 10))
 					: totalZk) + "</FH>\r";
 			content += "--------------------------------------------\r";
 		}
@@ -222,14 +222,14 @@ public class Util {
 						+ (sl.length() < 12 ? ((sl + "          ").substring(0,
 						12)) : sl)
 						+ " "
-						+ (ssj.length() < 12 ? ((ssj + "          ").substring(
+						+ (ssj.length() < 12 ? ((ssj + "               ").substring(
 						0, 12)) : ssj) + " " + totalStr + "\r";
 			}
 			content += "小计           "
-					+ (totalsl.length() < 12 ? ((totalsl + "              ")
+					+ (totalsl.length() < 12 ? ((totalsl + "                 ")
 					.substring(0, 12)) : totalsl)
 					+ "           "
-					+ (totalMoney.length() < 12 ? ((totalMoney + "").substring(
+					+ (totalMoney.length() < 12 ? ((totalMoney + "                ").substring(
 					0, 12)) : totalMoney) + "\r";
 			content += "</FH>\r";
 			content += "--------------------------------------------\r";

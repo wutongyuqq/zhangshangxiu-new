@@ -1,6 +1,5 @@
 package com.shoujia.zhangshangxiu.web;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,6 +29,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.shoujia.zhangshangxiu.R;
+import com.shoujia.zhangshangxiu.base.BaseActivity;
+import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.web.util.WaitTool;
 
 import java.io.File;
@@ -52,7 +53,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 	WebView webView;
 	private static Boolean isQuit = false;
 	private long mExitTime = 0;
@@ -309,7 +310,7 @@ public class MainActivity extends Activity {
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 						| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main_two);
 		context = this;
 		//webView = (WebView) findViewById(R.id.web);
 		webView.addJavascriptInterface(this, "printdata");
@@ -505,39 +506,54 @@ public class MainActivity extends Activity {
 	@JavascriptInterface
 	public void checkVesion() {
 		NetTool netTool = new NetTool();
-		Map<String, Object> jsonMap = netTool.getVesionInfoFromServer();
-		if (jsonMap != null) {
-			String stateStr = jsonMap.get("state") != null ? (String) jsonMap
-					.get("state") : "";
-			String updateStr = jsonMap.get("online_update") != null ? (String) jsonMap
-					.get("online_update") : "";
-			String download_url = jsonMap.get("download_url") != null ? (String) jsonMap
-					.get("download_url") : "";
-			if (stateStr.equals("ok") && updateStr.equals("YES")
-					&& !download_url.equals("")) {
-				String versionServer = jsonMap.get("version") != null ? (String) jsonMap
-						.get("version") : "";
-				if (isNeedUpdate(versionServer)) {
-					String update_log = jsonMap.get("update_log") != null ? (String) jsonMap
-							.get("update_log") : "";
-					showUpdateDialog(context, update_log, download_url);
+		netTool.getVesionInfoFromServer(new IGetDataListener(){
+			@Override
+			public void onSuccess(String resJson) {
+				Map<String, Object> jsonMap = JsonUtil.jsToMap(resJson);
+				if (jsonMap != null) {
+					String stateStr = jsonMap.get("state") != null ? (String) jsonMap
+							.get("state") : "";
+					String updateStr = jsonMap.get("online_update") != null ? (String) jsonMap
+							.get("online_update") : "";
+					String download_url = jsonMap.get("download_url") != null ? (String) jsonMap
+							.get("download_url") : "";
+					if (stateStr.equals("ok") && updateStr.equals("YES")
+							&& !download_url.equals("")) {
+						String versionServer = jsonMap.get("version") != null ? (String) jsonMap
+								.get("version") : "";
+						if (isNeedUpdate(versionServer)) {
+							String update_log = jsonMap.get("update_log") != null ? (String) jsonMap
+									.get("update_log") : "";
+							showUpdateDialog(context, update_log, download_url);
+						} else {
+							Toast.makeText(context, "已是最新版本，无需更新", Toast.LENGTH_LONG)
+									.show();
+						}
+					} else {
+						if (stateStr.equals("ok")) {
+							toastMsg= jsonMap.get("msg") != null ? (String) jsonMap
+									.get("msg") : "";
+
+							mHandler.sendEmptyMessage(TOAST_MSG);
+						} else {
+							toastMsg="服务异常";
+							mHandler.sendEmptyMessage(TOAST_MSG);
+						}
+
+					}
 				} else {
-					Toast.makeText(context, "已是最新版本，无需更新", Toast.LENGTH_LONG)
-							.show();
+					toastMsg="已是最新版本，无需更新";
+					mHandler.sendEmptyMessage(TOAST_MSG);
+					//Toast.makeText(context, "已是最新版本，无需更新", Toast.LENGTH_LONG).show();
 				}
-			} else {
-				if (stateStr.equals("ok")) {
-					String msg = jsonMap.get("msg") != null ? (String) jsonMap
-							.get("msg") : "";
-					Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(context, "服务异常", Toast.LENGTH_LONG).show();
-				}
+			}
+
+			@Override
+			public void onFail() {
 
 			}
-		} else {
-			Toast.makeText(context, "已是最新版本，无需更新", Toast.LENGTH_LONG).show();
-		}
+		});
+
 	}
 
 	public String getAppVersionName(Context context) {

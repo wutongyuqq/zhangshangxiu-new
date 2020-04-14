@@ -158,6 +158,46 @@ public class DBManager {
     }
 
 
+
+    //获取汽车信息列表
+    public boolean queryCp(String cp) {
+        List<CarInfo> beanList = new ArrayList<>();
+        if (dbHelper == null) {
+            return false;
+        }
+        if (cp == null) {
+            return false;
+        }
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String sql = "SELECT  *  FROM " + DBHelper.TABLE_NAME +" WHERE mc like '%"+cp+"%'";
+
+            Cursor cursor = db.rawQuery(sql, null, null);//db.query(DBHelper.TABLE_NAME,null,nameStr,typeArr,null,null,"watch_num",limit);
+            //String sql = "select * from "+DBHelper.TABLE_NAME+" where videotype";
+            //Cursor cursor = db.rawQuery()
+            if (cursor!=null) {
+                while (cursor.moveToNext()) {
+                    CarInfo bean = new CarInfo();
+                    beanList.add(bean);
+                }
+            }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 结束事务
+            db.endTransaction();
+            db.close();
+        }
+        if(beanList!=null && beanList.size()>0){
+            return true;
+        }
+        return false;
+    }
+
+
     //获取汽车信息列表
     public List<CarInfo> queryAllListData() {
         List<CarInfo> beanList = new ArrayList<>();
@@ -333,6 +373,7 @@ public class DBManager {
                 values.put("gls", car.getGls());
                 values.put("memo", car.getMemo());
                 values.put("keys_no", car.getKeys_no());
+
                 db.insert(DBHelper.TABLE_NAME, null, values);
             }
             //加上的代码
@@ -1007,6 +1048,69 @@ public class DBManager {
 
 
 
+
+
+
+
+
+    //获取汽车信息列表ByLb
+    public List<SecondIconInfo> querySecondIconListDataByLb(String name) {
+        List<SecondIconInfo> beanList = new ArrayList<>();
+        if (dbHelper == null) {
+            return null;
+        }
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String sql = "SELECT  *  FROM " + DBHelper.SECOND_ICON_TABLE_NAME + " where lb='"+name+"'";
+            Cursor cursor = db.rawQuery(sql, null, null);//db.query(DBHelper.TABLE_NAME,null,nameStr,typeArr,null,null,"watch_num",limit);
+            //String sql = "select * from "+DBHelper.TABLE_NAME+" where videotype";
+            //Cursor cursor = db.rawQuery()
+            if (cursor!=null) {
+                while (cursor.moveToNext()) {
+                    SecondIconInfo bean = new SecondIconInfo();
+                    int id = cursor.getInt(cursor.getColumnIndex("id"));
+                    String cx = cursor.getString(cursor.getColumnIndex("cx"));
+                    String is_quick_project = cursor.getString(cursor.getColumnIndex("is_quick_project"));
+                    String lb = cursor.getString(cursor.getColumnIndex("lb"));
+                    String mc = cursor.getString(cursor.getColumnIndex("mc"));
+                    String pgzgs = cursor.getString(cursor.getColumnIndex("pgzgs"));
+                    String pycode = cursor.getString(cursor.getColumnIndex("pycode"));
+                    String spj = cursor.getString(cursor.getColumnIndex("spj"));
+                    String tybz = cursor.getString(cursor.getColumnIndex("tybz"));
+                    String wxgz = cursor.getString(cursor.getColumnIndex("wxgz"));
+                    String xlf = cursor.getString(cursor.getColumnIndex("xlf"));
+
+                    bean.setId(id);
+                    bean.setCx(cx);
+                    bean.setIs_quick_project(is_quick_project);
+                    bean.setLb(lb);
+                    bean.setMc(mc);
+                    bean.setPgzgs(pgzgs);
+                    bean.setPycode(pycode);
+                    bean.setSpj(spj);
+                    bean.setTybz(tybz);
+                    bean.setWxgz(wxgz);
+                    bean.setXlf(xlf);
+                    beanList.add(bean);
+                }
+            }
+            cursor.close();
+            // 设置事务标志为成功，当结束事务时就会提交事务
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 结束事务
+            db.endTransaction();
+            db.close();
+
+        }
+        return beanList;
+    }
+
+
+
     //获取汽车信息列表
     public SecondIconInfo querySecondIconData(int id) {
         List<SecondIconInfo> beanList = new ArrayList<>();
@@ -1071,6 +1175,8 @@ public class DBManager {
         if (dbHelper == null || infos == null) {
             return;
         }
+
+
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         db.beginTransaction();
         try {

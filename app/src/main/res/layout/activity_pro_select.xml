@@ -34,6 +34,7 @@
             android:paddingTop="10dp"
             android:gravity="center"
             android:background="#eeeeee"
+            android:visibility="gone"
             android:text="常规项目"/>
 
         <TextView

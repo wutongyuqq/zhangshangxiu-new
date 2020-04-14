@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.shoujia.zhangshangxiu.R;
+import com.shoujia.zhangshangxiu.http.IGetDataListener;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
@@ -29,8 +30,9 @@ public class SecondActivity extends Activity {
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 						| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		setContentView(R.layout.activity_second);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_second);
+
 		backBtn = findViewById(R.id.back_btn);
 		codeImage = findViewById(R.id.code_image);
 		init();
@@ -69,15 +71,26 @@ public class SecondActivity extends Activity {
 			String aSet = getIntent().getStringExtra("aSet");
 			String nonce = getIntent().getStringExtra("nonce");
 			String usercode = getIntent().getStringExtra("usercode");
-			NetTool netTool = new NetTool();
+			final NetTool netTool = new NetTool();
 			Map<String, Object> jsonMap = netTool.getWxInfoFromServer(id,aSet,nonce);
 			String access_token = (String)jsonMap.get("access_token");
-			Map<String, Object> jsonMap2 = netTool.getTicket(access_token,usercode);
-			if(jsonMap2.get("ticket")!=null){
-				String ticket = (String) jsonMap2.get("ticket");
-				mBitmap = netTool.getImageCode(ticket);
-				handler.sendEmptyMessage(3);
-			}
+			netTool.getTicket(access_token, usercode, new IGetDataListener() {
+				@Override
+				public void onSuccess(String json) {
+					Map<String,Object> jsonMap2 = JsonUtil.jsToMap(json);
+					if(jsonMap2.get("ticket")!=null){
+						String ticket = (String) jsonMap2.get("ticket");
+						mBitmap = netTool.getImageCode(ticket);
+						handler.sendEmptyMessage(3);
+					}
+				}
+
+				@Override
+				public void onFail() {
+
+				}
+			});
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}

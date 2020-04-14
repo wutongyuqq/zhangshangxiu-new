@@ -522,6 +522,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
+
                 Log.d("onSuccess--json", json);
                 System.out.println("11111");
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
@@ -529,8 +530,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
                 if ("ok".equals(state)) {
                     toastMsg = "提交成功";
                     mHandler.sendEmptyMessage(TOAST_MSG);
-                    startActivity(new Intent(ProjectShouyinActivity.this,ProjectOrderActivity.class));
-                    finish();
+                    updateJsData();
                 } else {
                     if(resMap.get("msg")!=null) {
                         toastMsg = (String) resMap.get("msg");
@@ -540,6 +540,31 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
                         mHandler.sendEmptyMessage(TOAST_MSG);
                     }
                 }
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+    }
+
+    private void updateJsData() {
+
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_update_repair_list_state");
+        dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
+        dataMap.put("states", "已出厂");
+        dataMap.put("xm_state", "已完工");
+
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                startActivity(new Intent(ProjectShouyinActivity.this,ProjectOrderActivity.class));
+                finish();
             }
 
             @Override

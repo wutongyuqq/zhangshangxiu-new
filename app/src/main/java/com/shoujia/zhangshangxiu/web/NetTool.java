@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
+import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.web.util.LAVApi;
 
 import java.io.UnsupportedEncodingException;
@@ -36,19 +37,27 @@ public class NetTool {
 	public NetTool(){
 	}
 	public  void print(final String content){
-		String access_token = getTokenFromLocal(content);
-		if(access_token.equals("")){
-			getToken(content);
-		}else{
-			getPrint(access_token,content);
-		}
+		getTokenFromLocal(content,new IGetDataListener(){
+			@Override
+			public void onSuccess(String json) {
+				if(json.equals("")){
+					getToken(content);
+				}else{
+					getPrint(json,content);
+				}
+			}
+
+			@Override
+			public void onFail() {
+
+			}
+		});
+
 		
 	}
 	
-	private String getTokenFromZsx(String access_token){
-		if(access_token!=null&&!access_token.equals("")){
-			return access_token;
-		}
+	private void getTokenFromZsx(final String access_token, final IGetDataListener getDataListener){
+
 		HttpClientService service = HttpClientService.getInstance();
 		Map<String,Object> postMap = new HashMap<String,Object>();
 		postMap.put("db", "sjsoft_SQL");
@@ -57,82 +66,88 @@ public class NetTool {
 		postMap.put("machine_code", shared_user_info.getString("machine_code",""));//"4004564459");
 		postMap.put("access_token", access_token);
 		String json = JsonUtil.mapTojson(postMap);
-		String resJson = service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json);
-		Map<String,Object> resMap = JsonUtil.jsToMap(resJson);
-		
-		String newTokenStr = resMap.get("machine_access_token")!=null? (String)resMap.get("machine_access_token"):"";
-		
-		if(newTokenStr.equals("")){
-			
-			String grant_type="client_credentials";
-			long timestamp = System.currentTimeMillis()/1000;
-			String sign=MD5.MD5Encode(client_id+timestamp+access_token).toLowerCase();//用户id
-			String scope="all";//用户id
-			String id=getUUID();
-			String tokenStr = LAVApi.getToken(client_id, grant_type, sign, scope, timestamp+"", id);
-			Map<String,Object> tkMap = JsonUtil.jsToMap(tokenStr);
-			Map<String, Object> bodyMap = (Map<String, Object>) tkMap.get("body");
-			final String tk_access_token = bodyMap!=null&&bodyMap.get("access_token")!=null?(String)bodyMap.get("access_token"):"";
-			if(!tk_access_token.equals("")){
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
+		service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json, new IGetDataListener() {
+			@Override
+			public void onSuccess(String resJson) {
+				Map<String,Object> resMap = JsonUtil.jsToMap(resJson);
+
+				String newTokenStr = resMap.get("machine_access_token")!=null? (String)resMap.get("machine_access_token"):"";
+
+				if(newTokenStr.equals("")){
+
+					String grant_type="client_credentials";
+					long timestamp = System.currentTimeMillis()/1000;
+					String sign=MD5.MD5Encode(client_id+timestamp+access_token).toLowerCase();//用户id
+					String scope="all";//用户id
+					String id=getUUID();
+					String tokenStr = LAVApi.getToken(client_id, grant_type, sign, scope, timestamp+"", id);
+					Map<String,Object> tkMap = JsonUtil.jsToMap(tokenStr);
+					Map<String, Object> bodyMap = (Map<String, Object>) tkMap.get("body");
+					final String tk_access_token = bodyMap!=null&&bodyMap.get("access_token")!=null?(String)bodyMap.get("access_token"):"";
+					if(!tk_access_token.equals("")){
 						sendTokenToServer(tk_access_token);
-						
 					}
-				});
-				
+					getDataListener.onSuccess(tk_access_token);
+				}else{
+					getDataListener.onSuccess(newTokenStr);
+				}
 			}
-			return tk_access_token;
-		}else{
-			return newTokenStr;
-		}
+
+			@Override
+			public void onFail() {
+				getDataListener.onFail();
+			}
+		});
+
 	}
 
-	private String getTokenFromZsx(String access_token,String machine_code,String data_source){
-		if(access_token!=null&&!access_token.equals("")){
-			return access_token;
+	private void getTokenFromZsx2(final String access_token,String machine_code,String data_source, final IGetDataListener listener) {
+		if (access_token != null && !access_token.equals("")) {
+			listener.onSuccess(access_token);
 		}
 		HttpClientService service = HttpClientService.getInstance();
-		Map<String,Object> postMap = new HashMap<String,Object>();
+		Map<String, Object> postMap = new HashMap<String, Object>();
 		postMap.put("db", "sjsoft_SQL");
 		postMap.put("function", "sp_fun_machine_access_token");
 		postMap.put("data_source", data_source);//"首佳软件SQL");
 		postMap.put("machine_code", machine_code);//"4004564459");
 		postMap.put("access_token", access_token);
 		String json = JsonUtil.mapTojson(postMap);
-		String resJson = service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json);
-		Map<String,Object> resMap = JsonUtil.jsToMap(resJson);
 
-		String newTokenStr = resMap.get("machine_access_token")!=null? (String)resMap.get("machine_access_token"):"";
+		service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json, new IGetDataListener() {
+			@Override
+			public void onSuccess(String resJson) {
+				Map<String, Object> resMap = JsonUtil.jsToMap(resJson);
 
-		if(newTokenStr.equals("")){
+				String newTokenStr = resMap.get("machine_access_token") != null ? (String) resMap.get("machine_access_token") : "";
 
-			String grant_type="client_credentials";
-			long timestamp = System.currentTimeMillis()/1000;
-			String sign=MD5.MD5Encode(client_id+timestamp+access_token).toLowerCase();//用户id
-			String scope="all";//用户id
-			String id=getUUID();
-			String tokenStr = LAVApi.getToken(client_id, grant_type, sign, scope, timestamp+"", id);
-			Map<String,Object> tkMap = JsonUtil.jsToMap(tokenStr);
-			Map<String, Object> bodyMap = (Map<String, Object>) tkMap.get("body");
-			final String tk_access_token = bodyMap!=null&&bodyMap.get("access_token")!=null?(String)bodyMap.get("access_token"):"";
-			if(!tk_access_token.equals("")){
-				new Thread(new Runnable() {
+				if (newTokenStr.equals("")) {
 
-					@Override
-					public void run() {
+					String grant_type = "client_credentials";
+					long timestamp = System.currentTimeMillis() / 1000;
+					String sign = MD5.MD5Encode(client_id + timestamp + access_token).toLowerCase();//用户id
+					String scope = "all";//用户id
+					String id = getUUID();
+					String tokenStr = LAVApi.getToken(client_id, grant_type, sign, scope, timestamp + "", id);
+					Map<String, Object> tkMap = JsonUtil.jsToMap(tokenStr);
+					Map<String, Object> bodyMap = (Map<String, Object>) tkMap.get("body");
+					final String tk_access_token = bodyMap != null && bodyMap.get("access_token") != null ? (String) bodyMap.get("access_token") : "";
+					if (!tk_access_token.equals("")) {
 						sendTokenToServer(tk_access_token);
-
 					}
-				});
-
+					listener.onSuccess(tk_access_token);
+				} else {
+					listener.onSuccess(newTokenStr);
+				}
 			}
-			return tk_access_token;
-		}else{
-			return newTokenStr;
-		}
+
+			@Override
+			public void onFail() {
+				listener.onFail();
+			}
+		});
+
+
 	}
 
 	//发送token到首佳软件服务器
@@ -148,18 +163,38 @@ public class NetTool {
 		postMap.put("machine_code", shared_user_info.getString("machine_code",""));//"4004564459");
 		postMap.put("access_token", access_token);
 		String json = JsonUtil.mapTojson(postMap);
-		String resJson = service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json);
-		System.out.println(resJson);
+		service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json, new IGetDataListener() {
+			@Override
+			public void onSuccess(String json) {
+
+			}
+
+			@Override
+			public void onFail() {
+
+			}
+		});
+
 	}
 	//从本地获取token
-	public String getTokenFromLocal(final String content){
+	public void getTokenFromLocal(final String content,final IGetDataListener listener){
 		SharedPreferences shared_user_info = context.getSharedPreferences("user_info", Context.MODE_PRIVATE);
 		String access_token = shared_user_info.getString("access_token","");
 		if(access_token.equals("")){
-			access_token = getTokenFromZsx(access_token);
-			return access_token;
+			getTokenFromZsx(access_token, new IGetDataListener() {
+				@Override
+				public void onSuccess(String json) {
+					listener.onSuccess(json);
+				}
+
+				@Override
+				public void onFail() {
+					listener.onFail();
+				}
+			});
+
 		}else{
-			return access_token;
+			listener.onSuccess(access_token);
 		}
 	}
 	public  void getToken(final String content){
@@ -256,7 +291,7 @@ public class NetTool {
 
 
 	}
-	public Map<String,Object> getVesionInfoFromServer(){
+	public void getVesionInfoFromServer(final IGetDataListener listener){
 	
 		HttpClientService service = HttpClientService.getInstance();
 		Map<String,Object> postMap = new HashMap<String,Object>();
@@ -266,9 +301,19 @@ public class NetTool {
 		//postMap.put("update_date", getCurTime());//"4004564459");
 		
 		String json = JsonUtil.mapTojson(postMap);
-		String resJson = service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json);
-		Map<String,Object> resMap = JsonUtil.jsToMap(resJson);
-		return resMap;
+		service.getDataFromZsx("http://121.43.148.193:5555/restful/pro", json, new IGetDataListener() {
+			@Override
+			public void onSuccess(String resJson) {
+				listener.onSuccess(resJson);
+			}
+
+			@Override
+			public void onFail() {
+				listener.onFail();
+			}
+		});
+
+
 	}
 	
 	
@@ -289,7 +334,7 @@ public class NetTool {
 	}
 	
 	
-	public Map<String,Object> getTicket(String token, String usercode){
+	public void getTicket(String token, String usercode,final IGetDataListener listener){
 		HttpClientService service = HttpClientService.getInstance();
 		Map<String,Object> postMap = new HashMap<String,Object>();
 		postMap.put("expire_seconds", 4800);
@@ -297,9 +342,19 @@ public class NetTool {
 		
 		postMap.put("action_info", "{'scene': {'scene_str': '"+usercode+"'}}");
 		String json = "{\"expire_seconds\": 4800, \"action_name\": \"QR_STR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\": "+usercode+"}}}";
-		String resJson = service.getDataFromZsx("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token="+token, json);
-		Map<String,Object> resMap = JsonUtil.jsToMap(resJson);
-		return resMap;
+		service.getDataFromZsx("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + token, json, new IGetDataListener() {
+			@Override
+			public void onSuccess(String json) {
+				Map<String,Object> resMap = JsonUtil.jsToMap(json);
+				listener.onSuccess(json);
+			}
+
+			@Override
+			public void onFail() {
+				listener.onFail();
+			}
+		});
+
 	}
 	
 	public Bitmap getImageCode(String ticket){

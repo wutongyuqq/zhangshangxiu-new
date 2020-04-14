@@ -85,8 +85,8 @@ public class FactoryManagerAdapter extends BaseAdapter {
         hodler.project_statu.setText("项目状态："+info.getStates());
         hodler.car_type.setText("车型："+info.getCx());
         hodler.wxgz_type.setText("维修工种："+info.getWxgz());
-        hodler.lgry_type.setText("领工人员："+info.getAssign());
-        hodler.zpry_type.setText("指派人员："+info.getXlg());
+        hodler.lgry_type.setText("领工人员："+info.getXlg());
+        hodler.zpry_type.setText("指派人员："+info.getAssign());
         String jc_date = info.getJc_date();
         if(info.getJc_date().length()>10){
             jc_date = info.getJc_date().substring(0,10);

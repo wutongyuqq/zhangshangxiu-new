@@ -1,1 +1,1 @@
-include ':app', ':OcrPlateidLibrary'
+include ':app',':ocr_ui';

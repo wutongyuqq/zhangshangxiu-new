@@ -140,7 +140,15 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         tv_tzpg.setOnClickListener(this);
         mStates = getIntent().getStringExtra("state");
         mCurIndex = getIntent().getIntExtra("curIndex",0);
-
+        if(mCurIndex==3){
+            ((TextView)findViewById(R.id.title)).setText("完工检验");
+        }else if(mCurIndex==2){
+            ((TextView)findViewById(R.id.title)).setText("待质检");
+        }else if(mCurIndex==1){
+            ((TextView)findViewById(R.id.title)).setText("修理中");
+        }else if(mCurIndex==0){
+            ((TextView)findViewById(R.id.title)).setText("待领工");
+        }
         setViewVisible();
     }
 
@@ -299,12 +307,32 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     }
 
     private void fanGong() {
+
+        String  xhStr="";
+        for(ManageInfo info:manageInfos){
+            if(info.isChecked()){
+                xhStr+=info.getXh()+",";
+            }
+        }
+        if(TextUtils.isEmpty(xhStr)){
+            toastMsg = "您还未选择";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+        if(xhStr.endsWith(",")){
+            xhStr = xhStr.substring(0,xhStr.length()-1);
+        }
+
+
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_update_repair_list_state");
+
+        dataMap.put("function", "sp_fun_update_jsdmx_xlxm_state");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
-        dataMap.put("states", "修理中");
-        dataMap.put("xm_state", "修理中");
+        dataMap.put("state", "修理中");
+        dataMap.put("xh_list", xhStr);
+
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -339,12 +367,32 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     }
 
     private void crossJianYan() {
+
+        String  xhStr="";
+        for(ManageInfo info:manageInfos){
+            if(info.isChecked()){
+                xhStr+=info.getXh()+",";
+            }
+        }
+        if(TextUtils.isEmpty(xhStr)){
+            toastMsg = "您还未选择";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+        if(xhStr.endsWith(",")){
+            xhStr = xhStr.substring(0,xhStr.length()-1);
+        }
+
+
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_update_repair_list_state");
+
+        dataMap.put("function", "sp_fun_update_jsdmx_xlxm_state");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
-        dataMap.put("states", "");
-        dataMap.put("xm_state", "已完工");
+        dataMap.put("state", "通过检验");
+        dataMap.put("xh_list", xhStr);
+
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -382,12 +430,27 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     }
 
     private void cancleJianYan() {
+        String  xhStr="";
+        for(ManageInfo info:manageInfos){
+            if(info.isChecked()){
+                xhStr+=info.getXh()+",";
+            }
+        }
+        if(TextUtils.isEmpty(xhStr)){
+            toastMsg = "您还未选择";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+        if(xhStr.endsWith(",")){
+            xhStr = xhStr.substring(0,xhStr.length()-1);
+        }
+        //{"db":"mycon1","function":"sp_fun_update_jsdmx_xlxm_state","jsd_id":"A1802260001","xh_list":"1,3,8","state":"已完工"}
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_update_repair_list_state");
+        dataMap.put("function", "sp_fun_update_jsdmx_xlxm_state");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
-        dataMap.put("states", "修理中");
-        dataMap.put("xm_state", "待质检");
+        dataMap.put("state", "待质检");
+        dataMap.put("xh_list", xhStr);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -421,12 +484,31 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
     }
 
     private void finishWork() {
+        String  xhStr="";
+        for(ManageInfo info:manageInfos){
+            if(info.isChecked()){
+                xhStr+=info.getXh()+",";
+            }
+        }
+        if(TextUtils.isEmpty(xhStr)){
+            toastMsg = "您还未选择";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+        if(xhStr.endsWith(",")){
+            xhStr = xhStr.substring(0,xhStr.length()-1);
+        }
+
+
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_update_repair_list_state");
+
+        dataMap.put("function", "sp_fun_update_jsdmx_xlxm_state");
         dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
-        dataMap.put("states", "已完工");
-        dataMap.put("xm_state", "已完工");
+        dataMap.put("state", "已完工");
+        dataMap.put("xh_list", xhStr);
+
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override

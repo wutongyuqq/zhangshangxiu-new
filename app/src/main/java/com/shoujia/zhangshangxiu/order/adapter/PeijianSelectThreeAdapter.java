@@ -79,6 +79,9 @@ public class PeijianSelectThreeAdapter extends BaseAdapter {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                if(editable==null){
+                    return;
+                }
                 listData.get(position).name = editable.toString();
             }
         });
@@ -92,6 +95,9 @@ public class PeijianSelectThreeAdapter extends BaseAdapter {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                if(editable==null){
+                    return;
+                }
                 listData.get(position).shuliang = editable.toString();
             }
         });

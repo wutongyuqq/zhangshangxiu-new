@@ -68,30 +68,37 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
         sp = new SharePreferenceManager(this);
         rl_pj_one_list = findViewById(R.id.rl_pj_one_list);
         View headView = View.inflate(this,R.layout.view_select_head,null);
-         headInput = headView.findViewById(R.id.content);
+         headInput = headView.findViewById(R.id.headInput);
          query_btn = headView.findViewById(R.id.query_btn);
         rl_pj_one_list.addHeaderView(headView);
         new NavSupport(this,15);
         query_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPartsBeans.clear();
-                if (headInput.getText() != null && !TextUtils.isEmpty(headInput.getText().toString().trim())) {
+                if(mPartsBeans==null){
+                    mPartsBeans=new ArrayList<>();
+                }
+                try {
+                    mPartsBeans.clear();
+                    if (headInput.getText() != null && !TextUtils.isEmpty(headInput.getText().toString().trim())) {
 
-                    String contentStr = headInput.getText().toString().trim();
-                    DBManager dbManager = DBManager.getInstanse(PeijianSelectActivity.this);
-                    List<PartsBean> beans = dbManager.getPartsListData(contentStr);
-                    if (beans != null && beans.size() > 0) {
-                        mPartsBeans.addAll(beans);
-                        mHandler.sendEmptyMessage(101);
+                        String contentStr = headInput.getText().toString().trim();
+                        DBManager dbManager = DBManager.getInstanse(PeijianSelectActivity.this);
+                        List<PartsBean> beans = dbManager.getPartsListData(contentStr);
+                        if (beans != null && beans.size() > 0) {
+                            mPartsBeans.addAll(beans);
+                            mHandler.sendEmptyMessage(101);
+                        }
+                    } else {
+                        DBManager dbManager = DBManager.getInstanse(PeijianSelectActivity.this);
+                        List<PartsBean> beans = dbManager.getPartsListData();
+                        if (beans != null && beans.size() > 0) {
+                            mPartsBeans.addAll(beans);
+                            mHandler.sendEmptyMessage(101);
+                        }
                     }
-                }else{
-                    DBManager dbManager = DBManager.getInstanse(PeijianSelectActivity.this);
-                    List<PartsBean> beans = dbManager.getPartsListData();
-                    if (beans != null && beans.size() > 0) {
-                        mPartsBeans.addAll(beans);
-                        mHandler.sendEmptyMessage(101);
-                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -200,6 +207,9 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
                     twoAdapter.notifyDataSetChanged();
                 break;
             case R.id.add_three:
+                if(mThreeBeans==null){
+                    mThreeBeans= new ArrayList<>();
+                }
                 mThreeBeans.add(new TwoBean());
                 threeAdapter.notifyDataSetChanged();
                 break;

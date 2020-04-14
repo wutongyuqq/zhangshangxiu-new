@@ -78,7 +78,7 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
                 managerAdapter.notifyDataSetChanged();
             }else{
                 listview.setVisibility(View.GONE);
-                net_work_tip.setVisibility(View.VISIBLE);
+                net_work_tip.setVisibility(View.GONE);
             }
 
         }

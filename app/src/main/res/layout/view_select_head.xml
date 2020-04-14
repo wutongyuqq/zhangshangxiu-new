@@ -18,7 +18,7 @@
 
 
         <EditText
-            android:id="@+id/content"
+            android:id="@+id/headInput"
             android:layout_width="200dp"
             android:layout_height="30dp"
             android:layout_marginLeft="10dp"

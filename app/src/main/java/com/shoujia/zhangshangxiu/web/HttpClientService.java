@@ -3,9 +3,15 @@ package com.shoujia.zhangshangxiu.web;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.shoujia.zhangshangxiu.http.HttpClient;
+import com.shoujia.zhangshangxiu.http.IGetDataListener;
+import com.shoujia.zhangshangxiu.util.Constance;
+import com.shoujia.zhangshangxiu.util.Util;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,7 +75,7 @@ public class HttpClientService {
 		return mSevice;
 	}
 
-	public String getDataFromZsx(final String url, String json) {
+	public String getDataFromZsx2(final String url, String json) {
 		String resJson = "";
 		// 申明给服务端传递一个json串
 		// 创建一个OkHttpClient对象
@@ -88,10 +94,26 @@ public class HttpClientService {
 				resJson = response.body().string();
 
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resJson;
+
+	}
+
+	public void getDataFromZsx(final String url, String postJson,final IGetDataListener getDataListener) {
+
+		HttpClient client = new HttpClient();
+		client.postJson(url, postJson, new IGetDataListener() {
+			@Override
+			public void onSuccess(String json) {
+				getDataListener.onSuccess(json);
+			}
+			@Override
+			public void onFail() {
+				getDataListener.onFail();
+			}
+		});
 
 	}
 

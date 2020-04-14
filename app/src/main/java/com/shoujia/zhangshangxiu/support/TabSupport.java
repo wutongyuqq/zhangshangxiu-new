@@ -92,6 +92,14 @@ public class TabSupport implements View.OnClickListener{
                 .replace(R.id.fragment_tab,fragmentList.get(1))   // 此处的R.id.fragment_container是要盛放fragment的父容器
                 .commit();
     }
+    public void chooseHomeTab(){
+        setTabImage(1);
+        ((HomeActivity)mActivity).setTittle("车辆接待");
+        ((HomeActivity)mActivity).getSupportFragmentManager()    //
+                .beginTransaction()
+                .replace(R.id.fragment_tab,fragmentList.get(0))   // 此处的R.id.fragment_container是要盛放fragment的父容器
+                .commit();
+    }
 
     @Override
     public void onClick(View view) {

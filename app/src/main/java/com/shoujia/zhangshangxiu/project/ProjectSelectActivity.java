@@ -18,10 +18,12 @@ import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
 import com.shoujia.zhangshangxiu.entity.FirstIconInfo;
 import com.shoujia.zhangshangxiu.entity.SecondIconInfo;
+import com.shoujia.zhangshangxiu.home.HomeActivity;
 import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.order.ProjectOrderActivity;
+import com.shoujia.zhangshangxiu.order.ProjectPaigongActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
 import com.shoujia.zhangshangxiu.util.Constance;
@@ -43,7 +45,7 @@ import java.util.Map;
 public class ProjectSelectActivity extends BaseActivity implements View.OnClickListener {
     private final String TAG = "ProjectSelectActivity";
     private NavSupport navSupport;
-    private TextView confirm_order, tv_kj, tv_cg, tv_by;
+    private TextView confirm_order, tv_kj, tv_cg, tv_by,back_jieche;
 
     private GridLayout gridLayout1;
     ZnFlowLayout gridLayout2;
@@ -51,6 +53,7 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
     InfoSupport mInFoupport;
     List<SecondIconInfo> secondIconInfos = new ArrayList<>();
     List<FirstIconInfo> mFirstIconInfos = new ArrayList<>();
+    int currentIndex = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,14 +65,16 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
         tv_kj = findViewById(R.id.tv_kj);
         tv_cg = findViewById(R.id.tv_cg);
         tv_by = findViewById(R.id.tv_by);
+        gridLayout1 = findViewById(R.id.gridlayout1);
+        gridLayout2 = findViewById(R.id.gridlayout2);
+        back_jieche = findViewById(R.id.back_jieche);
         confirm_order.setOnClickListener(this);
         tv_kj.setOnClickListener(this);
         tv_cg.setOnClickListener(this);
         tv_by.setOnClickListener(this);
-        gridLayout1 = findViewById(R.id.gridlayout1);
-        gridLayout2 = findViewById(R.id.gridlayout2);
         mInFoupport = new InfoSupport(this);
         sp = new SharePreferenceManager(this);
+        back_jieche.setOnClickListener(this);
         initView();
         initData();
 
@@ -125,7 +130,22 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
                     subView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            TextView view1 = view.findViewById(R.id.tv_item);
+                            if (view1 != null && view1.getText() != null) {
+                                String name = view1.getText().toString();
+                                DBManager dbManager = DBManager.getInstanse(ProjectSelectActivity.this);
+                                secondIconInfos.clear();
+                                SecondIconInfo info = new SecondIconInfo();
+                                info.setMc("返回");
+                                secondIconInfos.add(info);
+                                if(currentIndex==2){
+                                    secondIconInfos.addAll(dbManager.querySecondIconListDataByLb(name));
+                                }else {
+                                    secondIconInfos.addAll(dbManager.querySecondIconListData(name));
+                                }
+                                mHandler.sendEmptyMessage(101);
 
+                            }
                         }
                     });
 
@@ -207,6 +227,8 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
                     if (resMap.get("msg") != null) {
                         toastMsg = (String) resMap.get("msg");
                         mHandler.sendEmptyMessage(TOAST_MSG);
+                        //Intent intent2 = new Intent(ProjectSelectActivity.this, ProjectOrderActivity.class);
+                        //startActivity(intent2);
                     }
                 }
             }
@@ -244,7 +266,11 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
                             SecondIconInfo info = new SecondIconInfo();
                             info.setMc("返回");
                             secondIconInfos.add(info);
-                            secondIconInfos.addAll(dbManager.querySecondIconListData(name));
+                            if(currentIndex==2){
+                                secondIconInfos.addAll(dbManager.querySecondIconListDataByLb(name));
+                            }else {
+                                secondIconInfos.addAll(dbManager.querySecondIconListData(name));
+                            }
                             mHandler.sendEmptyMessage(101);
 
                         }
@@ -296,6 +322,7 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setTextColor(int index) {
+        currentIndex = index;
         TextView[] textViews = {tv_cg, tv_kj, tv_by};
         for (int i = 0; i < 3; i++) {
             if (i == index) {
@@ -327,6 +354,11 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
             case R.id.tv_by:
                 setTextColor(2);
                 getByData();
+                break;
+            case R.id.back_jieche:
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.putExtra("from","select");
+                startActivity(intent);
                 break;
             default:
 

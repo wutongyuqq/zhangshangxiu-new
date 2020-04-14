@@ -22,8 +22,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kernal.plateid.CoreSetup;
-import com.kernal.plateid.activity.PlateidCameraActivity;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.home.adapter.HomeCarInfoAdapter;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
@@ -260,6 +258,7 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
          }else if(msgInt==19){
             dismissDialog();
          }else if(msgInt==20){
+             isCpClick = false;
              homeCarInfoAdapter.notifyDataSetChanged();
              if (carInfoList != null && carInfoList.size() > 0) {
                  int[] location = new int[2];
@@ -309,12 +308,12 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                 more_info.setVisibility(View.VISIBLE);
                 break;
             case R.id.take_photo_car:
-                isOtherPage = true;
+              /*  isOtherPage = true;
                 CoreSetup coreSetup = new CoreSetup();
                 Intent cameraIntent = new Intent(getActivity(), PlateidCameraActivity.class);
                 coreSetup.takePicMode = false;
                 cameraIntent.putExtra("coreSetup", coreSetup);
-                startActivityForResult(cameraIntent, 1);
+                startActivityForResult(cameraIntent, 1);*/
                 break;
             case R.id.jieche_btn:
 
@@ -546,9 +545,16 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                     String proStr = proSimple + "%" + editable.toString();
                     DBManager db = DBManager.getInstanse(getActivity());
                     carInfoList = db.queryListData(proStr);
-                    if(carInfoList==null||carInfoList.size()==0||isCpClick){
+                    if(isCpClick){
+                        return;
+                    }
+                    if(carInfoList==null||carInfoList.size()==0){
+                        if(TextUtils.isEmpty(editable.toString())||editable.toString().length()<4){
+                            return;
+                        }
+
                         //新车
-                        getHomeHelper().getSearchCarList(proSimple, new HomeDataHelper.SearchDataListener() {
+                        getHomeHelper().getSearchCarList( editable.toString(), new HomeDataHelper.SearchDataListener() {
                             @Override
                             public void onSuccess(List<CarInfo> carInfos) {
                               if(carInfos==null||carInfos.size()==0){

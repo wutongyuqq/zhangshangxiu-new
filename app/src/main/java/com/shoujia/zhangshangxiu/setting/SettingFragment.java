@@ -29,7 +29,9 @@ import com.shoujia.zhangshangxiu.dialog.LoginOutDialog;
 import com.shoujia.zhangshangxiu.dialog.WaitProgressDialog;
 import com.shoujia.zhangshangxiu.home.HomeService;
 import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
+import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.login.PhoneLoginActivity;
+import com.shoujia.zhangshangxiu.web.JsonUtil;
 import com.shoujia.zhangshangxiu.web.MainActivity;
 import com.shoujia.zhangshangxiu.web.NetTool;
 
@@ -112,12 +114,21 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                         mHandler.sendEmptyMessage(TOAST_MSG);
                     }
                 });
+                helper.getSecondIconList(new HomeDataHelper.UpdateDataListener() {
+                    @Override
+                    public void onSuccess() {
+                        dismissDialog();
+                       // DBManager.getInstanse(getActivity()).close();
+                        toastMsg = "更新二级项目数据成功";
+                        mHandler.sendEmptyMessageDelayed(TOAST_MSG,2000);
+                    }
+                });
                 helper.getPersonRepairList(new HomeDataHelper.UpdateDataListener() {
                     @Override
                     public void onSuccess() {
                         dismissDialog();
                        // DBManager.getInstanse(getActivity()).close();
-                        toastMsg = "更新修理数据成功";
+                        toastMsg = "更新修理工数据成功";
                         mHandler.sendEmptyMessageDelayed(TOAST_MSG,2000);
                     }
                 });
@@ -190,43 +201,54 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     public void checkVesion() {
         NetTool netTool = new NetTool();
-        Map<String, Object> jsonMap = netTool.getVesionInfoFromServer();
-        if (jsonMap != null) {
-            String stateStr = jsonMap.get("state") != null ? (String) jsonMap
-                    .get("state") : "";
-            String updateStr = jsonMap.get("online_update") != null ? (String) jsonMap
-                    .get("online_update") : "";
-             download_url = jsonMap.get("download_url") != null ? (String) jsonMap
-                    .get("download_url") : "";
-            if (stateStr.equals("ok") && updateStr.equals("YES")
-                    && !download_url.equals("")) {
-                String versionServer = jsonMap.get("version") != null ? (String) jsonMap
-                        .get("version") : "";
-                if (isNeedUpdate(versionServer)) {
-                     update_log = jsonMap.get("update_log") != null ? (String) jsonMap
-                            .get("update_log") : "";
+        netTool.getVesionInfoFromServer(new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                Map<String,Object> jsonMap = JsonUtil.jsToMap(json);
+                if (jsonMap != null) {
+                    String stateStr = jsonMap.get("state") != null ? (String) jsonMap
+                            .get("state") : "";
+                    String updateStr = jsonMap.get("online_update") != null ? (String) jsonMap
+                            .get("online_update") : "";
+                    download_url = jsonMap.get("download_url") != null ? (String) jsonMap
+                            .get("download_url") : "";
+                    if (stateStr.equals("ok") && updateStr.equals("YES")
+                            && !download_url.equals("")) {
+                        String versionServer = jsonMap.get("version") != null ? (String) jsonMap
+                                .get("version") : "";
+                        if (isNeedUpdate(versionServer)) {
+                            update_log = jsonMap.get("update_log") != null ? (String) jsonMap
+                                    .get("update_log") : "";
 
-                    mHandler.sendEmptyMessage(11);
+                            mHandler.sendEmptyMessage(11);
 
+                        } else {
+                            toastMsg = "已是最新版本，无需更新";
+                            mHandler.sendEmptyMessage(TOAST_MSG);
+                        }
+                    } else {
+                        if (stateStr.equals("ok")) {
+                            toastMsg = jsonMap.get("msg") != null ? (String) jsonMap
+                                    .get("msg") : "";
+                            mHandler.sendEmptyMessage(TOAST_MSG);
+                        } else {
+                            toastMsg = "服务异常";
+                            mHandler.sendEmptyMessage(TOAST_MSG);
+                        }
+
+                    }
                 } else {
                     toastMsg = "已是最新版本，无需更新";
                     mHandler.sendEmptyMessage(TOAST_MSG);
                 }
-            } else {
-                if (stateStr.equals("ok")) {
-                    toastMsg = jsonMap.get("msg") != null ? (String) jsonMap
-                            .get("msg") : "";
-                    mHandler.sendEmptyMessage(TOAST_MSG);
-                } else {
-                    toastMsg = "服务异常";
-                    mHandler.sendEmptyMessage(TOAST_MSG);
-                }
+            }
+
+            @Override
+            public void onFail() {
 
             }
-        } else {
-            toastMsg = "已是最新版本，无需更新";
-            mHandler.sendEmptyMessage(TOAST_MSG);
-        }
+        });
+
     }
 
     private boolean isNeedUpdate(String version) {

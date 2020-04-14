@@ -488,7 +488,9 @@ public class HomeDataHelper extends BaseHelper {
                     JSONArray dataArray = (JSONArray) resMap.get("data");
                     List<CarInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(), CarInfo.class);
                     if (dataList != null && dataList.size() > 0) {
-                        DBManager.getInstanse(getActivity()).insertListData(dataList);
+                        if(!DBManager.getInstanse(getActivity()).queryCp(searchName)){
+                            DBManager.getInstanse(getActivity()).insertListData(dataList);
+                        }
                         //carInfoList.addAll(dataList);
                         if(listener!=null){
                             listener.onSuccess(dataList);

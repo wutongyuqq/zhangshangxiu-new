@@ -52,6 +52,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 		if(!TextUtils.isEmpty(fromStr)&&fromStr.equals("paigong")){
 			tabSupport.chooseManagerTab();
 
+		}if(!TextUtils.isEmpty(fromStr)&&fromStr.equals("select")){
+			tabSupport.chooseHomeTab();
+
 		}else {
 			getSupportFragmentManager()    //
 					.beginTransaction()

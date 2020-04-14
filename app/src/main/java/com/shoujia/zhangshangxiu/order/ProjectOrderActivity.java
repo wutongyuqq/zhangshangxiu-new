@@ -71,7 +71,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     TextView pjfTotal;
     TextView zongyingshou2;
     TextView tv_pjfZk;
-    TextView tv_pro, tv_pj,temp_pro,peijianku,project_ck,car_home_page,paigong,total_jiesuan,total_jiesuan2,car_home_page2;
+    TextView tv_pro, tv_pj,temp_pro,peijianku,project_ck,car_home_page,paigong,total_jiesuan,total_jiesuan2,car_home_page2,banjinpenqi;
     LinearLayout pro_btn_lay,pj_btn_lay;
     String gdStatu="";
     boolean isToPaigong;
@@ -103,6 +103,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         listview2 = findViewById(R.id.listview2);
 
         temp_pro = findViewById(R.id.temp_pro);
+        banjinpenqi = findViewById(R.id.banjinpenqi);
         pro_btn_lay = findViewById(R.id.pro_btn_lay);
         pj_btn_lay = findViewById(R.id.pj_btn_lay);
         peijianku = findViewById(R.id.peijianku);
@@ -392,6 +393,8 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     //初始化数据
     private void initData() {
         OrderBeanInfo.allBtnUnable = false;
+        OrderBeanInfo.notDelete = false;
+
         DBManager db = DBManager.getInstanse(this);
         List<RepairInfo> repairInfos = db.queryRepairListData();
         if(repairInfos!=null&&repairInfos.size()>0) {
@@ -416,6 +419,9 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         super.updateUIThread(msgInt);
         if (msgInt == 100) {
             if (mProjectList != null && mProjectList.size() > 0) {
+                if(mOrderAdapter==null){
+                    return;
+                }
                 mOrderAdapter.notifyDataSetChanged();
                 float totalXlf = 0;
                 float totalXlfZk = 0;
@@ -430,6 +436,9 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 zongyingshou.setText("总计:"+(totalXlf - totalXlfZk));
                 tv_xlfZk.setText(totalXlfZk+"");
             }else{
+                if(mOrderAdapter==null){
+                    return;
+                }
                 mOrderAdapter.notifyDataSetChanged();
                 wxfTotal.setText("总计:0");
                 zongyingshou.setText("总计:0");
@@ -470,89 +479,95 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             zongyingshou.setText("总计:"+mOrderCarInfo.getZje());
             if (mOrderCarInfo.getDjzt().equals("待修")) {
                 paigong.setText("派工");
+                setBtnEnble(true);
                // $scope.djzt = '派工';
             } else if (mOrderCarInfo.getDjzt().equals("已派工") || mOrderCarInfo.getDjzt().equals("修理中")) {
                 paigong.setText("全部完工");
+                setBtnEnble(true);
                // $scope.djzt = '全部完工';
             } else if (mOrderCarInfo.getDjzt().equals("处理中")){
                 paigong.setText("派工");
+                setBtnEnble(true);
                 //$scope.djzt = '派工';
             } else if (mOrderCarInfo.getDjzt().equals("审核已结算")) {
                 img_wg_lay.setVisibility(View.VISIBLE);
                 djztUnable = true;
+                setBtnEnble(true);
                 OrderBeanInfo.allBtnUnable = true;
                 paigong.setText("取消完工");
-               /* $scope.showFloatImg = true;
-                $scope.djzt = '取消完工';
-                $scope.djztUnable = 1;
-                $scope.allBtnUnable = 1;*/
                 OrderBeanInfo.allBtnUnable = true;
+                setBtnEnble(false);
             } else if (mOrderCarInfo.getDjzt().equals("审核未结算")) {
                 img_wg_lay.setVisibility(View.VISIBLE);
                 paigong.setText("取消完工");
-               /* $scope.showFloatImg = true;
-                $scope.djzt = '取消完工';
-                $scope.notDelete = 1;*/
-                OrderBeanInfo.notDelete = true;
+                paigong.setEnabled(true);
+                setBtnEnble(true);
+
+                if(mOrderAdapter==null||mPeijianAdapter==null){
+                    return;
+                }
                 mOrderAdapter.notifyDataSetChanged();
                 mPeijianAdapter.notifyDataSetChanged();
             } else if (mOrderCarInfo.getDjzt().equals("已出厂")) {
                 img_wg_lay.setVisibility(View.VISIBLE);
+                OrderBeanInfo.notDelete = true;
                 OrderBeanInfo.allBtnUnable = true;
                 paigong.setText("取消完工");
                 yccType = true;
                 djztUnable = true;
-                total_jiesuan.setEnabled(false);
-                total_jiesuan2.setEnabled(false);
-                project_ck.setEnabled(false);
-                temp_pro.setEnabled(false);
-                peijianku.setEnabled(false);
-                total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
-                total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
-                project_ck.setBackgroundColor(Color.parseColor("#cccccc"));
-                temp_pro.setBackgroundColor(Color.parseColor("#cccccc"));
-                peijianku.setBackgroundColor(Color.parseColor("#cccccc"));
+                //total_jiesuan.setEnabled(false);
+                //total_jiesuan2.setEnabled(false);
+               // total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
+                setBtnEnble(false);
+                if(mOrderAdapter==null||mPeijianAdapter==null){
+                    return;
+                }
                 mOrderAdapter.notifyDataSetChanged();
                 mPeijianAdapter.notifyDataSetChanged();
-               /* $scope.showFloatImg = true;
-                $scope.djzt = '取消完工';
-                $scope.djztUnable = 1;
-                $scope.allBtnUnable = 1;
-                $scope.yccType = 1;*/
-                setJiesuanEable(true);
+
+               // setJiesuanEable(true);
             }
 
         }else if(msgInt == 111){
             paigong.setText("取消完工");
-            total_jiesuan.setEnabled(false);
-            total_jiesuan2.setEnabled(false);
             project_ck.setEnabled(false);
             temp_pro.setEnabled(false);
             peijianku.setEnabled(false);
             OrderBeanInfo.allBtnUnable = true;
-            total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
-            total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
-            project_ck.setBackgroundColor(Color.parseColor("#cccccc"));
-            temp_pro.setBackgroundColor(Color.parseColor("#cccccc"));
-            peijianku.setBackgroundColor(Color.parseColor("#cccccc"));
+            //total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
+            //total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
+            setBtnEnble(false);
+            if(mOrderAdapter==null||mPeijianAdapter==null){
+                return;
+            }
             mOrderAdapter.notifyDataSetChanged();
             mPeijianAdapter.notifyDataSetChanged();
         }else if(msgInt == 112){
+            OrderBeanInfo.allBtnUnable = false;
+            setBtnEnble(true);
             total_jiesuan.setEnabled(true);
             total_jiesuan2.setEnabled(true);
-            project_ck.setEnabled(true);
-            temp_pro.setEnabled(true);
-            peijianku.setEnabled(true);
-            OrderBeanInfo.allBtnUnable = false;
-            total_jiesuan.setBackgroundColor(Color.parseColor("#89c997"));
-            total_jiesuan2.setBackgroundColor(Color.parseColor("#89c997"));
-            project_ck.setBackgroundColor(Color.parseColor("#89c997"));
-            temp_pro.setBackgroundColor(Color.parseColor("#89c997"));
-            peijianku.setBackgroundColor(Color.parseColor("#89c997"));
+            if(mOrderAdapter==null||mPeijianAdapter==null){
+                return;
+            }
             mOrderAdapter.notifyDataSetChanged();
             mPeijianAdapter.notifyDataSetChanged();
 
         }
+    }
+
+    private void setBtnEnble(boolean isEnble){
+        project_ck.setBackgroundColor(Color.parseColor(isEnble?"#89c997":"#cccccc"));
+        temp_pro.setBackgroundColor(Color.parseColor(isEnble?"#89c997":"#cccccc"));
+        peijianku.setBackgroundColor(Color.parseColor(isEnble?"#89c997":"#cccccc"));
+        banjinpenqi.setBackgroundColor(Color.parseColor(isEnble?"#89c997":"#cccccc"));
+        paigong.setBackgroundColor(Color.parseColor(isEnble?"#89c997":"#cccccc"));
+
+        paigong.setEnabled(isEnble);
+        peijianku.setEnabled(isEnble);
+        banjinpenqi.setEnabled(isEnble);
+        temp_pro.setEnabled(isEnble);
+        project_ck.setEnabled(isEnble);
     }
 
     private void setJiesuanEable(boolean isEnable){
@@ -988,12 +1003,11 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 break;
                 case R.id.project_ck:
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectSelectActivity.class));
-                finish();
+
                 break;
             case R.id.car_home_page:
             case R.id.car_home_page2:
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectActivity.class));
-                finish();
                 break;
                 case R.id.paigong:
                     judgeToStatu();
@@ -1020,6 +1034,13 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         // TODO Auto-generated method stub
         super.onPause();
         upDateTotalMoney();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mOrderAdapter = null;
+        mPeijianAdapter = null;
+        super.onDestroy();
     }
 
     @Override

@@ -95,6 +95,44 @@ public class HttpClient {
         });
     }
 
+
+ public void postJson(String url, String jsonStr, final IGetDataListener listener) {
+        FormBody.Builder builder = new FormBody.Builder();
+        if(listener==null){
+            return;
+        }
+
+        Log.e("post---data--request",jsonStr);
+        //2.通过new FormBody()调用build方法,创建一个RequestBody,可以用add添加键值对
+        RequestBody  requestBody = RequestBody.create(JSONTYPE, jsonStr);
+        //3.创建Request对象，设置URL地址，将RequestBody作为post方法的参数传入
+        Request request = new Request.Builder().url(url).post(requestBody).build();
+        //4.创建一个call对象,参数就是Request请求对象
+        Call call = MyApplication.getOkHttpClient().newCall(request);
+        //5.请求加入调度,重写回调方法
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onFail();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if(response!=null&&response.body()!=null){
+                    String bodyStr = response.body().string();
+                    if(!TextUtils.isEmpty(bodyStr)&&isjson(bodyStr)) {
+                        Log.e("post---data--response",bodyStr);
+                        listener.onSuccess(bodyStr);
+                    }else{
+                        listener.onFail();
+                    }
+                }else{
+                    listener.onFail();
+                }
+            }
+        });
+    }
+
     private boolean isjson(String string){
         try {
             JSONObject jsonStr= JSONObject.parseObject(string);

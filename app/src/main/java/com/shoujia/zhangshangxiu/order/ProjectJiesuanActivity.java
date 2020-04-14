@@ -21,6 +21,7 @@ import com.shoujia.zhangshangxiu.order.entity.JsBaseBean;
 import com.shoujia.zhangshangxiu.order.entity.JsCompBean;
 import com.shoujia.zhangshangxiu.order.entity.JsPartBean;
 import com.shoujia.zhangshangxiu.order.entity.JsXmBean;
+import com.shoujia.zhangshangxiu.project.ProjectActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
 import com.shoujia.zhangshangxiu.util.Constance;
@@ -42,7 +43,7 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
 
 
     private SharePreferenceManager sp;
-    private TextView start_sy,sing_print,double_print,cancle_jiesuan,zongyingshou3;
+    private TextView start_sy,sing_print,double_print,cancle_jiesuan,zongyingshou3,jiaoche_btn;
     JsBaseBean mJsBaseBean = new JsBaseBean();
     JsCompBean mJsCompBean;
     List<JsPartBean> mPartBeans = new ArrayList<>();
@@ -79,10 +80,12 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         double_print = findViewById(R.id.double_print);
         cancle_jiesuan = findViewById(R.id.cancle_jiesuan);
         zongyingshou3 = findViewById(R.id.zongyingshou3);
+        jiaoche_btn = findViewById(R.id.jiaoche_btn);
         start_sy.setOnClickListener(this);
         sing_print.setOnClickListener(this);
         double_print.setOnClickListener(this);
         cancle_jiesuan.setOnClickListener(this);
+        jiaoche_btn.setOnClickListener(this);
         TextView jsd_id_view = findViewById(R.id.jsd_id);
         TextView factoy_name = findViewById(R.id.factoy_name);
         TextView dytime = findViewById(R.id.dytime);
@@ -90,9 +93,16 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
         factoy_name.setText(sp.getString(Constance.FACTORYNAME));
         dytime.setText("打印时间："+DateUtil.getCurDate());
         String jsdStatuStr = getIntent().getStringExtra("jsdStatu");
-        if(jsdStatuStr.equals("审核已结算")){
+        if(jsdStatuStr.equals("审核已结算")||jsdStatuStr.equals("已出厂")){
             start_sy.setClickable(false);
             start_sy.setBackgroundColor(Color.parseColor("#cccccc"));
+        }
+        jiaoche_btn.setEnabled(false);
+        jiaoche_btn.setBackgroundColor(Color.parseColor("#cccccc"));
+        //isEnble?"#89c997":
+        if(jsdStatuStr.equals("审核已结算")||jsdStatuStr.equals("审核未结算")){
+            jiaoche_btn.setEnabled(true);
+            jiaoche_btn.setBackgroundColor(Color.parseColor("#89c997"));
         }
     }
 
@@ -136,6 +146,8 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
             TextView telPhone = findViewById(R.id.telPhone);
             address.setText("地址："+mJsCompBean.address);
             telPhone.setText("电话："+mJsCompBean.telphone);
+        }else if(msgInt==201){
+            finish();
         }
     }
 
@@ -463,12 +475,82 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
                     printData();
                 break;
             case R.id.cancle_jiesuan:
-                finish();
+                cancleJiesuan();
+                //onBackPressed();
+                break;
+            case R.id.jiaoche_btn:
+                jiaoChe();
+                //onBackPressed();
                 break;
             default:
 
                 break;
         }
+    }
+
+    private void jiaoChe() {
+        /*
+        * {"db":"mycon1","function":"sp_fun_update_repair_list_state","jsd_id":"A1802260001","states":"已出厂","xm_state":""}
+        *
+        * */
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_update_repair_list_state");
+        dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
+        dataMap.put("states", "已出厂");
+        dataMap.put("xm_state", "");
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                Log.d("onSuccess--json", json);
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                toastMsg = (String) resMap.get("msg");
+                mHandler.sendEmptyMessage(TOAST_MSG);
+
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+
+
+    }
+
+    private void cancleJiesuan() {
+
+
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_delete_skd");
+        dataMap.put("jsd_id", sp.getString(Constance.JSD_ID));
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                Log.d("onSuccess--json", json);
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                toastMsg = (String) resMap.get("msg");
+                mHandler.sendEmptyMessage(TOAST_MSG);
+                String state = (String) resMap.get("state");
+                if ("ok".equals(state)) {
+                    mHandler.sendEmptyMessage(201);
+                }
+
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+
     }
 
     private void uploadMoney() {

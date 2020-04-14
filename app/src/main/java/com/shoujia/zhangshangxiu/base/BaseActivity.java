@@ -59,7 +59,7 @@ public class BaseActivity extends Activity implements OnClickListener{
             final BaseActivity activity=mWeakReference.get();
             if(activity!=null){
                 if(msg.what==TOAST_MSG){
-                    Toast.makeText(BaseActivity.this,toastMsg,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),toastMsg,Toast.LENGTH_LONG).show();
                     dismissDialog();
                 }else if(msg.what==999){
                     dismissDialog();

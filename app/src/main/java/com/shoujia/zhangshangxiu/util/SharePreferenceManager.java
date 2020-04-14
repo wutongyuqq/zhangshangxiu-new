@@ -1,5 +1,6 @@
 package com.shoujia.zhangshangxiu.util;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -10,6 +11,9 @@ public class SharePreferenceManager {
         init(context,SP_NAME);
     }
     public static void init(Context context, String name) {
+        if(context==null){
+            context = getApplicationByReflection().getApplicationContext();
+        }
         sp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
@@ -22,6 +26,16 @@ public class SharePreferenceManager {
         return null;
     }
 
+
+    public  static Application getApplicationByReflection() {
+        try {
+            return (Application) Class.forName("android.app.ActivityThread")
+                    .getMethod("currentApplication").invoke(null, (Object[]) null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public  void putBoolean(String key,boolean value) {
         if (null != sp) {

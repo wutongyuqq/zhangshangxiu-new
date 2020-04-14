@@ -61,7 +61,7 @@ public class HomeService extends Service {
 
     private HomeDataHelper getHomeHelper(){
         if(mHomeDataHelper==null){
-            mHomeDataHelper = new HomeDataHelper(this);
+            mHomeDataHelper = new HomeDataHelper(getApplicationContext());
         }
         return mHomeDataHelper;
     }

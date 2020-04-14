@@ -1,43 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- ~ Copyright (C) 2017 Baidu, Inc. All Rights Reserved. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shoujia.zhangshangxiu"
-    xmlns:tools="http://schemas.android.com/tools">
+          package="com.shoujia.zhangshangxiu">
 
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.MOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
-
-    <!-- Optional. Required for location feature -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-
-    <uses-permission android:name="android.permission.CAMERA"/>
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:name="com.shoujia.zhangshangxiu.MyApplication"
-        android:allowBackup="false"
-        android:hardwareAccelerated="false"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:largeHeap="true"
-        tools:replace="android:appComponentFactory"
-        android:theme="@style/AppTheme">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+
         <activity
             android:name="com.shoujia.zhangshangxiu.web.SplashActivity"
             android:theme="@style/AppTheme">
@@ -54,6 +29,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
+
 
 
         <activity android:name="com.shoujia.zhangshangxiu.login.PhoneLoginActivity"
@@ -102,7 +78,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
-   <activity android:name="com.shoujia.zhangshangxiu.performance.PerformanceActivity"
+        <activity android:name="com.shoujia.zhangshangxiu.performance.PerformanceActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
@@ -132,19 +108,18 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
-    <activity android:name="com.shoujia.zhangshangxiu.order.ProjectShouyinActivity"
+        <activity android:name="com.shoujia.zhangshangxiu.order.ProjectShouyinActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
-   <activity android:name="com.shoujia.zhangshangxiu.manager.activity.MangerLinggongActivity"
+        <activity android:name="com.shoujia.zhangshangxiu.manager.activity.MangerLinggongActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <service android:name="com.shoujia.zhangshangxiu.home.HomeService"
-          android:label="@string/app_name"/>
-
+            />
 
     </application>
 

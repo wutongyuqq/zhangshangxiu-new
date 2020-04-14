@@ -48,7 +48,7 @@ public class PhoneLoginActivity extends BaseActivity implements OnClickListener 
 
         login_btn.setOnClickListener(this);
         top_btn.setOnClickListener(this);
-        sp = new SharePreferenceManager(this);
+        sp = new SharePreferenceManager(getApplicationContext());
         username.setText(sp.getString(Constance.USERNAME));
         password.setText(sp.getString(Constance.PASSWORD));
         factory_name.setText(sp.getString(Constance.FACTORYNAME));

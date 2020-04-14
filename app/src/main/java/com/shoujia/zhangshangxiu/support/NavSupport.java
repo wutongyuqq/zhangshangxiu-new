@@ -28,7 +28,7 @@ public class NavSupport  implements View.OnClickListener{
 
 
     private void initView(){
-        sp = new SharePreferenceManager(mActivity);
+        sp = new SharePreferenceManager(mActivity.getApplicationContext());
         right_btn = (ImageView) findViewById(R.id.right_btn);
         left_btn = (ImageView) findViewById(R.id.left_btn);
         tv_title = (TextView) findViewById(R.id.title);

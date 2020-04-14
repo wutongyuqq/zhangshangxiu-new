@@ -22,6 +22,15 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.baidu.ocr.demo.FileUtil;
+import com.baidu.ocr.demo.MainActivity;
+import com.baidu.ocr.sdk.OCR;
+import com.baidu.ocr.sdk.OnResultListener;
+import com.baidu.ocr.sdk.exception.OCRError;
+import com.baidu.ocr.sdk.model.AccessToken;
+import com.baidu.ocr.ui.camera.CameraActivity;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.home.adapter.HomeCarInfoAdapter;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
@@ -33,6 +42,7 @@ import com.shoujia.zhangshangxiu.entity.FirstIconInfo;
 import com.shoujia.zhangshangxiu.entity.ReciveInfo;
 import com.shoujia.zhangshangxiu.entity.RepairInfo;
 import com.shoujia.zhangshangxiu.entity.SecondIconInfo;
+import com.shoujia.zhangshangxiu.home.help.CarScanInfo;
 import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.order.ProjectOrderActivity;
@@ -73,11 +83,12 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = View.inflate(getActivity(), R.layout.fragment_home_zsx, null);
-        sp = new SharePreferenceManager(getContext());
+        sp = new SharePreferenceManager(getActivity().getApplicationContext());
         carInfoList = new ArrayList<>();
         initView();
         initData();
         initPopWindow();
+        initAccessToken();
         return mView;
     }
 
@@ -314,6 +325,7 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                 coreSetup.takePicMode = false;
                 cameraIntent.putExtra("coreSetup", coreSetup);
                 startActivityForResult(cameraIntent, 1);*/
+              takePhotoCar();
                 break;
             case R.id.jieche_btn:
 
@@ -337,6 +349,52 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
             default:
                 break;
         }
+
+    }
+
+    private static final int REQUEST_CODE_LICENSE_PLATE = 122;
+    private boolean hasGotToken = false;
+    /**
+     * 以license文件方式初始化
+     */
+    private void initAccessToken() {
+        OCR.getInstance(getActivity()).initAccessToken(new OnResultListener<AccessToken>() {
+            @Override
+            public void onResult(AccessToken accessToken) {
+                String token = accessToken.getAccessToken();
+                hasGotToken = true;
+            }
+
+            @Override
+            public void onError(OCRError error) {
+                error.printStackTrace();
+                Toast.makeText(getContext(),"licence方式获取token失败,"+error.getMessage(),Toast.LENGTH_LONG).show();
+                //alertText("licence方式获取token失败", error.getMessage());
+            }
+        }, getActivity().getApplicationContext());
+    }
+
+
+    private boolean checkTokenStatus() {
+        if (!hasGotToken) {
+            Toast.makeText(getActivity().getApplicationContext(), "token还未成功获取", Toast.LENGTH_LONG).show();
+        }
+        return hasGotToken;
+    }
+
+
+
+    private void takePhotoCar() {
+
+        if (!checkTokenStatus()) {
+            return;
+        }
+        Intent intent = new Intent(getContext(), CameraActivity.class);
+        intent.putExtra(CameraActivity.KEY_OUTPUT_FILE_PATH,
+                FileUtil.getSaveFile(getActivity().getApplication()).getAbsolutePath());
+        intent.putExtra(CameraActivity.KEY_CONTENT_TYPE,
+                CameraActivity.CONTENT_TYPE_GENERAL);
+        startActivityForResult(intent, REQUEST_CODE_LICENSE_PLATE);
 
     }
 
@@ -635,6 +693,46 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
             CarInfo info = (CarInfo) data.getSerializableExtra("carInfo");
             setFormData(info);
         }
+
+        // 识别成功回调，车牌识别
+        if (requestCode == REQUEST_CODE_LICENSE_PLATE && resultCode == Activity.RESULT_OK) {
+            RecognizeService.recLicensePlate(getContext(), FileUtil.getSaveFile(getActivity().getApplicationContext()).getAbsolutePath(),
+                    new RecognizeService.ServiceListener() {
+                        @Override
+                        public void onResult(String result) {
+                           Log.e("",result);
+                           if(TextUtils.isEmpty(result)){
+                               Toast.makeText(getContext(),"车牌获取失败",Toast.LENGTH_LONG).show();
+                               return;
+                           }
+
+                            CarScanInfo scanInfo = JSON.parseObject(result, new TypeReference<CarScanInfo>(){});
+                            String cpStr = scanInfo.getWords_result().getNumber();
+                            if(TextUtils.isEmpty(cpStr)||cpStr.length()<2){
+                                Toast.makeText(getContext(),"车牌获取失败",Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            Toast.makeText(getContext(),"车牌为："+cpStr,Toast.LENGTH_LONG).show();
+                            //String cpStr = scanInfo.ge;
+                            String cpArea = cpStr.substring(0,1);
+                            tv_cp_area.setText(cpArea);
+                            int length = cpStr.length();
+                            String cpNum =  cpStr.substring(1,length);
+                            et_province_cp.setText(cpNum);
+                            DBManager db = DBManager.getInstanse(getActivity());
+                            List<CarInfo> carInfos = db.queryListData(cpStr);
+                            if(carInfos!=null&&carInfos.size()>0){
+                                CarInfo info = carInfos.get(0);
+                                setFormData(info);
+                            }else{
+                                CarInfo car = new CarInfo();
+                                car.setMc(cpStr);
+                                setFormData(car);
+                            }
+
+                        }
+                    });
+        }
     }
 
     private void setFormData(CarInfo info) {
@@ -666,7 +764,8 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
 
     }
 
-    @Override
+
+        @Override
     public void onPause() {
         super.onPause();
         isOtherPage = true;

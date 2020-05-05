@@ -147,16 +147,36 @@
                 android:text="车架号"
                 android:textSize="17sp" />
 
-            <EditText
-                android:id="@+id/chejiahao"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
-                android:background="#00000000"
-                android:gravity="left"
-                android:hint="输入"
-                android:paddingLeft="10dp"
-                android:textSize="17sp"/>
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/chejiahao"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:background="#00000000"
+                    android:gravity="left"
+                    android:hint="输入"
+                    android:paddingLeft="10dp"
+                    android:textSize="17sp"/>
+
+                <ImageView
+                    android:id="@+id/scan_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_weight="0.5"
+                    android:gravity="left"
+                    android:src="@drawable/scan"
+                    />
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -458,8 +478,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="关注"
-                android:paddingRight="40dp"
-                android:paddingLeft="40dp"
+                android:paddingRight="30dp"
+                android:paddingLeft="30dp"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:textColor="#ffffff"
@@ -480,8 +500,28 @@
                     android:text="接车"
                     android:textColor="#ffffff"
                     android:textSize="17sp"
-                    android:paddingRight="40dp"
-                    android:paddingLeft="40dp"
+                    android:paddingRight="30dp"
+                    android:paddingLeft="30dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:background="#89c997"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/xingshizheng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="行驶证"
+                    android:textColor="#ffffff"
+                    android:textSize="17sp"
+                    android:paddingRight="30dp"
+                    android:paddingLeft="30dp"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:background="#89c997"

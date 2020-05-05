@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="#000000"
+            android:gravity="center"
+            android:text="行驶证信息"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="车牌："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_cp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="输入车牌"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="车辆类型："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_cllx"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="所有人："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_syr"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="住址："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_zz"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="使用性质："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_syxz"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="品牌型号："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_ppxh"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="发动机号："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_fdjh"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="车辆识别："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_clsb"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:padding="10dp">
+
+                <TextView
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:text="发证机关："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_fzjg"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                   
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="注册日期："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_zcrq"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="发证日期："
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/edit_fzrq"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="#eeeeee"
+                    android:hint="请填写"
+                    android:padding="5dp"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+            </LinearLayout>
+            
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_right_lay"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/btn_tjjd"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="#89c997"
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:text="提交建档"
+                android:textColor="#ffffff" />
+
+
+            <TextView
+                android:id="@+id/btn_scan"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="#89c997"
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:layout_marginLeft="50dp"
+                android:text="重拍"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

@@ -132,13 +132,13 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                         mHandler.sendEmptyMessageDelayed(TOAST_MSG,2000);
                     }
                 });
-                helper.getPartsList(new HomeDataHelper.UpdateDataListener() {
+                helper.updateParts(new HomeDataHelper.UpdateDataListener() {
                     @Override
                     public void onSuccess() {
                         dismissDialog();
-                       // DBManager.getInstanse(getActivity()).close();
+                        // DBManager.getInstanse(getActivity()).close();
                         toastMsg = "更新配件数据成功";
-                        mHandler.sendEmptyMessageDelayed(TOAST_MSG,1000);
+                        mHandler.sendEmptyMessage(TOAST_MSG);
                     }
                 });
                 helper.getSecondIconList(new HomeDataHelper.UpdateDataListener() {

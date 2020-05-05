@@ -159,6 +159,90 @@ public class DBManager {
 
 
 
+
+
+    //获取汽车信息列表
+    public List<CarInfo> queryListDataByVin(String param,boolean isLike) {
+        List<CarInfo> beanList = new ArrayList<>();
+        if (dbHelper == null) {
+            return null;
+        }
+        String limitStr =  "50 OFFSET 0";
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String sql = "SELECT  *  FROM " + DBHelper.TABLE_NAME +" LIMIT "+limitStr;
+            if(TextUtils.isEmpty(param)){
+
+            }else{
+                //select *, count(distinct name) from table group by name
+                sql = "SELECT  *,count(distinct mc)  FROM " + DBHelper.TABLE_NAME + " WHERE cjhm like '%"+param+"%'" +" group by mc  LIMIT "+limitStr;
+            }
+            if(!isLike){
+                sql = "SELECT  *,count(distinct mc)   FROM " + DBHelper.TABLE_NAME + " WHERE cjhm = '"+param+"'" +" group by mc  LIMIT "+limitStr;
+            }
+            Cursor cursor = db.rawQuery(sql, null, null);//db.query(DBHelper.TABLE_NAME,null,nameStr,typeArr,null,null,"watch_num",limit);
+            //String sql = "select * from "+DBHelper.TABLE_NAME+" where videotype";
+            //Cursor cursor = db.rawQuery()
+            if (cursor!=null) {
+                while (cursor.moveToNext()) {
+                    CarInfo bean = new CarInfo();
+                    int id = cursor.getInt(cursor.getColumnIndex("id"));
+                    String cjhm = cursor.getString(cursor.getColumnIndex("cjhm"));
+                    String custom5 = cursor.getString(cursor.getColumnIndex("custom5"));
+                    String customer_id = cursor.getString(cursor.getColumnIndex("customer_id"));
+                    String cx = cursor.getString(cursor.getColumnIndex("cx"));
+                    String cz = cursor.getString(cursor.getColumnIndex("cz"));
+                    String fdjhm = cursor.getString(cursor.getColumnIndex("fdjhm"));
+                    String linkman = cursor.getString(cursor.getColumnIndex("linkman"));
+                    String mc = cursor.getString(cursor.getColumnIndex("mc"));
+                    String mobile = cursor.getString(cursor.getColumnIndex("mobile"));
+                    String ns_date = cursor.getString(cursor.getColumnIndex("ns_date"));
+                    String openid = cursor.getString(cursor.getColumnIndex("openid"));
+                    String phone = cursor.getString(cursor.getColumnIndex("phone"));
+                    String vipnumber = cursor.getString(cursor.getColumnIndex("vipnumber"));
+                    String gzms = cursor.getString(cursor.getColumnIndex("gzms"));
+                    String gls = cursor.getString(cursor.getColumnIndex("gls"));
+                    String memo = cursor.getString(cursor.getColumnIndex("memo"));
+                    String keys_no = cursor.getString(cursor.getColumnIndex("keys_no"));
+
+                    bean.setId(id);
+                    bean.setCjhm(cjhm);
+                    bean.setCustom5(custom5);
+                    bean.setCustomer_id(customer_id);
+                    bean.setCx(cx);
+                    bean.setCz(cz);
+                    bean.setFdjhm(fdjhm);
+                    bean.setLinkman(linkman);
+                    bean.setMc(mc);
+                    bean.setMobile(mobile);
+                    bean.setNs_date(ns_date);
+                    bean.setOpenid(openid);
+                    bean.setPhone(phone);
+                    bean.setVipnumber(vipnumber);
+                    bean.setGzms(gzms);
+                    bean.setGls(gls);
+                    bean.setMemo(memo);
+                    bean.setKeys_no(keys_no);
+                    beanList.add(bean);
+                }
+            }
+            cursor.close();
+            // 设置事务标志为成功，当结束事务时就会提交事务
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 结束事务
+            db.endTransaction();
+            db.close();
+
+        }
+        return beanList;
+    }
+
+
+
     //获取汽车信息列表
     public boolean queryCp(String cp) {
         List<CarInfo> beanList = new ArrayList<>();

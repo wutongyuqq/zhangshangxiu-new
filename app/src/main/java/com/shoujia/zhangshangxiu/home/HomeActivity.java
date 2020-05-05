@@ -68,25 +68,28 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 					public void onGlobalLayout()
 					{
 
-						int heightDiff = root_view.getRootView().getHeight() - root_view.getHeight();
+
+						rl_bottom.postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								int heightDiff = root_view.getRootView().getHeight() - root_view.getHeight();
 
 
-						if (heightDiff > 100)
-						{ // 说明键盘是弹出状态
-							Log.v(TAG, "键盘弹出状态");
-							rl_bottom.setVisibility(View.GONE);
-							ll_top_title.setVisibility(View.GONE);
-						} else{
-							Log.v(TAG, "键盘收起状态");
-							rl_bottom.postDelayed(new Runnable() {
-								@Override
-								public void run() {
-									rl_bottom.setVisibility(View.VISIBLE);
-									ll_top_title.setVisibility(View.VISIBLE);
+								if (heightDiff > 100)
+								{ // 说明键盘是弹出状态
+									Log.v(TAG, "键盘弹出状态");
+									rl_bottom.setVisibility(View.GONE);
+									ll_top_title.setVisibility(View.GONE);
+								} else{
+									Log.v(TAG, "键盘收起状态");
+											rl_bottom.setVisibility(View.VISIBLE);
+											ll_top_title.setVisibility(View.VISIBLE);
+
+
 								}
-							},100);
+							}
+						},100);
 
-						}
 					}
 				});
 

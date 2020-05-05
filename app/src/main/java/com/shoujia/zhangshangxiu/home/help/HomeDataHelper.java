@@ -682,8 +682,67 @@ public class HomeDataHelper extends BaseHelper {
         });
     }
 
+
+
+    List<PartsBean> dataPartsList;
+    String partPrevious;
+
+
+    public void updateParts(final UpdateDataListener listener){
+        dataPartsList = new ArrayList<>();
+        partPrevious = "start";
+        getPartsList(listener);
+
+    }
+
     //获取第一页数据
     public void getPartsList(final UpdateDataListener listener){
+        if(!TextUtils.isEmpty(partPrevious)&&partPrevious.equals("end")){
+            DBManager dbManager = DBManager.getInstanse(mActivity);
+            dbManager.insertPartsListData(dataPartsList);
+            listener.onSuccess();
+            return;
+        }
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_down_stock");
+        dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
+        dataMap.put("pjbm", "");
+        dataMap.put("cd", "");
+        dataMap.put("ck", "");
+
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                partPrevious = (String) resMap.get("Previous");
+
+                if ( "ok".equals(state)) {
+                    JSONArray dataArray = (JSONArray) resMap.get("data");
+                    List<PartsBean> dataList = JSONArray.parseArray(dataArray.toJSONString(),PartsBean.class);
+                    dataPartsList.addAll(dataList);
+                    getPartsList(listener);
+                }else{
+                    toastMsg = resMap.get("msg")!=null?"更新配件数据失败"+(String) resMap.get("msg"):"更新配件数据失败：网络异常";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                }
+            }
+            @Override
+            public void onFail() {
+                toastMsg = "网络异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+    }
+
+
+
+
+
+    //获取第一页数据
+    public void getPartsList2(final UpdateDataListener listener){
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_stock");

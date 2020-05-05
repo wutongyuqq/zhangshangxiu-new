@@ -138,7 +138,7 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
 
     private void getPeijianDataList(){
         HomeDataHelper helper = new HomeDataHelper(this);
-        helper.getPartsList(new HomeDataHelper.UpdateDataListener() {
+        helper.updateParts(new HomeDataHelper.UpdateDataListener() {
             @Override
             public void onSuccess() {
                 DBManager dbManager = DBManager.getInstanse(PeijianSelectActivity.this);

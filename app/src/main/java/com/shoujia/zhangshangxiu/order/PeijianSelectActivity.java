@@ -3,6 +3,7 @@ package com.shoujia.zhangshangxiu.order;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -66,15 +67,20 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
 
     private void initView() {
         sp = new SharePreferenceManager(this);
+
+        View footView = View.inflate(this, R.layout.listview_bottom, null);
+
         rl_pj_one_list = findViewById(R.id.rl_pj_one_list);
         View headView = View.inflate(this,R.layout.view_select_head,null);
          headInput = headView.findViewById(R.id.headInput);
          query_btn = headView.findViewById(R.id.query_btn);
         rl_pj_one_list.addHeaderView(headView);
+        rl_pj_one_list.addFooterView(footView);
         new NavSupport(this,15);
         query_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(mPartsBeans==null){
                     mPartsBeans=new ArrayList<>();
                 }
@@ -131,6 +137,8 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
         make_sure_one.setOnClickListener(this);
         make_sure_two.setOnClickListener(this);
         make_sure_three.setOnClickListener(this);
+        rl_pj_two_list.addFooterView(footView);
+        rl_pj_three_list.addFooterView(footView);
 
     }
 
@@ -145,6 +153,9 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
                 List<PartsBean> beans = dbManager.getPartsListData();
                 if(beans!=null&&beans.size()>0) {
                     mPartsBeans.addAll(beans);
+                    mHandler.sendEmptyMessage(101);
+                }else{
+                    mPartsBeans.clear();
                     mHandler.sendEmptyMessage(101);
                 }
             }

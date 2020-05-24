@@ -23,11 +23,13 @@ import android.widget.TextView;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
 import com.shoujia.zhangshangxiu.db.DBManager;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.ManageInfo;
 import com.shoujia.zhangshangxiu.manager.activity.MangerLinggongActivity;
 import com.shoujia.zhangshangxiu.manager.adapter.FactoryManagerAdapter;
 import com.shoujia.zhangshangxiu.manager.help.ManageDataHelper;
 import com.shoujia.zhangshangxiu.order.adapter.WxgzListAdapter;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -63,6 +65,7 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
         mView = View.inflate(getActivity(), R.layout.fragment_factory_manager, null);
         sp = new SharePreferenceManager(getContext());
         initView();
+
         getServerData(0);
         return mView;
     }
@@ -150,6 +153,7 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
     }
 
     private void getServerData(int index){
+
         mCurIndex = index;
         TextView[] textViews = {prepare_work,doing_work,prepare_check,done_work};
         for(int i=0;i<textViews.length;i++){
@@ -161,6 +165,19 @@ public class FactoryManagerFragment extends BaseFragment implements View.OnClick
                 textViews[i].setTextColor(Color.parseColor("#333333"));
             }
         }
+
+
+
+        CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10500");
+        if(beanInfo2!=null && "1".equals(beanInfo2.getNew_bill())) {
+
+        }else{
+            toastMsg = "您没有该权限，请联系管理员";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+
+
         getListData(index);
     }
 

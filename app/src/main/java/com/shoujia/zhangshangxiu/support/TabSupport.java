@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.home.HomeActivity;
 import com.shoujia.zhangshangxiu.home.HomeZsxFragment;
 import com.shoujia.zhangshangxiu.manager.FactoryManagerFragment;
@@ -15,6 +17,9 @@ import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.introduce.FactoryIntroduceFragment;
 import com.shoujia.zhangshangxiu.msgcenter.MsgCenterFragment;
 import com.shoujia.zhangshangxiu.setting.SettingFragment;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
+import com.shoujia.zhangshangxiu.util.Constance;
+import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ public class TabSupport implements View.OnClickListener{
     private ImageView iv_one,iv_two,iv_three,iv_four,iv_five;
     private TextView iv_one_txt,iv_two_txt,iv_three_txt,iv_four_txt,iv_five_txt;
     private List<Fragment> fragmentList;
+    private SharePreferenceManager sp;
     public TabSupport(Activity activity){
         this.mActivity = activity;
         initView();
@@ -37,6 +43,7 @@ public class TabSupport implements View.OnClickListener{
     }
 
     private void initView() {
+        sp = new SharePreferenceManager(mActivity);
         fragmentList = new ArrayList<>(5);
         fragmentList.add(new HomeZsxFragment());
         fragmentList.add(new FactoryManagerFragment());
@@ -116,6 +123,14 @@ public class TabSupport implements View.OnClickListener{
              * 消息列表
              * */
             case R.id.rl_bottom_02:
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10200");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getOpen())) {
+
+                }else{
+                    Toast.makeText(mActivity,"您没有该权限，请联系管理员",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 setTabImage(2);
                 ((HomeActivity)mActivity).setTittle("车间管理");
                 ((HomeActivity)mActivity).getSupportFragmentManager()    //
@@ -124,6 +139,15 @@ public class TabSupport implements View.OnClickListener{
                         .commit();
                 break;
             case R.id.rl_bottom_03:
+                CheckBeanInfo beanInfo3 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo3!=null && "1".equals(beanInfo3.getOpen())) {
+
+                }else{
+                    Toast.makeText(mActivity,"您没有该权限，请联系管理员",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 setTabImage(3);
                 ((HomeActivity)mActivity).setTittle("整厂概况");
                 ((HomeActivity)mActivity).getSupportFragmentManager()    //

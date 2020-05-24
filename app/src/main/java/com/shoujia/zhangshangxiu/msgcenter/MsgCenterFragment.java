@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.performance.PerformanceActivity;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
+import com.shoujia.zhangshangxiu.util.Constance;
+import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 
 /**
  * Created by Administrator on 2017/2/23 0023.
@@ -20,6 +24,7 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
 
     private View mView;
     private TextView performance,query_order;
+    private SharePreferenceManager sp;
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,6 +33,8 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
         query_order = mView.findViewById(R.id.query_order);
         performance.setOnClickListener(this);
         query_order.setOnClickListener(this);
+        sp = new SharePreferenceManager(getContext());
+
         return mView;
     }
 
@@ -48,6 +55,15 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
                 startActivity(new Intent(getActivity(),PerformanceActivity.class));
                 break;
                 case R.id.query_order:
+                    CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"20200");
+                    if(beanInfo2!=null && "1".equals(beanInfo2.getSh())) {
+
+                    }else{
+                        toastMsg = "您没有该权限，请联系管理员";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                        return;
+                    }
+
                 startActivity(new Intent(getActivity(),QueryOrderActivity.class));
                 break;
 

@@ -23,5 +23,6 @@ public class Constance {
     public static String JIESHAOREN = "jieshaoren";//介绍人
     public static String BEIZHU = "beizhu";//备注
     public static String JIECHEDATE = "jc_date";//备注
+    public static String CHECKE_DATA = "check_Data";//备注
 
 }

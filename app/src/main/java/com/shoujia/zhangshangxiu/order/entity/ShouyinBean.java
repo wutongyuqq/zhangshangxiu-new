@@ -27,7 +27,7 @@ public class ShouyinBean {
     }
 
     public String getBit_compute() {
-        return bit_compute;
+        return bit_compute==null?"":bit_compute;
     }
 
     public void setBit_compute(String bit_compute) {

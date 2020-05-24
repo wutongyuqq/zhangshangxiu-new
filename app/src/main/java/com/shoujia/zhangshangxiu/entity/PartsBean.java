@@ -18,6 +18,7 @@ public class PartsBean {
 	private String xsj;
 	private String sl;
 	private boolean isSelected;
+	private boolean isFootView;
 
 	public int getId() {
 		return id;
@@ -146,5 +147,13 @@ public class PartsBean {
 
 	public void setSl(String sl) {
 		this.sl = sl;
+	}
+
+	public boolean isFootView() {
+		return isFootView;
+	}
+
+	public void setFootView(boolean footView) {
+		isFootView = footView;
 	}
 }

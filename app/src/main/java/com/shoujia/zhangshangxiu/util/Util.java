@@ -13,8 +13,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.MyApplication;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
+import com.shoujia.zhangshangxiu.entity.PartsBean;
 import com.shoujia.zhangshangxiu.order.entity.JsBaseBean;
 import com.shoujia.zhangshangxiu.order.entity.JsPartBean;
 import com.shoujia.zhangshangxiu.order.entity.JsXmBean;
@@ -89,23 +93,27 @@ public class Util {
 
 
 	public static String getIpAddress(Context context){
-		String ip = "";
-		ConnectivityManager conMann = (ConnectivityManager)
-				context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo mobileNetworkInfo = conMann.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		NetworkInfo wifiNetworkInfo = conMann.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		String ip = "192.0.0.1";
+		try {
+
+			ConnectivityManager conMann = (ConnectivityManager)
+					context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mobileNetworkInfo = conMann.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			NetworkInfo wifiNetworkInfo = conMann.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 
-		if (mobileNetworkInfo.isConnected()) {
-			ip = getLocalIpAddress();
-			System.out.println("local ip"+ip);
-		}else if(wifiNetworkInfo.isConnected())
-		{
-			WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-			WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-			int ipAddress = wifiInfo.getIpAddress();
-			ip = int2ip(ipAddress);
-			System.out.println("wifi ip"+ip);
+			if (mobileNetworkInfo.isConnected()) {
+				ip = getLocalIpAddress();
+				System.out.println("local ip" + ip);
+			} else if (wifiNetworkInfo.isConnected()) {
+				WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+				WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+				int ipAddress = wifiInfo.getIpAddress();
+				ip = int2ip(ipAddress);
+				System.out.println("wifi ip" + ip);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 		return ip;
 	}
@@ -249,5 +257,6 @@ public class Util {
 		NetTool printMsg = new NetTool(context);
 		printMsg.print(content);
 	}
+
 
 }

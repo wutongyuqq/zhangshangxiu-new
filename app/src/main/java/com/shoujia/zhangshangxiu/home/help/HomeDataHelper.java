@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.shoujia.zhangshangxiu.base.BaseHelper;
 import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
@@ -435,7 +436,7 @@ public class HomeDataHelper extends BaseHelper {
         dataMap.put("cx", carInfo.getCx());
         dataMap.put("cjhm", carInfo.getCjhm());
         dataMap.put("fdjhm", carInfo.getFdjhm());
-        dataMap.put("oprater_code", sp.getString(Constance.USERNAME));
+        dataMap.put("operater_code", sp.getString(Constance.USERNAME));
         dataMap.put("company_code", sp.getString(Constance.COMP_CODE));
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
@@ -569,7 +570,7 @@ public class HomeDataHelper extends BaseHelper {
         dataMap.put("keys_no", carInfo.getKeys_no());
         dataMap.put("memo", carInfo.getMemo());
         dataMap.put("customer_id", carInfo.getCustomer_id());
-        dataMap.put("oprater_code", sp.getString(Constance.USERNAME));
+        dataMap.put("operater_code", sp.getString(Constance.USERNAME));
         dataMap.put("jsd_id", "");
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
@@ -687,13 +688,20 @@ public class HomeDataHelper extends BaseHelper {
     List<PartsBean> dataPartsList;
     String partPrevious;
 
-
+    String pjbm = "";
+    String cd = "";
+    String ck = "";
     public void updateParts(final UpdateDataListener listener){
         dataPartsList = new ArrayList<>();
         partPrevious = "start";
+         pjbm = "";
+         cd = "";
+         ck = "";
         getPartsList(listener);
 
     }
+
+
 
     //获取第一页数据
     public void getPartsList(final UpdateDataListener listener){
@@ -707,26 +715,50 @@ public class HomeDataHelper extends BaseHelper {
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_stock");
         dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
-        dataMap.put("pjbm", "");
-        dataMap.put("cd", "");
-        dataMap.put("ck", "");
+        dataMap.put("pjbm", pjbm);
+        dataMap.put("cd", cd);
+        dataMap.put("ck", ck);
+        if(!TextUtils.isEmpty(partPrevious)&&!partPrevious.equals("start")&&!partPrevious.equals("end")) {
+            JSONArray jsonArray = JSON.parseArray(partPrevious);
+            if (jsonArray != null && jsonArray.size() > 0) {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+                pjbm = (String) jsonObject.get("pjbm");
+                cd = (String) jsonObject.get("cd");
+                ck = (String) jsonObject.get("ck");
+                dataMap.put("pjbm", pjbm);
+                dataMap.put("cd", cd);
+                dataMap.put("ck", ck);
+            }
+        }
+
 
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
-                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
-                String state = (String) resMap.get("state");
-                partPrevious = (String) resMap.get("Previous");
+                try {
+                    Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                    String state = (String) resMap.get("state");
+                    if(resMap.get("Previous")==null){
+                        return;
+                    }
+                    if(resMap.get("Previous")!=null && resMap.get("Previous") instanceof String) {
+                        partPrevious = (String) resMap.get("Previous");
+                    }else{
+                        partPrevious = ((JSONArray)resMap.get("Previous")).toJSONString();
+                    }
 
-                if ( "ok".equals(state)) {
-                    JSONArray dataArray = (JSONArray) resMap.get("data");
-                    List<PartsBean> dataList = JSONArray.parseArray(dataArray.toJSONString(),PartsBean.class);
-                    dataPartsList.addAll(dataList);
-                    getPartsList(listener);
-                }else{
-                    toastMsg = resMap.get("msg")!=null?"更新配件数据失败"+(String) resMap.get("msg"):"更新配件数据失败：网络异常";
-                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    if ("ok".equals(state)) {
+                        JSONArray dataArray = (JSONArray) resMap.get("data");
+                        List<PartsBean> dataList = JSONArray.parseArray(dataArray.toJSONString(), PartsBean.class);
+                        dataPartsList.addAll(dataList);
+                        getPartsList(listener);
+                    } else {
+                        toastMsg = resMap.get("msg") != null ? "更新配件数据失败" + (String) resMap.get("msg") : "更新配件数据失败：网络异常";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    }
+                }catch (Exception e) {
+                   e.printStackTrace();
                 }
             }
             @Override

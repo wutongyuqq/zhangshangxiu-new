@@ -11,10 +11,15 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.db.DBManager;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.ProjectBean;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
+import com.shoujia.zhangshangxiu.util.Constance;
+import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 
 public class OrderTempEditDialog {
     private Context mContext;
@@ -24,6 +29,7 @@ public class OrderTempEditDialog {
     TextView right_btn,btn_left;
     ProjectBean mProjectBean;
 
+    SharePreferenceManager sp;
 
 
     public OrderTempEditDialog(Context context,ProjectBean projectBean) {
@@ -36,6 +42,7 @@ public class OrderTempEditDialog {
 
 
     public void show() {
+        sp = new SharePreferenceManager(mContext);
         //1、使用Dialog、设置style
         mDialog = new Dialog(mContext, R.style.DialogTheme);
         //2、设置布局
@@ -52,8 +59,19 @@ public class OrderTempEditDialog {
         edit_wx_cb.setText(mProjectBean.getWxgz());
         edit_pro_jg.setText(mProjectBean.getXlf());
         edit_pro_lb.setText(mProjectBean.getZk());
+
+
+        CheckBeanInfo beanInfo = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+        if(beanInfo!=null && "1".equals(beanInfo.getModify())) {
+
+        }else{
+            edit_pro_lb.setEnabled(false);
+            edit_wx_cb.setEnabled(false);
+            edit_pro_jg.setEnabled(false);
+        }
         mDialog.setContentView(view);
         Window window = mDialog.getWindow();
+
         //设置弹出位置
         window.setGravity(Gravity.CENTER);
         //设置对话框大小
@@ -98,6 +116,16 @@ public class OrderTempEditDialog {
 
             @Override
             public void onClick(View view) {
+
+                CheckBeanInfo beanInfo = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo!=null && "1".equals(beanInfo.getModify())) {
+
+                }else{
+                    String toastMsg = "您没有该权限，请联系管理员";
+                    Toast.makeText(mContext,toastMsg,Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if(view.getTag()!=null&&view.getTag().equals("0")){
                     view.setTag("1");
                     save_new_price_img.setImageResource(R.drawable.right_now);

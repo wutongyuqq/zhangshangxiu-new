@@ -19,6 +19,7 @@ import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.dialog.ProjectCancleDialog;
 import com.shoujia.zhangshangxiu.dialog.ProjectEditDialog;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
 import com.shoujia.zhangshangxiu.history.HistoryActivity;
 import com.shoujia.zhangshangxiu.http.HttpClient;
@@ -28,6 +29,7 @@ import com.shoujia.zhangshangxiu.project.help.ProjectDataHelper;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
 import com.shoujia.zhangshangxiu.support.TabSupport;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -147,6 +149,8 @@ public class ProjectActivity extends BaseActivity implements View.OnClickListene
                         if(projectBeans!=null&&projectBeans.size()>0){
                             mOrderCarInfo = projectBeans.get(0);
                             //getGuzhang();
+                            sp.putString(Constance.CUSTOMER_ID,mOrderCarInfo.getCustomer_id());
+                            sp.putString(Constance.CURRENTCZ,mOrderCarInfo.getCz());
                         }
                         mHandler.sendEmptyMessage(109);
                     } else {
@@ -229,15 +233,23 @@ public class ProjectActivity extends BaseActivity implements View.OnClickListene
 				startActivity(intent2);
 				break;
             case R.id.cancle_reciver:
-                ProjectCancleDialog dialog = new ProjectCancleDialog(this);
-                dialog.setOnClickListener(new ProjectCancleDialog.OnClickListener() {
-                    @Override
-                    public void rightBtnClick() {
-                        ProjectDataHelper helper = new ProjectDataHelper(ProjectActivity.this);
-                        helper.cancleReciver();
-                    }
-                });
-                dialog.show();
+
+                CheckBeanInfo beanInfo = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo!=null && "1".equals(beanInfo.getDel())) {
+                    ProjectCancleDialog dialog = new ProjectCancleDialog(this);
+                    dialog.setOnClickListener(new ProjectCancleDialog.OnClickListener() {
+                        @Override
+                        public void rightBtnClick() {
+                            ProjectDataHelper helper = new ProjectDataHelper(ProjectActivity.this);
+                            helper.cancleReciver();
+                        }
+                    });
+                    dialog.show();
+                }else{
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                }
+
                 break;
             case R.id.rl_gls:
                 showTipDialog("jclc","公里数",tv_gls);

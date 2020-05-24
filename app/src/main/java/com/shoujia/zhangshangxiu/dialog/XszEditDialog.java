@@ -37,6 +37,7 @@ public class XszEditDialog {
         sp = new SharePreferenceManager(context.getApplicationContext());
 
     }
+
     public void setOnClickListener(OnClickListener onClickListener){
         this.onClickListener = onClickListener;
     }
@@ -136,7 +137,7 @@ public class XszEditDialog {
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_upload_customer_info_xsz");
         dataMap.put("company_code", sp.getString(Constance.COMP_CODE));
-        dataMap.put("oprater_code",  sp.getString(Constance.USERNAME));
+        dataMap.put("operater_code",  sp.getString(Constance.USERNAME));
         dataMap.put("plate_number", mBean.getHphmStr());
         dataMap.put("cz", mBean.getSyrStr());
         dataMap.put("mobile", "");

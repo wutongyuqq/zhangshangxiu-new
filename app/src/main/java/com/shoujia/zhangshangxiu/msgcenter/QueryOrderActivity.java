@@ -99,7 +99,6 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 				sp.putString(Constance.JSD_ID,bean.getJsd_id());
 				sp.putString(Constance.CURRENTCP,bean.getCp());
 				startActivity(new Intent(QueryOrderActivity.this,ProjectActivity.class));
-				finish();
 			}
 		});
 	}
@@ -111,10 +110,18 @@ public class QueryOrderActivity extends BaseActivity implements View.OnClickList
 			if(mQueryType != 0){
 					mOrderBeans.clear();
 					for(OrderBean bean : mTotalBeans){
-						if((bean.getWxgz_collect().contains(gzStr)||gzStr.equals("全部"))&&
-								(content.getText()==null||TextUtils.isEmpty(content.getText().toString().trim())||
-										bean.getCp().contains(content.getText().toString().trim()))){
-							mOrderBeans.add(bean);
+						if((bean.getWxgz_collect().contains(gzStr)||gzStr.equals("全部"))){
+							if(content.getText()==null||TextUtils.isEmpty(content.getText().toString().trim())){
+								mOrderBeans.add(bean);
+							}else if(bean.getCp().contains(content.getText().toString())){
+								mOrderBeans.add(bean);
+							}else if(bean.getJsd_id().contains(content.getText().toString())){
+								mOrderBeans.add(bean);
+							}else if(bean.getWxgz_collect().contains(content.getText().toString())){
+								mOrderBeans.add(bean);
+							}else if(bean.getZje().contains(content.getText().toString())){
+								mOrderBeans.add(bean);
+							}
 						}
 					}
 				mAdapter.notifyDataSetChanged();

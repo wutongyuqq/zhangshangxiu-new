@@ -16,6 +16,7 @@ import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseActivity;
 import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.FirstIconInfo;
 import com.shoujia.zhangshangxiu.entity.SecondIconInfo;
 import com.shoujia.zhangshangxiu.home.HomeActivity;
@@ -26,6 +27,7 @@ import com.shoujia.zhangshangxiu.order.ProjectOrderActivity;
 import com.shoujia.zhangshangxiu.order.ProjectPaigongActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -340,7 +342,14 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.confirm_order:
-                upLoadServer();
+                CheckBeanInfo beanInfo = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo!=null && "1".equals(beanInfo.getNew_bill())) {
+                    upLoadServer();
+                }else{
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                }
+
                 //startActivity(new Intent(this,ProjectOrderActivity.class));
                 break;
             case R.id.tv_cg:

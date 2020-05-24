@@ -21,6 +21,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseActivity;
+import com.shoujia.zhangshangxiu.dialog.GuzhangEditDialog;
+import com.shoujia.zhangshangxiu.dialog.YouhuiEditDialog;
 import com.shoujia.zhangshangxiu.entity.MoneyBean;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
@@ -52,14 +54,17 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
     TextView bank_name,bank_rate,query_last_money;
     TextView weifenpeiNum;
     EditText xianjinNum,shuakaNum,zhuanzhangNum,vip_card,kcVipMoney,guazhangNum,weixinNum,zfbNum,yskDkNum,kcYcb;
-    TextView  xianjinNumBtn, shuakaNumBtn,zhuanzhangNumBtn,guazhangNumBtn,weixinNumBtn,zfbNumBtn;
+    TextView  xianjinNumBtn, shuakaNumBtn,zhuanzhangNumBtn,guazhangNumBtn,weixinNumBtn,zfbNumBtn,youhuiJine;
     String vipcard_no="";
     ShouyinBean mShouyinBean;
     TextView zfbView;
     TextView wxView;
     TextView shouyin;
     TextView zongyingshou;
+    TextView yangchebiNum;
     private String mShuakaStr="";
+    LinearLayout youhuiMoney;
+    String mYouHuiMoney="0";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_pro_shouyin);
         initView();
         initData();
+
      
     }
 
@@ -81,9 +87,11 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         bank_name = findViewById(R.id.bank_name);
         bank_rate = findViewById(R.id.bank_rate);
         query_last_money = findViewById(R.id.query_last_money);
+        youhuiMoney = findViewById(R.id.youhuiMoney);
 
         vip_card=findViewById(R.id.vip_card);
         kcVipMoney=findViewById(R.id.kcVipMoney);
+        youhuiJine=findViewById(R.id.youhuiJine);
 
         xianjinNum=findViewById(R.id.xianjinNum);
         shuakaNum=findViewById(R.id.shuakaNum);
@@ -91,6 +99,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         guazhangNum=findViewById(R.id.guazhangNum);
         weixinNum=findViewById(R.id.weixinNum);
         zfbNum=findViewById(R.id.zfbNum);
+        yangchebiNum=findViewById(R.id.yangchebiNum);
 
         yskDkNum=findViewById(R.id.yskDkNum);
         kcYcb=findViewById(R.id.kcYcb);
@@ -162,6 +171,41 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
             }
         });
 
+        kcVipMoney.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    getWfpMoney();
+                }
+            }
+        });
+
+
+        kcYcb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    getWfpMoney();
+                }
+            }
+        });
+
+
+        yskDkNum.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    getWfpMoney();
+                }
+            }
+        });
+
+        youhuiMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showYouHuiMoney();
+            }
+        });
 
          weifenpeiNum = findViewById(R.id.weifenpeiNum);
         new NavSupport(this, 14);
@@ -169,6 +213,21 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         bank_name.setOnClickListener(this);
         query_last_money.setOnClickListener(this);
 
+    }
+
+    private void showYouHuiMoney() {
+        YouhuiEditDialog youhuiEditDialog = new YouhuiEditDialog(this,"优惠金额");
+        youhuiEditDialog.setOnClickListener(new YouhuiEditDialog.OnClickListener() {
+            @Override
+            public void rightBtnClick(String numStr) {
+                if(!TextUtils.isEmpty(numStr)){
+                    youhuiJine.setText("优惠：￥"+numStr);
+                    mYouHuiMoney = numStr;
+                    getWfpMoney();
+                }
+            }
+        });
+        youhuiEditDialog.show();
     }
 
     @Override
@@ -185,7 +244,9 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
             TextView pre_payment = findViewById(R.id.pre_payment);
             pre_payment.setText("预收款余额："+mShouyinBean.Pre_payment);
             weifenpeiNum.setText("未分配："+mShouyinBean.Pre_payment);
-            zongyingshou.setText("应收总计："+mShouyinBean.zje);
+            zongyingshou.setText("应收总计："+mShouyinBean.getZje());
+            yangchebiNum.setText("余额："+mShouyinBean.getBit_amount());
+            getWfpMoney();
         }
     }
 
@@ -300,6 +361,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
                     List<ShouyinBean> projectBeans = JSONArray.parseArray(dataArray.toJSONString(), ShouyinBean.class);
                     if(projectBeans!=null&&projectBeans.size()>0){ ;
                         mShouyinBean = projectBeans.get(0);
+
                     }
                     mHandler.sendEmptyMessage(109);
                 } else {
@@ -378,8 +440,8 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
 
         float yhje = 0;
 
-        if(TextUtils.isEmpty(totalZk)){
-            yhje = Float.parseFloat(totalZk);
+        if(!TextUtils.isEmpty(mYouHuiMoney)){
+            yhje = Float.parseFloat(mYouHuiMoney);
         }
 
         float yskDkNumFloat = 0;
@@ -504,7 +566,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         dataMap.put("czy", sp.getString(Constance.USERNAME));
         dataMap.put("ysje", String.valueOf(ysje));
         dataMap.put("plate_number", sp.getString(Constance.CURRENTCP));
-        dataMap.put("yhje",totalZk);
+        dataMap.put("yhje",mYouHuiMoney);
         dataMap.put("sxf", Util.getDoubleStr(sxf+""));
         dataMap.put("ssje",  Util.getDoubleStr(ssje+""));
         dataMap.put("skfs", skfs+"");
@@ -607,6 +669,10 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         float guazhangNumFloat = 0;
         float weixinNumFloat = 0;
         float zfbNumFloat = 0;
+        float yuMoneyFloat = 0;
+        float yskMoneyFloat = 0;
+        float ycbMoneyFloat = 0;
+        float youHuiMoneyFloat = Float.parseFloat(mYouHuiMoney);
         if(xianjinNum.getText()!=null&&!TextUtils.isEmpty(xianjinNum.getText().toString())){
             xianjinNumFloat = Float.parseFloat(xianjinNum.getText().toString());
         }
@@ -628,7 +694,24 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
             zfbNumFloat = Float.parseFloat(zfbNum.getText().toString());
         }
 
-        float otherFloat = xianjinNumFloat + shuakaNumFloat + zhuanzhangNumFloat + guazhangNumFloat + weixinNumFloat + zfbNumFloat;
+        //扣除余额
+        if(kcVipMoney.getText()!=null&&!TextUtils.isEmpty(kcVipMoney.getText().toString())){
+            yuMoneyFloat = Float.parseFloat(kcVipMoney.getText().toString());
+        }
+
+        //预收款抵扣
+        if(yskDkNum.getText()!=null&&!TextUtils.isEmpty(yskDkNum.getText().toString())){
+            yskMoneyFloat = Float.parseFloat(yskDkNum.getText().toString());
+        }
+
+        //养车币抵扣
+        if(kcYcb.getText()!=null&&!TextUtils.isEmpty(kcYcb.getText().toString())){
+            ycbMoneyFloat = Float.parseFloat(kcYcb.getText().toString());
+        }
+
+
+
+        float otherFloat = xianjinNumFloat + shuakaNumFloat + zhuanzhangNumFloat + guazhangNumFloat + weixinNumFloat + zfbNumFloat + yuMoneyFloat + yskMoneyFloat + ycbMoneyFloat + youHuiMoneyFloat;
         float ysjeFloat = Float.parseFloat(mShouyinBean.getZje());
         float shengYuTotal = ysjeFloat - otherFloat;
         if(shengYuTotal<0){
@@ -646,6 +729,12 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
         float guazhangNumFloat = 0;
         float weixinNumFloat = 0;
         float zfbNumFloat = 0;
+
+        float yuMoneyFloat = 0;
+        float yskMoneyFloat = 0;
+        float ycbMoneyFloat = 0;
+        float youHuiMoneyFloat = Float.parseFloat(mYouHuiMoney);
+
         if(xianjinNum.getText()!=null&&!TextUtils.isEmpty(xianjinNum.getText().toString())){
             xianjinNumFloat = Float.parseFloat(xianjinNum.getText().toString());
         }
@@ -667,7 +756,26 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
             zfbNumFloat = Float.parseFloat(zfbNum.getText().toString());
         }
 
-        float otherFloat = xianjinNumFloat + shuakaNumFloat + zhuanzhangNumFloat + guazhangNumFloat + weixinNumFloat + zfbNumFloat;
+
+
+        //扣除余额
+        if(kcVipMoney.getText()!=null&&!TextUtils.isEmpty(kcVipMoney.getText().toString())){
+            yuMoneyFloat = Float.parseFloat(kcVipMoney.getText().toString());
+        }
+
+        //预收款抵扣
+        if(yskDkNum.getText()!=null&&!TextUtils.isEmpty(yskDkNum.getText().toString())){
+            yskMoneyFloat = Float.parseFloat(yskDkNum.getText().toString());
+        }
+
+        //养车币抵扣
+        if(kcYcb.getText()!=null&&!TextUtils.isEmpty(kcYcb.getText().toString())){
+            ycbMoneyFloat = Float.parseFloat(kcYcb.getText().toString());
+        }
+
+
+
+        float otherFloat = xianjinNumFloat + shuakaNumFloat + zhuanzhangNumFloat + guazhangNumFloat + weixinNumFloat + zfbNumFloat + yuMoneyFloat + yskMoneyFloat + ycbMoneyFloat + youHuiMoneyFloat;
         float ysjeFloat = Float.parseFloat(mShouyinBean.getZje());
         float shengYuTotal = ysjeFloat - otherFloat;
         if(shengYuTotal<0){
@@ -686,7 +794,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.query_last_money:
                 EditText vip_card = findViewById(R.id.vip_card);
-                if(vip_card.getText()!=null&&TextUtils.isEmpty(vip_card.getText().toString().trim())){
+                if(vip_card.getText()!=null&&!TextUtils.isEmpty(vip_card.getText().toString().trim())){
                     vipcard_no = vip_card.getText().toString().trim();
                     showAllMoney();
                 }else{
@@ -743,6 +851,7 @@ public class ProjectShouyinActivity extends BaseActivity implements View.OnClick
                     bank_rate.setText(info.setup2);
                 }
             });
+        homeCarInfoAdapter.notifyDataSetChanged();
 
              // 设置PopupWindow的背景
             mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

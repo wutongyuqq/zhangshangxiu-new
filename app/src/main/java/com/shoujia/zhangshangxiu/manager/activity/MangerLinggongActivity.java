@@ -20,6 +20,7 @@ import com.shoujia.zhangshangxiu.dialog.OrderAddTmpDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderTempEditDialog;
 import com.shoujia.zhangshangxiu.dialog.ProjectPaigongDialog;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.ManageInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
 import com.shoujia.zhangshangxiu.entity.PaigongInfo;
@@ -39,6 +40,7 @@ import com.shoujia.zhangshangxiu.project.ProjectActivity;
 import com.shoujia.zhangshangxiu.project.ProjectSelectActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -368,6 +370,16 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
 
     private void crossJianYan() {
 
+        CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10500");
+        if(beanInfo2!=null && "1".equals(beanInfo2.getSh())) {
+
+        }else{
+            toastMsg = "您没有该权限，请联系管理员";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+
+
         String  xhStr="";
         for(ManageInfo info:manageInfos){
             if(info.isChecked()){
@@ -444,6 +456,16 @@ public class MangerLinggongActivity extends BaseActivity implements View.OnClick
         if(xhStr.endsWith(",")){
             xhStr = xhStr.substring(0,xhStr.length()-1);
         }
+
+        CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10500");
+        if(beanInfo2!=null && "1".equals(beanInfo2.getSh())) {
+
+        }else{
+            toastMsg = "您没有该权限，请联系管理员";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
+
         //{"db":"mycon1","function":"sp_fun_update_jsdmx_xlxm_state","jsd_id":"A1802260001","xh_list":"1,3,8","state":"已完工"}
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));

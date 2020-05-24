@@ -75,6 +75,8 @@ public class BankListAdapter extends BaseAdapter {
             hodler.tv_cp_name.setVisibility(View.GONE);
         }else if(bean.name.contains("POS")){
             hodler.tv_cp_name.setVisibility(View.VISIBLE);
+        }else{
+            hodler.tv_cp_name.setVisibility(View.VISIBLE);
         }
         
         return convertView;

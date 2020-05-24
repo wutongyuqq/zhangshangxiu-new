@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseActivity;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.order.entity.JsBaseBean;
@@ -24,6 +26,7 @@ import com.shoujia.zhangshangxiu.order.entity.JsXmBean;
 import com.shoujia.zhangshangxiu.project.ProjectActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.DateUtil;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
@@ -468,6 +471,15 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start_sy:
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getRz())) {
+
+                }else{
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
                 uploadMoney();
                break;
                 case R.id.sing_print:
@@ -475,6 +487,15 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
                     printData();
                 break;
             case R.id.cancle_jiesuan:
+                CheckBeanInfo beanInfo5 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10500");
+                if(beanInfo5!=null && "1".equals(beanInfo5.getRz())) {
+
+                }else{
+                    Toast.makeText(this,"您没有该权限，请联系管理员",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 cancleJiesuan();
                 //onBackPressed();
                 break;

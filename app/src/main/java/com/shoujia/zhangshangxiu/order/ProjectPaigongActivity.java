@@ -19,6 +19,7 @@ import com.shoujia.zhangshangxiu.dialog.OrderAddTmpDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderTempEditDialog;
 import com.shoujia.zhangshangxiu.dialog.ProjectPaigongDialog;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
 import com.shoujia.zhangshangxiu.entity.PaigongInfo;
 import com.shoujia.zhangshangxiu.entity.PartsBean;
@@ -35,6 +36,7 @@ import com.shoujia.zhangshangxiu.project.ProjectActivity;
 import com.shoujia.zhangshangxiu.project.ProjectSelectActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -158,6 +160,14 @@ public class ProjectPaigongActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_pg:
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10200");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getSh())) {
+
+                }else{
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
                 ProjectPaigongDialog dialog = new ProjectPaigongDialog(this);
                 dialog.setOnClickListener(new ProjectPaigongDialog.OnClickListener() {
                     @Override

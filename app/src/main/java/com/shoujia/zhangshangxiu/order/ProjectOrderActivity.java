@@ -24,6 +24,8 @@ import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderPeijianEditDialog;
 import com.shoujia.zhangshangxiu.dialog.OrderTempEditDialog;
 import com.shoujia.zhangshangxiu.dialog.PeijianTipDialog;
+import com.shoujia.zhangshangxiu.dialog.ProjectCancleDialog;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
 import com.shoujia.zhangshangxiu.entity.PeijianBean;
 import com.shoujia.zhangshangxiu.entity.ProjectBean;
@@ -38,8 +40,10 @@ import com.shoujia.zhangshangxiu.order.entity.OrderBeanInfo;
 import com.shoujia.zhangshangxiu.project.GuzhangListActivity;
 import com.shoujia.zhangshangxiu.project.ProjectActivity;
 import com.shoujia.zhangshangxiu.project.ProjectSelectActivity;
+import com.shoujia.zhangshangxiu.project.help.ProjectDataHelper;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
 import com.shoujia.zhangshangxiu.support.NavSupport;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 import com.shoujia.zhangshangxiu.util.Util;
@@ -137,6 +141,15 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 if( OrderBeanInfo.allBtnUnable){
                     return;
                 }
+                CheckBeanInfo beanInfo = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo!=null && "1".equals(beanInfo.getDel())) {
+
+                }else{
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
                 showDeleteDialog(position);
 
             }
@@ -144,6 +157,18 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         mOrderAdapter.setEditClickListener(new ProjectOrderProAdapter.EditClickListener() {
             @Override
             public void editClick(int position) {
+
+
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getModify())) {
+
+                }else{
+                    isToPaigong = false;
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
                 if( OrderBeanInfo.allBtnUnable){
                     return;
                 }
@@ -155,6 +180,18 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         mPeijianAdapter.setDeleteClickListener(new PeijianOrderProAdapter.DeleteClickListener() {
             @Override
             public void deleteClick(int position) {
+
+
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getDel())) {
+
+                }else{
+                    isToPaigong = false;
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
                 if( OrderBeanInfo.allBtnUnable){
                     return;
                 }
@@ -165,6 +202,19 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         mPeijianAdapter.setEditClickListener(new PeijianOrderProAdapter.EditClickListener() {
             @Override
             public void editClick(int position) {
+
+
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getModify())) {
+
+                }else{
+                    isToPaigong = false;
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
+
                 if( OrderBeanInfo.allBtnUnable){
                     return;
                 }
@@ -418,140 +468,162 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     protected void updateUIThread(int msgInt) {
         super.updateUIThread(msgInt);
         if (msgInt == 100) {
-            if (mProjectList != null && mProjectList.size() > 0) {
-                if(mOrderAdapter==null){
-                    return;
-                }
-                mOrderAdapter.notifyDataSetChanged();
-                float totalXlf = 0;
-                float totalXlfZk = 0;
-                for(ProjectBean bean : mProjectList){
-                    float xlf = Float.parseFloat(bean.getXlf());
-                    float xlfZk = Float.parseFloat(bean.getZk());
-                    totalXlf +=xlf;
-                    totalXlfZk +=xlfZk;
-                }
+            try {
+                if (mProjectList != null && mProjectList.size() > 0) {
+                    if (mOrderAdapter == null) {
+                        return;
+                    }
+                    mOrderAdapter.notifyDataSetChanged();
+                    float totalXlf = 0;
+                    float totalXlfZk = 0;
+                    for (ProjectBean bean : mProjectList) {
+                        float xlf = Float.parseFloat(bean.getXlf());
+                        float xlfZk = Float.parseFloat(bean.getZk());
+                        totalXlf += xlf;
+                        totalXlfZk += xlfZk;
+                    }
 
-                wxfTotal.setText("总计:"+totalXlf);
-                zongyingshou.setText("总计:"+(totalXlf - totalXlfZk));
-                tv_xlfZk.setText(totalXlfZk+"");
-            }else{
-                if(mOrderAdapter==null){
-                    return;
+                    wxfTotal.setText("总计:" + totalXlf);
+                    zongyingshou.setText("总计:" + (totalXlf - totalXlfZk));
+                    tv_xlfZk.setText(totalXlfZk + "");
+                } else {
+                    if (mOrderAdapter == null) {
+                        return;
+                    }
+                    mOrderAdapter.notifyDataSetChanged();
+                    wxfTotal.setText("总计:0");
+                    zongyingshou.setText("总计:0");
+                    tv_xlfZk.setText("0");
                 }
-                mOrderAdapter.notifyDataSetChanged();
-                wxfTotal.setText("总计:0");
-                zongyingshou.setText("总计:0");
-                tv_xlfZk.setText("0");
+            }catch (Exception e){
+
             }
         }else if(msgInt==101){
-            if(mPeiJianList!=null&&mPeiJianList.size()>0){
-                mPeijianAdapter.notifyDataSetChanged();
-                float totalMoneyFloat = 0;
-                for(PeijianBean bean:mPeiJianList){
-                    float totalMoney = Float.parseFloat(bean.getSl()) * Float.parseFloat(bean.getSsj());
-                    totalMoneyFloat += totalMoney;
+            try{
+                if(mPeiJianList!=null&&mPeiJianList.size()>0){
+                    mPeijianAdapter.notifyDataSetChanged();
+                    float totalMoneyFloat = 0;
+                    for(PeijianBean bean:mPeiJianList){
+                        float totalMoney = Float.parseFloat(bean.getSl()) * Float.parseFloat(bean.getSsj());
+                        totalMoneyFloat += totalMoney;
+                    }
+                    float totalPjfMoney = (float)(Math.round(totalMoneyFloat*100))/100;
+                    pjfTotal.setText(totalPjfMoney+"");
+                    zongyingshou2.setText(totalPjfMoney+"");
+                }else{
+                    mPeijianAdapter.notifyDataSetChanged();
+                    pjfTotal.setText("0");
+                    zongyingshou2.setText("0");
                 }
-                float totalPjfMoney = (float)(Math.round(totalMoneyFloat*100))/100;
-                pjfTotal.setText(totalPjfMoney+"");
-                zongyingshou2.setText(totalPjfMoney+"");
-            }else{
-                mPeijianAdapter.notifyDataSetChanged();
-                pjfTotal.setText("0");
-                zongyingshou2.setText("0");
+            }catch (Exception e){
+
             }
+
         }else if(msgInt==109){
-            if(mOrderCarInfo==null){
-                return;
-            }
-            guzhangmiaoshu.setText("故障描述："+mOrderCarInfo.getCar_fault());
-            sp.putString(Constance.YUWANGONG,mOrderCarInfo.getYwg_date());
-            sp.putString(Constance.GONGLISHU,mOrderCarInfo.getJclc());
-            sp.putString(Constance.CURRENTCP,mOrderCarInfo.getCp());
-            sp.putString(Constance.CUSTOMER_ID,mOrderCarInfo.getCustomer_id());
-            sp.putString(Constance.CURRENTCZ,mOrderCarInfo.getCz());
-            sp.putString(Constance.JIECHEDATE,mOrderCarInfo.getJc_date());
-            sp.putString(Constance.BEIZHU,mOrderCarInfo.getMemo());
-            sp.putString(Constance.CHEJIAHAO,mOrderCarInfo.getCjhm());
-            beizhu.setText("备注:"+mOrderCarInfo.getMemo());
-            wxfTotal.setText("总计:"+mOrderCarInfo.getWxfzj());
-            infoSupport.setCz(mOrderCarInfo.getCz());
-            zongyingshou.setText("总计:"+mOrderCarInfo.getZje());
-            if (mOrderCarInfo.getDjzt().equals("待修")) {
-                paigong.setText("派工");
-                setBtnEnble(true);
-               // $scope.djzt = '派工';
-            } else if (mOrderCarInfo.getDjzt().equals("已派工") || mOrderCarInfo.getDjzt().equals("修理中")) {
-                paigong.setText("全部完工");
-                setBtnEnble(true);
-               // $scope.djzt = '全部完工';
-            } else if (mOrderCarInfo.getDjzt().equals("处理中")){
-                paigong.setText("派工");
-                setBtnEnble(true);
-                //$scope.djzt = '派工';
-            } else if (mOrderCarInfo.getDjzt().equals("审核已结算")) {
-                img_wg_lay.setVisibility(View.VISIBLE);
-                djztUnable = true;
-                setBtnEnble(true);
-                OrderBeanInfo.allBtnUnable = true;
-                paigong.setText("取消完工");
-                OrderBeanInfo.allBtnUnable = true;
-                setBtnEnble(false);
-            } else if (mOrderCarInfo.getDjzt().equals("审核未结算")) {
-                img_wg_lay.setVisibility(View.VISIBLE);
-                paigong.setText("取消完工");
-                paigong.setEnabled(true);
-                setBtnEnble(true);
-
-                if(mOrderAdapter==null||mPeijianAdapter==null){
+            try {
+                if(mOrderCarInfo==null){
                     return;
                 }
-                mOrderAdapter.notifyDataSetChanged();
-                mPeijianAdapter.notifyDataSetChanged();
-            } else if (mOrderCarInfo.getDjzt().equals("已出厂")) {
-                img_wg_lay.setVisibility(View.VISIBLE);
-                OrderBeanInfo.notDelete = true;
-                OrderBeanInfo.allBtnUnable = true;
-                paigong.setText("取消完工");
-                yccType = true;
-                djztUnable = true;
-                //total_jiesuan.setEnabled(false);
-                //total_jiesuan2.setEnabled(false);
-               // total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
-                setBtnEnble(false);
-                if(mOrderAdapter==null||mPeijianAdapter==null){
-                    return;
-                }
-                mOrderAdapter.notifyDataSetChanged();
-                mPeijianAdapter.notifyDataSetChanged();
+                guzhangmiaoshu.setText("故障描述："+mOrderCarInfo.getCar_fault());
+                sp.putString(Constance.YUWANGONG,mOrderCarInfo.getYwg_date());
+                sp.putString(Constance.GONGLISHU,mOrderCarInfo.getJclc());
+                sp.putString(Constance.CURRENTCP,mOrderCarInfo.getCp());
+                sp.putString(Constance.CUSTOMER_ID,mOrderCarInfo.getCustomer_id());
+                sp.putString(Constance.CURRENTCZ,mOrderCarInfo.getCz());
+                sp.putString(Constance.JIECHEDATE,mOrderCarInfo.getJc_date());
+                sp.putString(Constance.BEIZHU,mOrderCarInfo.getMemo());
+                sp.putString(Constance.CHEJIAHAO,mOrderCarInfo.getCjhm());
+                beizhu.setText("备注:"+mOrderCarInfo.getMemo());
+                wxfTotal.setText("总计:"+mOrderCarInfo.getWxfzj());
+                infoSupport.setCz(mOrderCarInfo.getCz());
+                zongyingshou.setText("总计:"+mOrderCarInfo.getZje());
+                if (mOrderCarInfo.getDjzt().equals("待修")) {
+                    paigong.setText("派工");
+                    setBtnEnble(true);
+                    // $scope.djzt = '派工';
+                } else if (mOrderCarInfo.getDjzt().equals("已派工") || mOrderCarInfo.getDjzt().equals("修理中")) {
+                    paigong.setText("全部完工");
+                    setBtnEnble(true);
+                    // $scope.djzt = '全部完工';
+                } else if (mOrderCarInfo.getDjzt().equals("处理中")){
+                    paigong.setText("派工");
+                    setBtnEnble(true);
+                    //$scope.djzt = '派工';
+                } else if (mOrderCarInfo.getDjzt().equals("审核已结算")) {
+                    img_wg_lay.setVisibility(View.VISIBLE);
+                    djztUnable = true;
+                    setBtnEnble(true);
+                    OrderBeanInfo.allBtnUnable = true;
+                    paigong.setText("取消完工");
+                    OrderBeanInfo.allBtnUnable = true;
+                    setBtnEnble(false);
+                } else if (mOrderCarInfo.getDjzt().equals("审核未结算")) {
+                    img_wg_lay.setVisibility(View.VISIBLE);
+                    paigong.setText("取消完工");
+                    paigong.setEnabled(true);
+                    setBtnEnble(true);
 
-               // setJiesuanEable(true);
+                    if(mOrderAdapter==null||mPeijianAdapter==null){
+                        return;
+                    }
+                    mOrderAdapter.notifyDataSetChanged();
+                    mPeijianAdapter.notifyDataSetChanged();
+                } else if (mOrderCarInfo.getDjzt().equals("已出厂")) {
+                    img_wg_lay.setVisibility(View.VISIBLE);
+                    OrderBeanInfo.notDelete = true;
+                    OrderBeanInfo.allBtnUnable = true;
+                    paigong.setText("取消完工");
+                    yccType = true;
+                    djztUnable = true;
+                    //total_jiesuan.setEnabled(false);
+                    //total_jiesuan2.setEnabled(false);
+                    // total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
+                    setBtnEnble(false);
+                    if(mOrderAdapter==null||mPeijianAdapter==null){
+                        return;
+                    }
+                    mOrderAdapter.notifyDataSetChanged();
+                    mPeijianAdapter.notifyDataSetChanged();
+
+                    // setJiesuanEable(true);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
 
         }else if(msgInt == 111){
-            paigong.setText("取消完工");
-            project_ck.setEnabled(false);
-            temp_pro.setEnabled(false);
-            peijianku.setEnabled(false);
-            OrderBeanInfo.allBtnUnable = true;
-            //total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
-            //total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
-            setBtnEnble(false);
-            if(mOrderAdapter==null||mPeijianAdapter==null){
-                return;
+            try {
+                paigong.setText("取消完工");
+                project_ck.setEnabled(false);
+                temp_pro.setEnabled(false);
+                peijianku.setEnabled(false);
+                OrderBeanInfo.allBtnUnable = true;
+                //total_jiesuan.setBackgroundColor(Color.parseColor("#cccccc"));
+                //total_jiesuan2.setBackgroundColor(Color.parseColor("#cccccc"));
+                setBtnEnble(false);
+                if (mOrderAdapter == null || mPeijianAdapter == null) {
+                    return;
+                }
+                mOrderAdapter.notifyDataSetChanged();
+                mPeijianAdapter.notifyDataSetChanged();
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            mOrderAdapter.notifyDataSetChanged();
-            mPeijianAdapter.notifyDataSetChanged();
         }else if(msgInt == 112){
-            OrderBeanInfo.allBtnUnable = false;
-            setBtnEnble(true);
-            total_jiesuan.setEnabled(true);
-            total_jiesuan2.setEnabled(true);
-            if(mOrderAdapter==null||mPeijianAdapter==null){
-                return;
+            try {
+                OrderBeanInfo.allBtnUnable = false;
+                setBtnEnble(true);
+                total_jiesuan.setEnabled(true);
+                total_jiesuan2.setEnabled(true);
+                if (mOrderAdapter == null || mPeijianAdapter == null) {
+                    return;
+                }
+                mOrderAdapter.notifyDataSetChanged();
+                mPeijianAdapter.notifyDataSetChanged();
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            mOrderAdapter.notifyDataSetChanged();
-            mPeijianAdapter.notifyDataSetChanged();
 
         }
     }
@@ -587,22 +659,27 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
-                Log.d("onSuccess--json", json);
-                System.out.println("11111");
-                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
-                String state = (String) resMap.get("state");
-                if ("ok".equals(state)) {
-                    JSONArray dataArray = (JSONArray) resMap.get("data");
-                    List<OrderCarInfo> projectBeans = JSONArray.parseArray(dataArray.toJSONString(), OrderCarInfo.class);
-                    if(projectBeans!=null&&projectBeans.size()>0){
-                        mOrderCarInfo = projectBeans.get(0);
+                try {
+                    Log.d("onSuccess--json", json);
+                    System.out.println("11111");
+                    Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                    String state = (String) resMap.get("state");
+                    if ("ok".equals(state)) {
+                        JSONArray dataArray = (JSONArray) resMap.get("data");
+                        List<OrderCarInfo> projectBeans = JSONArray.parseArray(dataArray.toJSONString(), OrderCarInfo.class);
+                        if(projectBeans!=null&&projectBeans.size()>0){
+                            mOrderCarInfo = projectBeans.get(0);
 
-                        //getGuzhang();
+                            //getGuzhang();
+                        }
+                        mHandler.sendEmptyMessage(109);
+                    } else {
+
                     }
-                    mHandler.sendEmptyMessage(109);
-                } else {
-
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
             }
 
             @Override
@@ -698,6 +775,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void judgeToStatu(){
+
         if(djztUnable){
             return;
         }
@@ -705,9 +783,32 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         isToPaigong = true;
 
             if(gdStatu.equals("派工")) {
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10200");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getOpen())) {
+
+                }else{
+                    isToPaigong = false;
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectPaigongActivity.class));
             //去派工页面
             }else if(gdStatu.equals("全部完工")){
+
+                CheckBeanInfo beanInfo2 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10200");
+                if(beanInfo2!=null && "1".equals(beanInfo2.getSh())) {
+
+                }else{
+                    isToPaigong = false;
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
+
+
                 Map<String, String> dataMap = new HashMap<>();
                 dataMap.put("db", sp.getString(Constance.Data_Source_name));
                 dataMap.put("function", "sp_fun_update_repair_list_state");
@@ -998,10 +1099,28 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 dialog1.show();
                 break;
             case R.id.peijianku:
+                CheckBeanInfo beanInfo4 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo4!=null && "1".equals(beanInfo4.getNew_bill())) {
+
+                }else{
+                    toastMsg = "您没有该权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    return;
+                }
+
+
                 isToPeijian = true;
                 startActivity(new Intent(ProjectOrderActivity.this,PeijianSelectActivity.class));
                 break;
                 case R.id.project_ck:
+                    CheckBeanInfo beanInfo3 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                    if(beanInfo3!=null && "1".equals(beanInfo3.getNew_bill())) {
+
+                    }else{
+                        toastMsg = "您没有该权限，请联系管理员";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                        return;
+                    }
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectSelectActivity.class));
 
                 break;
@@ -1010,11 +1129,14 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 startActivity(new Intent(ProjectOrderActivity.this,ProjectActivity.class));
                 break;
                 case R.id.paigong:
+
                     judgeToStatu();
 
                 break;
             case R.id.total_jiesuan:
             case R.id.total_jiesuan2:
+
+
                 isToJiesuan=true;
                 Intent intent = new Intent(ProjectOrderActivity.this,ProjectJiesuanActivity.class);
                 if(mOrderCarInfo!=null) {

@@ -73,14 +73,26 @@
                         android:text="应收总计：￥0"
                         android:textColor="#333333" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/youhuiMoney"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="优惠：0"
-                        android:textColor="#333333" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/youhuiJine"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="60dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="优惠：￥0"
+                            android:textColor="#333333"
+                            android:drawablePadding="20dp"
+                            android:drawableRight="@drawable/edit"/>
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -125,7 +137,7 @@
                             android:background="#ffffff"
                             android:gravity="left"
                             android:padding="2dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textColor="#333333" />
 
                         <LinearLayout
@@ -180,7 +192,7 @@
                             android:layout_marginLeft="2dp"
                             android:layout_weight="2"
                             android:background="#ffffff"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:gravity="left"
                             android:padding="2dp"
                             android:textColor="#333333" />
@@ -339,7 +351,7 @@
                             android:background="#ffffff"
                             android:gravity="left"
                             android:padding="2dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textColor="#333333" />
 
                         <LinearLayout
@@ -401,7 +413,7 @@
                             android:layout_weight="2"
                             android:background="#ffffff"
                             android:gravity="left"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:padding="2dp"
                             android:textColor="#333333" />
 
@@ -516,7 +528,7 @@
                             android:layout_weight="2"
                             android:background="#ffffff"
                             android:gravity="left"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:padding="2dp"
                             android:textColor="#333333" />
 
@@ -570,7 +582,7 @@
                             android:background="#ffffff"
                             android:gravity="left"
                             android:padding="2dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textColor="#333333" />
 
                         <LinearLayout
@@ -627,7 +639,7 @@
                             android:layout_weight="2"
                             android:background="#ffffff"
                             android:gravity="left"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:padding="2dp"
                             android:textColor="#333333" />
 
@@ -734,7 +746,7 @@
                             android:background="#ffffff"
                             android:gravity="left"
                             android:padding="2dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textColor="#333333" />
 
                         <LinearLayout
@@ -836,7 +848,7 @@
                             android:background="#ffffff"
                             android:gravity="left"
                             android:padding="2dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textColor="#333333" />
 
                         <LinearLayout
@@ -883,7 +895,7 @@
                             android:background="#ffffff"
                             android:gravity="left"
                             android:padding="2dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:hint="扣除养车币"
                             android:textColor="#333333" />
 
@@ -894,12 +906,13 @@
                             android:layout_weight="1">
 
                             <TextView
+                                android:id="@+id/yangchebiNum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="2dp"
                                 android:gravity="center"
                                 android:padding="5dp"
-                                android:text="余额：20"
+                                android:text="余额：0"
                                 android:textColor="#666666" />
                         </LinearLayout>
                     </LinearLayout>

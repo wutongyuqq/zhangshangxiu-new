@@ -34,6 +34,7 @@ import com.baidu.ocr.sdk.model.AccessToken;
 import com.baidu.ocr.ui.camera.CameraActivity;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.dialog.XszEditDialog;
+import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.home.adapter.HomeCarInfoAdapter;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
 import com.shoujia.zhangshangxiu.db.DBManager;
@@ -57,6 +58,7 @@ import com.shoujia.zhangshangxiu.order.ProjectOrderActivity;
 import com.shoujia.zhangshangxiu.project.ProjectActivity;
 import com.shoujia.zhangshangxiu.search.SearchListActivity;
 import com.shoujia.zhangshangxiu.util.Base64Utils;
+import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.FileUtils;
 import com.shoujia.zhangshangxiu.util.HttpUtil;
@@ -403,8 +405,13 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                 //takePhotoChejiaHaoCar();
                 break;
             case R.id.jieche_btn:
-
-                startJieche();
+                CheckBeanInfo beanInfo = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
+                if(beanInfo!=null && "1".equals(beanInfo.getOpen())) {
+                    startJieche();
+                }else{
+                    toastMsg = "您没有接车权限，请联系管理员";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                }
                 break;
             case R.id.tv_guanzhu:
                 guanzhu();
@@ -882,9 +889,8 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
 
                                     }
 
-                                    if(mEditDialog==null) {
-                                        mEditDialog = new XszEditDialog(getContext(), bean);
-                                    }
+                                    mEditDialog = new XszEditDialog(getContext(), bean);
+
                                     mEditDialog.setOnClickListener(new XszEditDialog.OnClickListener() {
                                         @Override
                                         public void onSuccess(XszBean xszBean, String numStr) {
@@ -1027,37 +1033,48 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", "sjsoft_SQL");
         dataMap.put("function", "sp_fun_get_ocr_account_balance");
-        dataMap.put("data_source", "asa_to_sql");
+        dataMap.put("data_source", sp.getString(Constance.FACTORYNAME));
         dataMap.put("ocr_type", sbStr);
 
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
-                System.out.println("11111");
-                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
-                String state = (String) resMap.get("state");
-                if ("ok".equals(state)) {
-                    if(resMap.get("balance")!=null) {
-                        String balance = (String) resMap.get("balance");
-                        if(!TextUtils.isEmpty(balance)){
-                            int balanceInt = Integer.parseInt(balance);
-                            if(balanceInt<1){
-                                toastMsg = "本OCR账号余额不足,请及时充值";
-                                mHandler.sendEmptyMessage(TOAST_MSG);
-                            }else{
-                                mHandler.sendEmptyMessage(updateInt);
-                            }
-                        }
-                    }
-                } else {
-                    if (resMap.get("msg") != null) {
-                        toastMsg = (String) resMap.get("msg");
-                        mHandler.sendEmptyMessage(TOAST_MSG);
-                    } else {
+                try {
+                    System.out.println("11111");
+                    Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                    if (resMap == null) {
                         toastMsg = "网络异常";
                         mHandler.sendEmptyMessage(TOAST_MSG);
+                        return;
                     }
+                    String state = (String) resMap.get("state");
+                    if ("ok".equals(state)) {
+                        if (resMap.get("balance") != null) {
+                            String balance = (String) resMap.get("balance");
+                            if (!TextUtils.isEmpty(balance)) {
+                                int balanceInt = Integer.parseInt(balance);
+                                if (balanceInt < 1) {
+                                    toastMsg = "本OCR账号余额不足,请及时充值";
+                                    mHandler.sendEmptyMessage(TOAST_MSG);
+                                } else {
+                                    mHandler.sendEmptyMessage(updateInt);
+                                }
+                            }
+                        }
+                    } else {
+                        if (resMap.get("msg") != null) {
+                            toastMsg = (String) resMap.get("msg");
+                            mHandler.sendEmptyMessage(TOAST_MSG);
+                        } else {
+                            toastMsg = "网络异常";
+                            mHandler.sendEmptyMessage(TOAST_MSG);
+                        }
+                    }
+                }catch (Exception e){
+                    toastMsg = "网络异常";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    e.printStackTrace();
                 }
             }
 
@@ -1084,8 +1101,8 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", "sjsoft_SQL");
         dataMap.put("function", "sp_fun_update_ocr_account_balance");
-        dataMap.put("oprater_code",  sp.getString(Constance.USERNAME));
-        dataMap.put("data_source", "asa_to_sql");
+        dataMap.put("operater_code",  sp.getString(Constance.USERNAME));
+        dataMap.put("data_source", sp.getString(Constance.FACTORYNAME));
         dataMap.put("ocr_type", sbStr);
         dataMap.put("result", cp);
 

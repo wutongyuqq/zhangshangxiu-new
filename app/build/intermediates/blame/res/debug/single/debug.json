@@ -152,6 +152,10 @@
         "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/drawable-xxhdpi/fold_img.png"
     },
     {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/debug/layout_dialog_youhui_edit.xml.flat",
+        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/layout/dialog_youhui_edit.xml"
+    },
+    {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/debug/layout_abc_activity_chooser_view_list_item.xml.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/layout/abc_activity_chooser_view_list_item.xml"
     },

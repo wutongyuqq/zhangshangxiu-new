@@ -4,24 +4,24 @@
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/74dc6304a1ff5810c7c5924c98ccd9c5/res/drawable/design_password_eye.xml"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_grid_select.xml.flat",
-        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/drawable/grid_select.xml"
-    },
-    {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_design_layout_snackbar.xml.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/74dc6304a1ff5810c7c5924c98ccd9c5/res/layout/design_layout_snackbar.xml"
+    },
+    {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_grid_select.xml.flat",
+        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/drawable/grid_select.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_design_navigation_menu.xml.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/74dc6304a1ff5810c7c5924c98ccd9c5/res/layout/design_navigation_menu.xml"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_order_pro_item.xml.flat",
-        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/layout/order_pro_item.xml"
-    },
-    {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_abc_btn_borderless_material.xml.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable/abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_order_pro_item.xml.flat",
+        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/layout/order_pro_item.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xxxhdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
@@ -124,16 +124,16 @@
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-xxhdpi-v4/abc_list_divider_mtrl_alpha.9.png"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xxhdpi_img_wg.png.flat",
-        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/drawable-xxhdpi/img_wg.png"
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_abc_screen_simple_overlay_action_mode.xml.flat",
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/layout/abc_screen_simple_overlay_action_mode.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_design_menu_item_action_area.xml.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/74dc6304a1ff5810c7c5924c98ccd9c5/res/layout/design_menu_item_action_area.xml"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_abc_screen_simple_overlay_action_mode.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/layout/abc_screen_simple_overlay_action_mode.xml"
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xxhdpi_img_wg.png.flat",
+        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/drawable-xxhdpi/img_wg.png"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_activity_pro_order.xml.flat",
@@ -148,12 +148,12 @@
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-mdpi-v4/abc_list_divider_mtrl_alpha.9.png"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xhdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png"
-    },
-    {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xxhdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_light.9.png"
+    },
+    {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xhdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/color-v23_abc_tint_default.xml.flat",
@@ -168,20 +168,20 @@
         "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/ocr_ui/build/intermediates/packaged_res/release/drawable-xhdpi-v4/bd_ocr_rotate.png"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_notification_bg.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/7e7355b511daebcd7592d6d8875779ef/res/drawable/notification_bg.xml"
-    },
-    {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xxhdpi_gou_blue.png.flat",
         "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/drawable-xxhdpi/gou_blue.png"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xhdpi-v4_bd_ocr_take_photo_selector.xml.flat",
-        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/ocr_ui/build/intermediates/packaged_res/release/drawable-xhdpi-v4/bd_ocr_take_photo_selector.xml"
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_notification_bg.xml.flat",
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/7e7355b511daebcd7592d6d8875779ef/res/drawable/notification_bg.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xhdpi-v4_bd_ocr_take_photo_selector.xml.flat",
+        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/ocr_ui/build/intermediates/packaged_res/release/drawable-xhdpi-v4/bd_ocr_take_photo_selector.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-hdpi-v4_abc_ic_star_half_black_48dp.png.flat",
@@ -228,12 +228,12 @@
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-hdpi-v4/abc_btn_radio_to_on_mtrl_015.png"
     },
     {
-        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_abc_list_selector_holo_light.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable/abc_list_selector_holo_light.xml"
-    },
-    {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-xhdpi-v4_abc_textfield_default_mtrl_alpha.9.png.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-xhdpi-v4/abc_textfield_default_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable_abc_list_selector_holo_light.xml.flat",
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable/abc_list_selector_holo_light.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-hdpi-v4_abc_btn_check_to_on_mtrl_000.png.flat",
@@ -986,6 +986,10 @@
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-ldrtl-mdpi-v17_abc_spinner_mtrl_am_alpha.9.png.flat",
         "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/drawable-ldrtl-mdpi-v17/abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/layout_dialog_youhui_edit.xml.flat",
+        "source": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/src/main/res/layout/dialog_youhui_edit.xml"
     },
     {
         "merged": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/res/merged/release/drawable-v21_abc_edit_text_material.xml.flat",

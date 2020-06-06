@@ -696,16 +696,16 @@ public final class R {
         public static final int text2 = 0x7f0801c7;
         public static final int textSpacerNoButtons = 0x7f0801c8;
         public static final int textSpacerNoTitle = 0x7f0801c9;
-        public static final int time = 0x7f0801ce;
-        public static final int title = 0x7f0801cf;
-        public static final int titleDividerNoCustom = 0x7f0801d0;
-        public static final int title_template = 0x7f0801d1;
-        public static final int top = 0x7f0801d2;
-        public static final int topPanel = 0x7f0801d3;
-        public static final int up = 0x7f080213;
-        public static final int useLogo = 0x7f080215;
-        public static final int withText = 0x7f08021f;
-        public static final int wrap_content = 0x7f080220;
+        public static final int time = 0x7f0801cf;
+        public static final int title = 0x7f0801d0;
+        public static final int titleDividerNoCustom = 0x7f0801d1;
+        public static final int title_template = 0x7f0801d2;
+        public static final int top = 0x7f0801d3;
+        public static final int topPanel = 0x7f0801d4;
+        public static final int up = 0x7f080215;
+        public static final int useLogo = 0x7f080217;
+        public static final int withText = 0x7f080221;
+        public static final int wrap_content = 0x7f080222;
     }
     public static final class integer {
         private integer() {}
@@ -749,25 +749,25 @@ public final class R {
         public static final int bd_ocr_confirm_result = 0x7f0a0034;
         public static final int bd_ocr_crop = 0x7f0a0035;
         public static final int bd_ocr_take_picture = 0x7f0a0036;
-        public static final int notification_action = 0x7f0a0067;
-        public static final int notification_action_tombstone = 0x7f0a0068;
-        public static final int notification_media_action = 0x7f0a0069;
-        public static final int notification_media_cancel_action = 0x7f0a006a;
-        public static final int notification_template_big_media = 0x7f0a006b;
-        public static final int notification_template_big_media_custom = 0x7f0a006c;
-        public static final int notification_template_big_media_narrow = 0x7f0a006d;
-        public static final int notification_template_big_media_narrow_custom = 0x7f0a006e;
-        public static final int notification_template_custom_big = 0x7f0a006f;
-        public static final int notification_template_icon_group = 0x7f0a0070;
-        public static final int notification_template_lines_media = 0x7f0a0071;
-        public static final int notification_template_media = 0x7f0a0072;
-        public static final int notification_template_media_custom = 0x7f0a0073;
-        public static final int notification_template_part_chronometer = 0x7f0a0074;
-        public static final int notification_template_part_time = 0x7f0a0075;
-        public static final int select_dialog_item_material = 0x7f0a0085;
-        public static final int select_dialog_multichoice_material = 0x7f0a0086;
-        public static final int select_dialog_singlechoice_material = 0x7f0a0087;
-        public static final int support_simple_spinner_dropdown_item = 0x7f0a0089;
+        public static final int notification_action = 0x7f0a0068;
+        public static final int notification_action_tombstone = 0x7f0a0069;
+        public static final int notification_media_action = 0x7f0a006a;
+        public static final int notification_media_cancel_action = 0x7f0a006b;
+        public static final int notification_template_big_media = 0x7f0a006c;
+        public static final int notification_template_big_media_custom = 0x7f0a006d;
+        public static final int notification_template_big_media_narrow = 0x7f0a006e;
+        public static final int notification_template_big_media_narrow_custom = 0x7f0a006f;
+        public static final int notification_template_custom_big = 0x7f0a0070;
+        public static final int notification_template_icon_group = 0x7f0a0071;
+        public static final int notification_template_lines_media = 0x7f0a0072;
+        public static final int notification_template_media = 0x7f0a0073;
+        public static final int notification_template_media_custom = 0x7f0a0074;
+        public static final int notification_template_part_chronometer = 0x7f0a0075;
+        public static final int notification_template_part_time = 0x7f0a0076;
+        public static final int select_dialog_item_material = 0x7f0a0086;
+        public static final int select_dialog_multichoice_material = 0x7f0a0087;
+        public static final int select_dialog_singlechoice_material = 0x7f0a0088;
+        public static final int support_simple_spinner_dropdown_item = 0x7f0a008a;
     }
     public static final class mipmap {
         private mipmap() {}

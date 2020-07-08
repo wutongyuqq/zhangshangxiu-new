@@ -463,7 +463,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
         }
 
     }
-
+    float totalXlfZk = 0;
     @Override
     protected void updateUIThread(int msgInt) {
         super.updateUIThread(msgInt);
@@ -475,7 +475,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                     }
                     mOrderAdapter.notifyDataSetChanged();
                     float totalXlf = 0;
-                    float totalXlfZk = 0;
+
                     for (ProjectBean bean : mProjectList) {
                         float xlf = Float.parseFloat(bean.getXlf());
                         float xlfZk = Float.parseFloat(bean.getZk());
@@ -485,6 +485,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
 
                     wxfTotal.setText("总计:" + totalXlf);
                     zongyingshou.setText("总计:" + (totalXlf - totalXlfZk));
+
                     tv_xlfZk.setText(totalXlfZk + "");
                 } else {
                     if (mOrderAdapter == null) {
@@ -1025,7 +1026,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
 
         if(wxfTotal.getText()!=null&&!TextUtils.isEmpty(wxfTotal.getText().toString())){
             String wxfStr = wxfTotal.getText().toString();
-            wxfTotalFloat = Float.parseFloat(wxfStr.replaceAll("总计:",""));
+            wxfTotalFloat = Float.parseFloat(wxfStr.replaceAll("总计:",""))-totalXlfZk;
         }
         if (mOrderCarInfo==null|| (pjfTotalFloat +wxfTotalFloat) != Float.parseFloat(mOrderCarInfo.getZje())) {
 

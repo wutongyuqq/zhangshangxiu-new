@@ -475,7 +475,7 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                     }
                     mOrderAdapter.notifyDataSetChanged();
                     float totalXlf = 0;
-
+                    totalXlfZk = 0;
                     for (ProjectBean bean : mProjectList) {
                         float xlf = Float.parseFloat(bean.getXlf());
                         float xlfZk = Float.parseFloat(bean.getZk());
@@ -483,8 +483,8 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                         totalXlfZk += xlfZk;
                     }
 
-                    wxfTotal.setText("总计:" + totalXlf);
-                    zongyingshou.setText("总计:" + (totalXlf - totalXlfZk));
+                    wxfTotal.setText("" + totalXlf);
+                    zongyingshou.setText("" + (totalXlf - totalXlfZk));
 
                     tv_xlfZk.setText(totalXlfZk + "");
                 } else {
@@ -492,8 +492,8 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                         return;
                     }
                     mOrderAdapter.notifyDataSetChanged();
-                    wxfTotal.setText("总计:0");
-                    zongyingshou.setText("总计:0");
+                    wxfTotal.setText("0");
+                    zongyingshou.setText("0");
                     tv_xlfZk.setText("0");
                 }
             }catch (Exception e){
@@ -535,9 +535,9 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
                 sp.putString(Constance.BEIZHU,mOrderCarInfo.getMemo());
                 sp.putString(Constance.CHEJIAHAO,mOrderCarInfo.getCjhm());
                 beizhu.setText("备注:"+mOrderCarInfo.getMemo());
-                wxfTotal.setText("总计:"+mOrderCarInfo.getWxfzj());
+                wxfTotal.setText(""+mOrderCarInfo.getWxfzj());
                 infoSupport.setCz(mOrderCarInfo.getCz());
-                zongyingshou.setText("总计:"+mOrderCarInfo.getZje());
+                zongyingshou.setText(""+mOrderCarInfo.getZje());
                 if (mOrderCarInfo.getDjzt().equals("待修")) {
                     paigong.setText("派工");
                     setBtnEnble(true);

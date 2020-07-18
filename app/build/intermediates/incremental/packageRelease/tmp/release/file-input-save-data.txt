@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun May 24 23:03:24 CST 2020
+#Sat Jul 18 15:41:15 CST 2020
 4.path=lib/arm64-v8a/libidcard_quality.1.1.1.so
 13.baseType=DIRECTORY
 8.set=NATIVE_RESOURCE

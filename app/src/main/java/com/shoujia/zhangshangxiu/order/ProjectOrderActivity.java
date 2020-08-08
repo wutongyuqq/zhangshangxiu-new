@@ -1044,11 +1044,12 @@ public class ProjectOrderActivity extends BaseActivity implements View.OnClickLi
             client.post(Util.getUrl(), dataMap, new IGetDataListener() {
                 @Override
                 public void onSuccess(String json) {
+
                     System.out.println("11111");
                     Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                     String state = (String) resMap.get("state");
                     if ( "ok".equals(state)) {
-
+                        totalXlfZk=0;
                     }else{
 
                     }

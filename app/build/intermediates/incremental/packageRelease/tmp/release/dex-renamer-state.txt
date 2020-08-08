@@ -1,4 +1,4 @@
-#Sat Jul 18 15:41:14 CST 2020
+#Thu Jul 23 11:51:33 CST 2020
 base.0=/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/dex/release/mergeDexRelease/out
 path.0=classes.dex
 renamed.0=classes.dex

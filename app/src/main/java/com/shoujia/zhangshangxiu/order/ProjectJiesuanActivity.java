@@ -479,8 +479,8 @@ public class ProjectJiesuanActivity extends BaseActivity implements View.OnClick
                     mHandler.sendEmptyMessage(TOAST_MSG);
                     return;
                 }
-
-                uploadMoney();
+                startActivity(new Intent(ProjectJiesuanActivity.this,ProjectShouyinActivity.class));
+                //uploadMoney();
                break;
                 case R.id.sing_print:
                 case R.id.double_print:

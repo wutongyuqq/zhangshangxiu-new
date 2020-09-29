@@ -141,15 +141,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                         mHandler.sendEmptyMessage(TOAST_MSG);
                     }
                 });
-                helper.getSecondIconList(new HomeDataHelper.UpdateDataListener() {
-                    @Override
-                    public void onSuccess() {
-                        dismissDialog();
-                       // DBManager.getInstanse(getActivity()).close();
-                        //toastMsg = "更新项目库数据成功";
-                        //mHandler.sendEmptyMessage(TOAST_MSG);
-                    }
-                });
 
                 Intent intent = new Intent(getActivity(), HomeService.class);
                 Bundle bundle = new Bundle();

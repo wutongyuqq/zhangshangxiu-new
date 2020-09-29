@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <include layout="@layout/nav_support" />
+
+        <include
+            android:visibility="gone"
+            layout="@layout/info_support" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/kehumingcheng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:text="客户名称：张三"/>
+
+
+                <TextView
+                    android:id="@+id/kehuzongjine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:text="总金额：1000元"/>
+
+
+            <TextView
+                android:id="@+id/xiaoshoudanhao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:text="销售单号：20202020000"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/select_date_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-09-10"
+                android:paddingLeft="10dp"
+                android:background="#eeeeee"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:paddingRight="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="至"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="5dp"
+                />
+
+            <TextView
+                android:id="@+id/select_date_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-09-10"
+                android:paddingLeft="10dp"
+                android:background="#eeeeee"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:paddingRight="10dp" />
+
+            <ImageView
+                android:id="@+id/query_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/red_white_search" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <ListView
+                android:id="@+id/listview2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="80dp"
+                android:listSelector="@color/transparent"
+                android:scrollbars="none"/>
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/pro_btn_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:visibility="gone"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/car_home_page2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="#89c997"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="查客户"
+                android:textColor="#ffffff" />
+
+
+            <TextView
+                android:id="@+id/peijianku"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="#89c997"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="选配件"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/total_jiesuan"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="#89c997"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="扫条码"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/car_home_page"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="#89c997"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="开新单"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/save_kehu"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="#89c997"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="保存"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/total_jiesuan2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="#89c997"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="结算"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/img_wg_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        >
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="220dp"
+            android:src="@drawable/img_wg"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

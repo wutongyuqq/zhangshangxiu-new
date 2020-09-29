@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mac/Documents/zongmulu/xiangmu/waibao/zhangshangxiu_android/zhangshangxiu/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-da/values-da.xml",
+            "outputFile": "H:\\waibao\\zsx\\daima\\zhangshangxiu\\zhangshangxiu\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-da\\values-da.xml",
             "map": [
                 {
-                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/0aa029e604658ad1e71f2630fbf2e29e/res/values-da/values-da.xml",
+                    "source": "C:\\Users\\lip\\.gradle\\caches\\transforms-2\\files-2.1\\85b9706a07d7823daefab1d70facea46\\res\\values-da\\values-da.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

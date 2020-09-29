@@ -30,6 +30,14 @@ public class PeijianSelectOneAdapter extends BaseAdapter {
         this.listData = listData;
     }
 
+    public void setList(List<PartsBean> list){
+        if(listData!=null){
+            listData.clear();
+        }
+        listData.addAll(list);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         if (listData.size() == 0) {
@@ -81,6 +89,7 @@ public class PeijianSelectOneAdapter extends BaseAdapter {
             hodler.pj_xh = convertView.findViewById(R.id.pj_xh);
             hodler.tv_select = convertView.findViewById(R.id.tv_select);
             hodler.select_one = convertView.findViewById(R.id.select_one);
+            hodler.pj_pjjj = convertView.findViewById(R.id.pj_pjjj);
             convertView.setTag(hodler);
         }else{
             hodler = (Hodler) convertView.getTag();
@@ -93,6 +102,7 @@ public class PeijianSelectOneAdapter extends BaseAdapter {
             hodler.pj_gg.setText("规格："+bean.getCd());
             hodler.pj_kcl.setText("库存量："+bean.getKcl());
             hodler.pj_xh.setText("配件型号："+bean.getCx());
+            hodler.pj_pjjj.setText("成本价："+bean.getPjjj());
         }
         final boolean isSelected = listData.get(position).isSelected();
         hodler.tv_select.setImageResource(isSelected?R.drawable.right_now:R.drawable.right_now_no);
@@ -121,6 +131,7 @@ public class PeijianSelectOneAdapter extends BaseAdapter {
         TextView pj_gg;
         TextView pj_kcl;
         TextView pj_xh;
+        TextView pj_pjjj;
         ImageView tv_select;
         LinearLayout select_one;
 

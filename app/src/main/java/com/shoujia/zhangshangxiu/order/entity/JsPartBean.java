@@ -13,6 +13,7 @@ public class JsPartBean {
     public String ssj;
     public String xh;
 
+
     public String getSl() {
         if(TextUtils.isEmpty(sl)){
             return "1";

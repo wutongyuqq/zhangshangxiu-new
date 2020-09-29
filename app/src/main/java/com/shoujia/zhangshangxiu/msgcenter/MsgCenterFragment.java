@@ -11,7 +11,12 @@ import android.widget.TextView;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
 import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
+import com.shoujia.zhangshangxiu.performance.KeHuOrderActivity;
+import com.shoujia.zhangshangxiu.performance.KeHuQueryActivity;
+import com.shoujia.zhangshangxiu.performance.PeijianQueryActivity;
 import com.shoujia.zhangshangxiu.performance.PerformanceActivity;
+import com.shoujia.zhangshangxiu.performance.XsdKehuQueryActivity;
+import com.shoujia.zhangshangxiu.performance.XsdQueryActivity;
 import com.shoujia.zhangshangxiu.util.CheckUtil;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
@@ -23,16 +28,24 @@ import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 public class MsgCenterFragment extends BaseFragment implements View.OnClickListener{
 
     private View mView;
-    private TextView performance,query_order;
+    private TextView performance,query_order,kucunquery,myKehu,chakehu,xscx;
     private SharePreferenceManager sp;
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = View.inflate(getActivity(), R.layout.fragment_msg_center, null);
         performance = mView.findViewById(R.id.performance);
+        kucunquery = mView.findViewById(R.id.kucunquery);
         query_order = mView.findViewById(R.id.query_order);
+        xscx = mView.findViewById(R.id.xscx);
+        chakehu = mView.findViewById(R.id.chakehu);
+        myKehu = mView.findViewById(R.id.myKehu);
         performance.setOnClickListener(this);
+        kucunquery.setOnClickListener(this);
         query_order.setOnClickListener(this);
+        myKehu.setOnClickListener(this);
+        xscx.setOnClickListener(this);
+        chakehu.setOnClickListener(this);
         sp = new SharePreferenceManager(getContext());
 
         return mView;
@@ -65,6 +78,23 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
                     }
 
                 startActivity(new Intent(getActivity(),QueryOrderActivity.class));
+                break;
+            case R.id.kucunquery:
+                startActivity(new Intent(getActivity(), PeijianQueryActivity.class));
+                break;
+            case R.id.myKehu:
+                startActivity(new Intent(getActivity(), KeHuOrderActivity.class));
+                break;
+            case R.id.chakehu:
+                Intent intent3 = new Intent(getActivity(),KeHuQueryActivity.class);
+                intent3.putExtra("from","msgCenter");
+                startActivity(intent3);
+
+                break;
+            case R.id.xscx:
+                Intent intent = new Intent(getActivity(), XsdKehuQueryActivity.class);
+                intent.putExtra("from","chakehu");
+                startActivity(intent);
                 break;
 
             default:

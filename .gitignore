@@ -9,3 +9,8 @@
 /build
 /captures
 .externalNativeBuild
+/build/
+/app/build/
+/.idea/
+/orr_ui/build/
+

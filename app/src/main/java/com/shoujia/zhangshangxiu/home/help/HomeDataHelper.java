@@ -277,7 +277,7 @@ public class HomeDataHelper extends BaseHelper {
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_maintenance_project");
-        dataMap.put("previous_xh", previous_xh2);
+        dataMap.put("Previous_xh", previous_xh2);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -316,7 +316,7 @@ public class HomeDataHelper extends BaseHelper {
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_maintenance_project");
-        dataMap.put("previous_xh", previous_xh2);
+        dataMap.put("Previous_xh", previous_xh2);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -341,11 +341,10 @@ public class HomeDataHelper extends BaseHelper {
         });
     }
 
-    //获取二级页面数据
-    public void getSecondIconList(final UpdateDataListener listener){
+    private void getRealSecondIconList(final UpdateDataListener listener){
         if(previous_xh2.equals("end")){
-         //   DBManager db = DBManager.getInstanse(getActivity());
-          //  db.insertSecondIconListData(secondIconInfos);
+            //   DBManager db = DBManager.getInstanse(getActivity());
+            //  db.insertSecondIconListData(secondIconInfos);
             listener.onSuccess();
             return;
         }
@@ -353,7 +352,7 @@ public class HomeDataHelper extends BaseHelper {
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_down_maintenance_project");
-        dataMap.put("previous_xh", previous_xh2);
+        dataMap.put("Previous_xh", previous_xh2);
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
@@ -375,9 +374,14 @@ public class HomeDataHelper extends BaseHelper {
 
             @Override
             public void onFail() {
-
+                previous_xh2 = "end";
             }
         });
+    }
+    //获取二级页面数据
+    public void getSecondIconList(final UpdateDataListener listener){
+        previous_xh2 = "0";
+        getRealSecondIconList(listener);
     }
 
 

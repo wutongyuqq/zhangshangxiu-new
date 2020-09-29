@@ -2,6 +2,7 @@ package com.shoujia.zhangshangxiu.home;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -43,14 +44,19 @@ import java.util.Map;
  */
 public class HomeActivity extends FragmentActivity implements View.OnClickListener{
 	private final String TAG = "HomeActivity";
-  private NavSupport navSupport;
+	private NavSupport navSupport;
 	SharePreferenceManager sp;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_home);
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		//super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_home);
 		sp = new SharePreferenceManager(getApplicationContext());
 
 		TabSupport tabSupport = new TabSupport(this);
@@ -103,8 +109,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 									ll_top_title.setVisibility(View.GONE);
 								} else{
 									Log.v(TAG, "键盘收起状态");
-											rl_bottom.setVisibility(View.VISIBLE);
-											ll_top_title.setVisibility(View.VISIBLE);
+									rl_bottom.setVisibility(View.VISIBLE);
+									ll_top_title.setVisibility(View.VISIBLE);
 
 
 								}
@@ -121,9 +127,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 	public void setTittle(String title){
 		navSupport.setTittle(title);
 	}
-    @Override
-    public void onClick(View v) {
-    }
+	@Override
+	public void onClick(View v) {
+	}
 
 
 
@@ -136,8 +142,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
 	@Override
 	public void onBackPressed() {
-    	long curTimes = System.currentTimeMillis();
-    	if(curTimes-mLastPress>2000){
+		long curTimes = System.currentTimeMillis();
+		if(curTimes-mLastPress>2000){
 			mLastPress = System.currentTimeMillis();
 			Toast.makeText(this,"再按一次退出应用",Toast.LENGTH_SHORT).show();
 		}else {
@@ -147,27 +153,27 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 	}
 
 	private void checkData(){
-			Map<String, String> dataMap = new HashMap<>();
-			dataMap.put("db", sp.getString(Constance.Data_Source_name));
-			dataMap.put("function", "sp_fun_get_oprater_right");
-			dataMap.put("operater_code", sp.getString(Constance.USERNAME));
-			HttpClient client = new HttpClient();
-			client.post(Util.getUrl(), dataMap, new IGetDataListener() {
-				@Override
-				public void onSuccess(String json) {
-					try {
-						if(!TextUtils.isEmpty(json)) {
-							sp.putString(Constance.CHECKE_DATA, json);
-						}
-						//2020-05-24 01:23:54.191 2433-2590/com.shoujia.zhangshangxiu E/ checkData(): 222222{"state":"ok","data":[{"menu_right":"10600","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"10200","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"10500","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"90100","new":"1","del":"1","sh":"0","modify":"1","rz":"1","open":"1"},{"menu_right":"20200","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"70100","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"62700","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"21600","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"12000","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"11700","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"11000","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"71900","new":"0","del":"0","sh":"0","modify":"0","rz":"0","open":"0"}]}
-					}catch (Exception e){
-						e.printStackTrace();
+		Map<String, String> dataMap = new HashMap<>();
+		dataMap.put("db", sp.getString(Constance.Data_Source_name));
+		dataMap.put("function", "sp_fun_get_oprater_right");
+		dataMap.put("operater_code", sp.getString(Constance.USERNAME));
+		HttpClient client = new HttpClient();
+		client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+			@Override
+			public void onSuccess(String json) {
+				try {
+					if(!TextUtils.isEmpty(json)) {
+						sp.putString(Constance.CHECKE_DATA, json);
 					}
+					//2020-05-24 01:23:54.191 2433-2590/com.shoujia.zhangshangxiu E/ checkData(): 222222{"state":"ok","data":[{"menu_right":"10600","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"10200","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"10500","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"90100","new":"1","del":"1","sh":"0","modify":"1","rz":"1","open":"1"},{"menu_right":"20200","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"70100","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"62700","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"21600","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"12000","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"11700","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"11000","new":"1","del":"1","sh":"1","modify":"1","rz":"1","open":"1"},{"menu_right":"71900","new":"0","del":"0","sh":"0","modify":"0","rz":"0","open":"0"}]}
+				}catch (Exception e){
+					e.printStackTrace();
 				}
+			}
 
-				@Override
-				public void onFail() {
-				}
+			@Override
+			public void onFail() {
+			}
 		});
 
 	}

@@ -13,7 +13,9 @@ public class Constance {
     public static String CURRENTCP = "current_cp";//当前车牌
     public static String CURRENTCZ = "current_cz";//当前车主
     public static String JSD_ID = "jsd_id";//当前结算单
+    public static String XSD_ID = "xsd_id";//当前销售单
     public static String CUSTOMER_ID = "customer_id";//顾客id
+    public static String CUSTOMER_NAME = "customer_name";//顾客id
 
     public static String GONGLISHU = "jclc";//公里数
     public static String CHEJIAHAO = "cjhm";//车架号

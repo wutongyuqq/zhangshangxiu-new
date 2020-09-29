@@ -285,7 +285,7 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
 
     //初始化数据
     private void initData() {
-
+        getSecondInconList();
         DBManager db = DBManager.getInstanse(this);
         List<FirstIconInfo> firstIconInfos = db.queryFirstIconListData();
         if (firstIconInfos == null || firstIconInfos.size() == 0) {
@@ -294,7 +294,7 @@ public class ProjectSelectActivity extends BaseActivity implements View.OnClickL
                 @Override
                 public void onSuccess() {
                     DBManager.getInstanse(ProjectSelectActivity.this).close();
-                    getSecondInconList();
+
                 }
 
                 @Override

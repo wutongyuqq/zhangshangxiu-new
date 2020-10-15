@@ -1,8 +1,12 @@
 package com.shoujia.zhangshangxiu.home;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.shoujia.zhangshangxiu.R;
+import com.shoujia.zhangshangxiu.base.BaseFragment;
 import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.dialog.DatePickerDialog;
 import com.shoujia.zhangshangxiu.entity.CarInfo;
@@ -46,10 +51,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 	private final String TAG = "HomeActivity";
 	private NavSupport navSupport;
 	SharePreferenceManager sp;
-
+	private static String[] PERMISSIONS_STORAGE = {
+			Manifest.permission.READ_EXTERNAL_STORAGE,
+			Manifest.permission.WRITE_EXTERNAL_STORAGE};
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		//super.onSaveInstanceState(outState);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -119,7 +126,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
 					}
 				});
-
+		requestPermission();
 	}
 
 
@@ -129,6 +136,14 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 	}
 	@Override
 	public void onClick(View v) {
+	}
+
+	private void requestPermission(){
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+			if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+				ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, 1);
+			}
+		}
 	}
 
 

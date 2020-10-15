@@ -7,6 +7,8 @@ import java.security.cert.X509Certificate;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.shoujia.zhangshangxiu.crash.CrashHandler;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
@@ -42,6 +44,7 @@ public class MyApplication extends MultiDexApplication {
         //极光推送
         okHttp = new OkHttpClient();
         getDefaultSSLSocketFactory();
+        CrashHandler.getInstance().init(this);
         /*JMessageClient.setDebugMode(true);
         JMessageClient.init(this);
         JMessageClient.registerEventReceiver(new GlobalEventListener(getApplicationContext()));

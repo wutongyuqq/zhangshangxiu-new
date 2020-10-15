@@ -17,7 +17,6 @@ import com.shoujia.zhangshangxiu.base.BaseActivity;
 import com.shoujia.zhangshangxiu.entity.PartsBean;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
-import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectOneAdapter;
 import com.shoujia.zhangshangxiu.performance.adapter.KehuSelectOneAdapter;
 import com.shoujia.zhangshangxiu.performance.entity.CustomInfo;
 import com.shoujia.zhangshangxiu.support.NavSupport;
@@ -78,8 +77,11 @@ public class KeHuQueryActivity extends BaseActivity implements View.OnClickListe
                 }else if("msgCenter".equals(getIntent().getStringExtra("from"))) {
 
                 }else{
+                    if(mPartsList==null||mPartsList.size()==0){
+                        return;
+                    }
                     Intent intent = new Intent();
-                    intent.setClass(KeHuQueryActivity.this, KeHuOrderActivity.class);
+                    intent.setClass(KeHuQueryActivity.this, XsdKehuQueryActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("customer_id", mPartsList.get(position).getCustomer_id());
                     bundle.putString("customer_name", mPartsList.get(position).getCustomer_name());
@@ -102,7 +104,14 @@ public class KeHuQueryActivity extends BaseActivity implements View.OnClickListe
         super.updateUIThread(msgInt);
         if(msgInt==10){
             //oneAdapter.setList(mPartsList);
-            oneAdapter.notifyDataSetChanged();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    oneAdapter.notifyDataSetChanged();
+                }
+            });
+
         }
     }
 

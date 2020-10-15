@@ -3,6 +3,9 @@ package com.shoujia.zhangshangxiu.web;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
+import android.widget.Toast;
 
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.web.util.LAVApi;
@@ -20,7 +23,7 @@ public class NetTool {
 	private Context context;
 	SharedPreferences shared_user_info;
 	final String client_id="1056180385";//应用id
-	/*private Handler handler = new Handler(){
+	private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what){
 			case 0:
@@ -28,7 +31,7 @@ public class NetTool {
 			break;
 			}
 		};
-	};*/
+	};
 	public NetTool(Context context){
 		this.context = context;
 		shared_user_info = context.getSharedPreferences("user_info", Context.MODE_PRIVATE);
@@ -272,7 +275,7 @@ public class NetTool {
 					if(latMap!=null && latMap.get("error")!=null){
 						String errorStr = (String) latMap.get("error");
 						if(errorStr.equals("0")){
-							//handler.sendEmptyMessage(0);
+							handler.sendEmptyMessage(0);
 						}
 					}
 				}

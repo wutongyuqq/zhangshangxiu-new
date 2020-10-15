@@ -176,9 +176,9 @@ public class Util {
 				+ "</center> \r";
 		content += " 修理厂名称: " + company_name + "\r";
 		content += " 客户名称: " + cz + "\r";
-		content += " 车牌: " + cp + "\r";
-		content += " 车架号: " + cjhm + "\r";
-		content += " 车型: " + cx + "\r";
+		content += " 车    牌: " + cp + "\r";
+		content += " 车 架 号: " + cjhm + "\r";
+		content += " 车    型: " + cx + "\r";
 		content += " 进厂里程: " + jclc + "\r";
 		content += " 故障描述: " + memo + "\r";
 
@@ -196,8 +196,8 @@ public class Util {
 				content += (wxgz.length() < 14 ? ((wxgz + "              ")
 						.substring(0, 10)) : wxgz)
 						+ " "
-						+ (wxgz.length() < 10 ? ((wxgz + "              ")
-						.substring(0, 10)) : wxgz)
+						+ (xlf.length() < 10 ? ((xlf + "              ")
+						.substring(0, 10)) : xlf)
 						+ " "
 						+ (zk.length() < 10 ? ((zk + "               ").substring(0, 10)) : zk)
 						+ "\r";
@@ -226,18 +226,18 @@ public class Util {
 					totalStr = bFloat + "";
 				}
 
-				content += (pjmc + "          ").substring(0, 14)
-						+ (sl.length() < 12 ? ((sl + "          ").substring(0,
+				content += (pjmc + "                      ").substring(0, 14)
+						+ (sl.length() < 12 ? ((sl + "               ").substring(0,
 						12)) : sl)
 						+ " "
-						+ (ssj.length() < 12 ? ((ssj + "               ").substring(
+						+ (ssj.length() < 12 ? ((ssj + "                  ").substring(
 						0, 12)) : ssj) + " " + totalStr + "\r";
 			}
 			content += "小计           "
-					+ (totalsl.length() < 12 ? ((totalsl + "                 ")
+					+ (totalsl.length() < 12 ? ((totalsl + "                       ")
 					.substring(0, 12)) : totalsl)
 					+ "           "
-					+ (totalMoney.length() < 12 ? ((totalMoney + "                ").substring(
+					+ (totalMoney.length() < 12 ? ((totalMoney + "                    ").substring(
 					0, 12)) : totalMoney) + "\r";
 			content += "</FH>\r";
 			content += "--------------------------------------------\r";

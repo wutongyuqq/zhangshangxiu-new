@@ -116,6 +116,9 @@ public class XsdKehuQueryActivity extends BaseActivity implements View.OnClickLi
         listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(xsdInfos==null||xsdInfos.size()==0){
+                    return;
+                }
                 Intent intent = new Intent(XsdKehuQueryActivity.this,XsdQueryActivity.class);
                 intent.putExtra("xsdId",xsdInfos.get(position-1<0?0:position-1).getXs_id());
                 intent.putExtra("from","chakehu");
@@ -186,6 +189,9 @@ public class XsdKehuQueryActivity extends BaseActivity implements View.OnClickLi
     private void getListRealInfo() {
         if(pre_row_number!=null && pre_row_number.equals("end")){
             mHandler.sendEmptyMessage(10);
+            return;
+        }
+        if( select_date_start.getText()==null || select_date_end.getText()==null){
             return;
         }
         String startDate = select_date_start.getText().toString();

@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,7 @@ public abstract class BaseFragment extends Fragment{
 	protected String resJson = "";
 	protected MyHandler mHandler =null;
 	private static WaitProgressDialog waitingDialog;
-
+	private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
 	// 回调函数:条件 当Fragment移除时
 	@Override
 	public void onDestroyView() {
@@ -42,6 +44,28 @@ public abstract class BaseFragment extends Fragment{
 				parent.removeView(view);
 			}
 		}
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			boolean isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN);
+
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			if (isSupportHidden) {
+				ft.hide(this);
+			} else {
+				ft.show(this);
+			}
+			ft.commit();
+		}
+	}
+
+		@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(STATE_SAVE_IS_HIDDEN, isHidden());
 	}
 
 	@Override

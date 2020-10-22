@@ -1,4 +1,0 @@
-#Fri Oct 16 07:36:37 CST 2020
-base.0=H\:\\waibao\\zsx\\daima\\zhangshangxiu\\zhangshangxiu\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out
-path.0=classes.dex
-renamed.0=classes.dex

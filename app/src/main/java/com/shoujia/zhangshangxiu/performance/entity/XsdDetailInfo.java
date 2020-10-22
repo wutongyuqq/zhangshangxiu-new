@@ -42,7 +42,7 @@ public class XsdDetailInfo {
     }
 
     public String getPjbm() {
-        return pjbm;
+        return pjbm==null?"":pjbm;
     }
 
     public void setPjbm(String pjbm) {
@@ -98,7 +98,7 @@ public class XsdDetailInfo {
     }
 
     public String getBz() {
-        return bz;
+        return bz==null?"":bz;
     }
 
     public void setBz(String bz) {

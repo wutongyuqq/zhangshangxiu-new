@@ -13,10 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseActivity;
 import com.shoujia.zhangshangxiu.db.DBManager;
@@ -155,8 +159,8 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 if(xsdInfos==null||xsdInfos.size()==0){
                     return;
                 }
-                Intent intent = new Intent(KeHuOrderActivity.this,XsdQueryActivity.class);
-                intent.putExtra("xsdId",xsdInfos.get(position-1<0?0:position-1).getXs_id());
+                Intent intent = new Intent(KeHuOrderActivity.this,XsdQueryDetailActivity.class);
+                intent.putExtra("xsdId",mXsId);
                 startActivity(intent);
             }
         });
@@ -498,9 +502,15 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void toScanPage() {
+        //Intent sweep = new Intent(KeHuOrderActivity.this, CaptureActivity.class);
+        /*Intent sweep = new Intent("com.google.zxing.client.android.SCAN");
+        sweep.putExtra("SCAN_MODE", "QR_CODE_MODE");
+        startActivityForResult(sweep,1003);*/
 
-        Intent sweep = new Intent(KeHuOrderActivity.this, CaptureActivity.class);
-        startActivityForResult(sweep,1003);
+        //扫描操作
+    IntentIntegrator integrator = new IntentIntegrator(this);
+
+    integrator.initiateScan();
     }
 
 
@@ -580,6 +590,16 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 toastMsg = result;
                 mHandler.sendEmptyMessage(TOAST_MSG);
             }
+        }
+
+        // 跳转扫描页面返回扫描数据
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        //  判断返回值是否为空
+        if (scanResult != null) {
+            //返回条形码数据
+            String result = scanResult.getContents();
+            Log.d("code", result);
+            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
         }
     }
 

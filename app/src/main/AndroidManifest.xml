@@ -84,7 +84,7 @@
         </activity>
         <activity android:name="com.shoujia.zhangshangxiu.performance.XsdQueryDetailActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
 

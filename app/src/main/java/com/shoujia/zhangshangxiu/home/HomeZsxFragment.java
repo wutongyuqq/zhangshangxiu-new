@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.baidu.ocr.demo.FileUtil;
@@ -104,7 +105,7 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
 
     private static String mAccessToken;
     XszEditDialog mEditDialog;
-
+    CarInfo mInfo;
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = View.inflate(getActivity(), R.layout.fragment_home_zsx, null);
@@ -333,6 +334,8 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
             XszBean bean = (XszBean) msg.obj;
             updateUiInfo(bean);
             updateBalance(bean.getHphmStr());
+        }else if(msgInt==119){
+            setFormData(mInfo);
         }
     }
 
@@ -974,6 +977,7 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
                                     CarInfo car = new CarInfo();
                                     car.setMc(cpStr);
                                     setFormData(car);
+                                    getCpFromServer(cpStr);
                                 }
                                 }catch (Exception e){
                                     e.printStackTrace();
@@ -986,6 +990,51 @@ public class HomeZsxFragment extends BaseFragment implements View.OnClickListene
         } catch (Exception e) {
 
         }
+    }
+
+    private void getCpFromServer(String cpStr) {
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_down_cp_one");
+        dataMap.put("company_code",  sp.getString(Constance.COMP_CODE));
+        dataMap.put("cp", cpStr);
+
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                try {
+                    Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                    String state = (String) resMap.get("state");
+
+                    if ( state!=null&&"ok".equals(state)) {
+
+                        //{"state":"ok","data":[{"mc":"浙G3G821","cz":"浙G3G821","mobile":"","phone":"","vipnumber":"","customer_id":"A2018N00008","linkman":"","custom5":"","cx":"","cjhm":"","fdjhm":"","ns_date":"","openid":""}]}
+                        JSONArray dataArray = (JSONArray) resMap.get("data");
+                        List<CarInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(),CarInfo.class);
+                        if(dataList!=null&&dataList.size()>0){
+                            mInfo = dataList.get(0);
+                            mHandler.sendEmptyMessage(119);
+                        }
+
+                    }else{
+                        toastMsg = resMap.get("msg")!=null?(String) resMap.get("msg"):"网络异常";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    }
+                }catch (Exception e){
+                    toastMsg = "网络异常";
+                    mHandler.sendEmptyMessage(TOAST_MSG);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+
     }
 
     private void setFormData(CarInfo info) {

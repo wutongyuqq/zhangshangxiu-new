@@ -119,7 +119,7 @@ public class XsdKehuQueryActivity extends BaseActivity implements View.OnClickLi
                 if(xsdInfos==null||xsdInfos.size()==0){
                     return;
                 }
-                Intent intent = new Intent(XsdKehuQueryActivity.this,XsdQueryActivity.class);
+                Intent intent = new Intent(XsdKehuQueryActivity.this,XsdQueryDetailActivity.class);
                 intent.putExtra("xsdId",xsdInfos.get(position-1<0?0:position-1).getXs_id());
                 intent.putExtra("from","chakehu");
                 startActivity(intent);
@@ -252,14 +252,6 @@ public class XsdKehuQueryActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.peijianku:
-                CheckBeanInfo beanInfo4 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
-                if(beanInfo4!=null && "1".equals(beanInfo4.getNew_bill())) {
-
-                }else{
-                    toastMsg = "您没有该权限，请联系管理员";
-                    mHandler.sendEmptyMessage(TOAST_MSG);
-                    return;
-                }
                 if(TextUtils.isEmpty(mXsdId)){
                     toastMsg = "请先选择客户";
                     mHandler.sendEmptyMessage(TOAST_MSG);
@@ -270,14 +262,7 @@ public class XsdKehuQueryActivity extends BaseActivity implements View.OnClickLi
                 startActivityForResult(intent2,101);
                 break;
             case R.id.project_ck:
-                CheckBeanInfo beanInfo3 = CheckUtil.getCheckInfo(sp.getString(Constance.CHECKE_DATA),"10600");
-                if(beanInfo3!=null && "1".equals(beanInfo3.getNew_bill())) {
 
-                }else{
-                    toastMsg = "您没有该权限，请联系管理员";
-                    mHandler.sendEmptyMessage(TOAST_MSG);
-                    return;
-                }
                 startActivity(new Intent(XsdKehuQueryActivity.this,ProjectSelectActivity.class));
 
                 break;

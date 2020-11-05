@@ -137,6 +137,9 @@ public class XsdQueryDetailActivity extends BaseActivity implements View.OnClick
 
 
         View headView2 = View.inflate(this, R.layout.project_peijian_detail_head, null);
+        if("chakehu".equals(mFrom)){
+            headView2.findViewById(R.id.caozuo).setVisibility(View.GONE);
+        }
 
         listview2.addHeaderView(headView2);
     }

@@ -1,30 +1,24 @@
 package com.shoujia.zhangshangxiu.performance;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseActivity;
-import com.shoujia.zhangshangxiu.db.DBManager;
-import com.shoujia.zhangshangxiu.entity.CarInfo;
-import com.shoujia.zhangshangxiu.entity.PartsBean;
-import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
-import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectOneAdapter;
-import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectThreeAdapter;
-import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectTwoAdapter;
-import com.shoujia.zhangshangxiu.order.entity.TwoBean;
+import com.shoujia.zhangshangxiu.performance.adapter.KehuSelectOneAdapter;
+import com.shoujia.zhangshangxiu.performance.entity.CustomInfo;
 import com.shoujia.zhangshangxiu.support.NavSupport;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
@@ -39,21 +33,20 @@ import java.util.Map;
  * Created by Administrator on 2017/2/23 0023.
  * 首页
  */
-public class PeijianQueryActivity extends BaseActivity implements View.OnClickListener {
+public class GongyingshangQueryActivity extends BaseActivity implements View.OnClickListener {
 
     private SharePreferenceManager sp;
     private ListView rl_pj_one_list;
-    List<PartsBean> mPartsBeans = new ArrayList<>();
     private String  previous_xh1 = "0";
-    List<PartsBean> mPartsList=new ArrayList<>();
-    PeijianSelectOneAdapter oneAdapter;
-    View query_btn,quit_query;
+    List<CustomInfo> mPartsList=new ArrayList<>();
+    KehuSelectOneAdapter oneAdapter;
+    View query_btn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_peijian_query_select);
+        setContentView(R.layout.activity_kehu_query_select);
         initView();
         initData();
 
@@ -63,24 +56,62 @@ public class PeijianQueryActivity extends BaseActivity implements View.OnClickLi
         sp = new SharePreferenceManager(this);
         rl_pj_one_list = findViewById(R.id.rl_pj_one_list);
         query_btn = findViewById(R.id.query_btn);
-        quit_query = findViewById(R.id.quit_query);
-        oneAdapter = new PeijianSelectOneAdapter(this,mPartsBeans);
+        oneAdapter = new KehuSelectOneAdapter(this,mPartsList);
         rl_pj_one_list.setAdapter(oneAdapter);
+        new NavSupport(this,20);
         query_btn.setOnClickListener(this);
-        quit_query.setOnClickListener(this);
-        new NavSupport(this,21);
-    }
+        rl_pj_one_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if("chakehu".equals(getIntent().getStringExtra("from"))){
+                    //getJsdInfo(mPartsList.get(position).getCustomer_id(),mPartsList.get(position).getCustomer_name());
+                    Intent intent = new Intent();
+                    intent.setClass(GongyingshangQueryActivity.this, KeHuQueryOrderActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("customer_id", mPartsList.get(position).getCustomer_id());
+                    bundle.putString("customer_name", mPartsList.get(position).getCustomer_name());
+                    bundle.putString("from", "chakehu");
+                    intent.putExtras(bundle);
+                    startActivity(intent);
 
+                }else if("msgCenter".equals(getIntent().getStringExtra("from"))) {
+
+                }else{
+                    if(mPartsList==null||mPartsList.size()==0){
+                        return;
+                    }
+                    Intent intent = new Intent();
+                    intent.setClass(GongyingshangQueryActivity.this, XsdKehuQueryActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("customer_id", mPartsList.get(position).getCustomer_id());
+                    bundle.putString("customer_name", mPartsList.get(position).getCustomer_name());
+                    bundle.putString("from", "msg");
+                    intent.putExtras(bundle);
+                    setResult(100, intent);
+                    finish();
+                }
+
+            }
+        });
+    }
     //初始化数据
     private void initData() {
-        //searchData();
+       // searchData();
     }
 
     @Override
     protected void updateUIThread(int msgInt) {
         super.updateUIThread(msgInt);
         if(msgInt==10){
-            oneAdapter.setList(mPartsList);
+            //oneAdapter.setList(mPartsList);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    oneAdapter.notifyDataSetChanged();
+                }
+            });
+
         }
     }
 
@@ -90,66 +121,52 @@ public class PeijianQueryActivity extends BaseActivity implements View.OnClickLi
             case R.id.query_btn:
                 searchData();
                 break;
-            case R.id.quit_query:
-                finish();
-                break;
             default:
 
                 break;
         }
     }
 
+
     private void searchData(){
         mPartsList.clear();
-        previous_xh1="0";
         EditText contentText = findViewById(R.id.content);
         String searchName = "";
         if(contentText.getText()!=null && !TextUtils.isEmpty(contentText.getText().toString())){
             searchName = contentText.getText().toString();
         }
+        //点击软键盘外部，收起软键盘
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm != null){
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
         getListData(searchName);
     }
 
-    //{"db":"mycon1","function":"sp_fun_serch_stock","comp_code":"A","pjmc":"配件名称","operater":"superuser"}
+    //{{“db”:”mycon1”,”function”:” sp_fun_serch_customer “,”customer_name”:”客户名称”,”operater”:”superuser”}
     private void getListData(final String searchWord){
-        if(previous_xh1!=null&&previous_xh1.equals("end")){
-            mHandler.sendEmptyMessage(10);
-            return;
-        }
+
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db",sp.getString(Constance.Data_Source_name));//sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_serch_stock");
-        dataMap.put("pjmc", searchWord);
+        dataMap.put("function", "sp_fun_serch_customer");
+        dataMap.put("customer_name", searchWord);
         dataMap.put("operater", sp.getString(Constance.USERNAME));
-        dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
-        dataMap.put("Previous", previous_xh1);
 
 
         HttpClient client = new HttpClient();
         client.post(Util.getUrl(), dataMap, new IGetDataListener() {
             @Override
             public void onSuccess(String json) {
-
                 System.out.println("11111");
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
-                //previous_xh1 = (String) resMap.get("Previous");
-                if(resMap.get("Previous")==null){
-                    return;
-                }
-                if(resMap.get("Previous")!=null && resMap.get("Previous") instanceof String) {
-                    previous_xh1 = (String) resMap.get("Previous");
-                }else{
-                    previous_xh1 = ((JSONArray)resMap.get("Previous")).toJSONString();
-                }
-
                 if ("ok".equals(state)) {
                     JSONArray dataArray = (JSONArray) resMap.get("data");
-                    List<PartsBean> dataList = JSONArray.parseArray(dataArray.toJSONString(), PartsBean.class);
+                    List<CustomInfo> dataList = JSONArray.parseArray(dataArray.toJSONString(), CustomInfo.class);
                     if(dataList!=null && dataList.size()>0) {
                         mPartsList.addAll(dataList);
                     }
-                    getListData(searchWord);
+                    mHandler.sendEmptyMessage(10);
                 } else {
                     previous_xh1="end";
                     if (resMap.get("msg") != null) {

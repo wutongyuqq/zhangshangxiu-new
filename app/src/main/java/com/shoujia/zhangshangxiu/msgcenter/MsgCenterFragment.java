@@ -12,9 +12,12 @@ import com.shoujia.zhangshangxiu.R;
 import com.shoujia.zhangshangxiu.base.BaseFragment;
 import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.performance.KeHuOrderActivity;
+import com.shoujia.zhangshangxiu.performance.KeHuPeijianSelectActivity;
 import com.shoujia.zhangshangxiu.performance.KeHuQueryActivity;
 import com.shoujia.zhangshangxiu.performance.PeijianQueryActivity;
 import com.shoujia.zhangshangxiu.performance.PerformanceActivity;
+import com.shoujia.zhangshangxiu.performance.RukudanOrderActivity;
+import com.shoujia.zhangshangxiu.performance.RukudanQueryActivity;
 import com.shoujia.zhangshangxiu.performance.XsdKehuQueryActivity;
 import com.shoujia.zhangshangxiu.performance.XsdQueryActivity;
 import com.shoujia.zhangshangxiu.util.CheckUtil;
@@ -28,7 +31,7 @@ import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
 public class MsgCenterFragment extends BaseFragment implements View.OnClickListener{
 
     private View mView;
-    private TextView performance,query_order,kucunquery,myKehu,chakehu,xscx;
+    private TextView performance,query_order,kucunquery,myXiaoshoudan,chakehu,xscx,rukudan;
     private SharePreferenceManager sp;
 
     @Override
@@ -39,11 +42,13 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
         query_order = mView.findViewById(R.id.query_order);
         xscx = mView.findViewById(R.id.xscx);
         chakehu = mView.findViewById(R.id.chakehu);
-        myKehu = mView.findViewById(R.id.myKehu);
+        myXiaoshoudan = mView.findViewById(R.id.myXiaoshoudan);
+        rukudan = mView.findViewById(R.id.rukudan);
         performance.setOnClickListener(this);
         kucunquery.setOnClickListener(this);
         query_order.setOnClickListener(this);
-        myKehu.setOnClickListener(this);
+        myXiaoshoudan.setOnClickListener(this);
+        rukudan.setOnClickListener(this);
         xscx.setOnClickListener(this);
         chakehu.setOnClickListener(this);
         sp = new SharePreferenceManager(getContext());
@@ -80,10 +85,17 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
                 startActivity(new Intent(getActivity(),QueryOrderActivity.class));
                 break;
             case R.id.kucunquery:
-                startActivity(new Intent(getActivity(), PeijianQueryActivity.class));
+                Intent intent = new Intent(getActivity(), KeHuPeijianSelectActivity.class);
+                intent.putExtra("from","msgCenterFrom");
+                startActivity(intent);
                 break;
-            case R.id.myKehu:
+            case R.id.myXiaoshoudan:
                 startActivity(new Intent(getActivity(), KeHuOrderActivity.class));
+                break;
+            case R.id.rukudan:
+                Intent intent4 = new Intent(getActivity(), RukudanOrderActivity.class);
+                intent4.putExtra("from","msgCenter");
+                startActivity(intent4);
                 break;
             case R.id.chakehu:
                 Intent intent3 = new Intent(getActivity(),KeHuQueryActivity.class);
@@ -92,9 +104,9 @@ public class MsgCenterFragment extends BaseFragment implements View.OnClickListe
 
                 break;
             case R.id.xscx:
-                Intent intent = new Intent(getActivity(), XsdKehuQueryActivity.class);
-                intent.putExtra("from","chakehu");
-                startActivity(intent);
+                Intent intent2 = new Intent(getActivity(), XsdKehuQueryActivity.class);
+                intent2.putExtra("from","chakehu");
+                startActivity(intent2);
                 break;
 
             default:

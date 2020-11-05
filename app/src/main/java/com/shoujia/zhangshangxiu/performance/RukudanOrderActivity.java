@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,14 +24,10 @@ import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
-import com.shoujia.zhangshangxiu.entity.PeijianBean;
 import com.shoujia.zhangshangxiu.entity.RepairInfo;
 import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
-import com.shoujia.zhangshangxiu.order.PeijianSelectActivity;
-import com.shoujia.zhangshangxiu.order.ProjectJiesuanActivity;
-import com.shoujia.zhangshangxiu.order.ProjectPaigongActivity;
 import com.shoujia.zhangshangxiu.order.entity.OrderBeanInfo;
 import com.shoujia.zhangshangxiu.performance.adapter.KeHuPejianProAdapter;
 import com.shoujia.zhangshangxiu.performance.entity.XsdInfo;
@@ -55,7 +50,7 @@ import java.util.Map;
  * Created by Administrator on 2017/2/23 0023.
  * 首页
  */
-public class KeHuOrderActivity extends BaseActivity implements View.OnClickListener {
+public class RukudanOrderActivity extends BaseActivity implements View.OnClickListener {
     private final String TAG = "ProjectOrderActivity";
     private SharePreferenceManager sp;
     KeHuPejianProAdapter mPeijianAdapter;
@@ -117,7 +112,8 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         select_date_end = findViewById(R.id.select_date_end);
          kehumingcheng = findViewById(R.id.kehumingcheng);
          kehuzongjine = findViewById(R.id.kehuzongjine);
-
+        TextView gysView = findViewById(R.id.car_home_page2);
+        gysView.setText("供应商");
         String endDate = DateUtil.getCurrentDate();
         String startDate = endDate.substring(0,endDate.length()-2)+"01";
         select_date_end.setText(endDate);
@@ -157,7 +153,7 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 if(xsdInfos==null||xsdInfos.size()==0){
                     return;
                 }
-                Intent intent = new Intent(KeHuOrderActivity.this,XsdQueryDetailActivity.class);
+                Intent intent = new Intent(RukudanOrderActivity.this,XsdQueryDetailActivity.class);
                 intent.putExtra("xsdId",mXsId);
                 startActivity(intent);
             }
@@ -434,7 +430,7 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                     mHandler.sendEmptyMessage(TOAST_MSG);
                     return;
                 }
-                Intent intent2 = new Intent(KeHuOrderActivity.this,KeHuPeijianSelectActivity.class);
+                Intent intent2 = new Intent(RukudanOrderActivity.this,KeHuPeijianSelectActivity.class);
                 intent2.putExtra("xsdId",mXsId);
                 startActivityForResult(intent2,101);
                 break;
@@ -447,19 +443,19 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                         mHandler.sendEmptyMessage(TOAST_MSG);
                         return;
                     }
-                startActivity(new Intent(KeHuOrderActivity.this,ProjectSelectActivity.class));
+                startActivity(new Intent(RukudanOrderActivity.this,ProjectSelectActivity.class));
 
                 break;
 
             case R.id.car_home_page2:
 
-                startActivityForResult(new Intent(KeHuOrderActivity.this,KeHuQueryActivity.class),100);
+                startActivityForResult(new Intent(RukudanOrderActivity.this,GongyingshangQueryActivity.class),100);
                // overridePendingTransition(0,0);
 
 
                 break;
             case R.id.car_home_page:
-                startActivityForResult(new Intent(KeHuOrderActivity.this,KeHuOrderActivity.class),100);
+                startActivityForResult(new Intent(RukudanOrderActivity.this, RukudanOrderActivity.class),100);
                 overridePendingTransition(0,0);
                 finish();
                 break;
@@ -475,7 +471,7 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
 
 
                 isToJiesuan=true;
-                Intent intent = new Intent(KeHuOrderActivity.this,ProjectKehuJiesuanActivity.class);
+                Intent intent = new Intent(RukudanOrderActivity.this,ProjectKehuJiesuanActivity.class);
 
                 sp.putString(Constance.XSD_ID,mXsId);
                 sp.putString(Constance.CUSTOMER_NAME,mCustomerName);
@@ -517,6 +513,7 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.setPrompt("Scan a barcode");
         integrator.setCameraId(0);  // Use a specific camera of the device
+
         integrator.initiateScan();
 
 
@@ -626,10 +623,10 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         // ”customer_id”:”A2020N00001”,”operater”:”superuser”,”zje”:”0.00”,”xs_id”:””}
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db",sp.getString(Constance.Data_Source_name));//"asa_to_sql");//sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_upload_sales_order");
+        dataMap.put("function", "sp_fun_update_purchase_order");
         dataMap.put("customer_id", customer_id);
         dataMap.put("zje", "0.00");
-        dataMap.put("xs_id", "");
+        dataMap.put("jhd_id", "");
         dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
         dataMap.put("customer_name", customer_name);
         dataMap.put("operater", sp.getString(Constance.USERNAME));
@@ -643,8 +640,8 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
                 String state = (String) resMap.get("state");
                 if ("ok".equals(state)) {
-                    String xs_id = (String) resMap.get("xs_id");
-                    mXsId = xs_id;
+                    String jhd_id = (String) resMap.get("jhd_id");
+                    mXsId = jhd_id;
                     mCustomerId = customer_id;
                     mCustomerName = customer_name;
                     //sp.putString(Constance.JSD_ID,xs_id);

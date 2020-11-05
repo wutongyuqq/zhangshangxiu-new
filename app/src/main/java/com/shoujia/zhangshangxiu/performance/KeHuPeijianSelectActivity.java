@@ -45,6 +45,7 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
     List<PartsBean> mPartsBeans = new ArrayList<>();
 
     PeijianSelectOneAdapter oneAdapter;
+    private String mFrom;
 
     private int postNum = 0;
     private int totalPostNum = 0;
@@ -113,6 +114,10 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
         oneAdapter = new PeijianSelectOneAdapter(this,mPartsBeans);
         rl_pj_one_list.setAdapter(oneAdapter);
         make_sure_one.setOnClickListener(this);
+        mFrom = getIntent().getStringExtra("from");
+        if(!TextUtils.isEmpty(mFrom) && mFrom.equals("msgCenterFrom")){
+            findViewById(R.id.pro_btn_lay).setVisibility(View.GONE);
+        }
 
     }
 

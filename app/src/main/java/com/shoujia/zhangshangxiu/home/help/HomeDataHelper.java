@@ -722,6 +722,7 @@ public class HomeDataHelper extends BaseHelper {
         dataMap.put("pjbm", pjbm);
         dataMap.put("cd", cd);
         dataMap.put("ck", ck);
+        dataMap.put("Previous", partPrevious);
         if(!TextUtils.isEmpty(partPrevious)&&!partPrevious.equals("start")&&!partPrevious.equals("end")) {
             JSONArray jsonArray = JSON.parseArray(partPrevious);
             if (jsonArray != null && jsonArray.size() > 0) {

@@ -3,6 +3,7 @@
     <string name="bankCardLabel">银行卡识别</string>
     <string name="generalLabel">通用文字识别</string>
     <string name="app_name">掌上修</string>
+    <string name="action_settings">Settings</string>
     <string name="internet_ip_debug">http://121.43.148.193:5555</string>
     <string name="ip_address_debug">http://121.43.148.193:5555</string>
     <string name="internet_ip">http://121.43.148.193:5555</string>

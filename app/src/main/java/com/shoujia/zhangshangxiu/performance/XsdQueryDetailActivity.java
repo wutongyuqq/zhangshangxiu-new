@@ -78,7 +78,7 @@ public class XsdQueryDetailActivity extends BaseActivity implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_xsd_query);
+        setContentView(R.layout.activity_xsd_query2);
         mXsdId = getIntent().getStringExtra("xsdId");
         mFrom = getIntent().getStringExtra("from");
         initView();

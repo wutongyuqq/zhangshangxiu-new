@@ -58,7 +58,7 @@ public class GongyingshangQueryActivity extends BaseActivity implements View.OnC
         query_btn = findViewById(R.id.query_btn);
         oneAdapter = new KehuSelectOneAdapter(this,mPartsList);
         rl_pj_one_list.setAdapter(oneAdapter);
-        new NavSupport(this,20);
+        new NavSupport(this,24);
         query_btn.setOnClickListener(this);
         rl_pj_one_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

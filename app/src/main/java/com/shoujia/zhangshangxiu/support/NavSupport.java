@@ -91,6 +91,12 @@ public class NavSupport  implements View.OnClickListener{
         }else if(mFromType==22){
             setTittle("销售单");
             setLeftBtnVisible(true);
+        }else if(mFromType==23){
+            setTittle("入库单");
+            setLeftBtnVisible(true);
+        }else if(mFromType==24){
+            setTittle("供应商");
+            setLeftBtnVisible(true);
         }
     }
 

@@ -24,12 +24,14 @@ import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
+import com.shoujia.zhangshangxiu.entity.PartsBean;
 import com.shoujia.zhangshangxiu.entity.RepairInfo;
 import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.order.entity.OrderBeanInfo;
 import com.shoujia.zhangshangxiu.performance.adapter.KeHuPejianProAdapter;
+import com.shoujia.zhangshangxiu.performance.adapter.RukuPejianProAdapter;
 import com.shoujia.zhangshangxiu.performance.entity.XsdInfo;
 import com.shoujia.zhangshangxiu.project.ProjectSelectActivity;
 import com.shoujia.zhangshangxiu.support.InfoSupport;
@@ -53,7 +55,7 @@ import java.util.Map;
 public class RukudanOrderActivity extends BaseActivity implements View.OnClickListener {
     private final String TAG = "ProjectOrderActivity";
     private SharePreferenceManager sp;
-    KeHuPejianProAdapter mPeijianAdapter;
+    RukuPejianProAdapter mPeijianAdapter;
     ListView listview2;
     TextView wxfTotal;
     TextView zongyingshou;
@@ -100,7 +102,7 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         sp = new SharePreferenceManager(this);
-        new NavSupport(this, 22);
+        new NavSupport(this, 23);
         listview2 = findViewById(R.id.listview2);
         peijianku = findViewById(R.id.peijianku);
         car_home_page = findViewById(R.id.car_home_page);
@@ -112,13 +114,12 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
         select_date_end = findViewById(R.id.select_date_end);
          kehumingcheng = findViewById(R.id.kehumingcheng);
          kehuzongjine = findViewById(R.id.kehuzongjine);
-        TextView gysView = findViewById(R.id.car_home_page2);
-        gysView.setText("供应商");
+        car_home_page2.setText("供应商");
         String endDate = DateUtil.getCurrentDate();
         String startDate = endDate.substring(0,endDate.length()-2)+"01";
         select_date_end.setText(endDate);
         select_date_start.setText(startDate);
-
+        total_jiesuan2.setVisibility(View.INVISIBLE);
         peijianku.setOnClickListener(this);
         car_home_page.setOnClickListener(this);
         car_home_page2.setOnClickListener(this);
@@ -128,12 +129,12 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
         total_saomiao.setOnClickListener(this);
         save_kehu.setOnClickListener(this);
         infoSupport = new InfoSupport(this);
-        mPeijianAdapter = new KeHuPejianProAdapter(this, xsdInfos);
+        mPeijianAdapter = new RukuPejianProAdapter(this, xsdInfos);
         listview2.setAdapter(mPeijianAdapter);
 
 
 
-        mPeijianAdapter.setDeleteClickListener(new KeHuPejianProAdapter.DeleteClickListener() {
+        mPeijianAdapter.setDeleteClickListener(new RukuPejianProAdapter.DeleteClickListener() {
             @Override
             public void deleteClick(int position) {
 
@@ -153,9 +154,9 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
                 if(xsdInfos==null||xsdInfos.size()==0){
                     return;
                 }
-                Intent intent = new Intent(RukudanOrderActivity.this,XsdQueryDetailActivity.class);
-                intent.putExtra("xsdId",mXsId);
-                startActivity(intent);
+                if(position-1<xsdInfos.size()&&position>0) {
+                    showDeletePeijianDialog(position-1,xsdInfos.get(position-1).getPjmc(),xsdInfos.get(position-1).getXh());
+                }
             }
         });
 
@@ -172,20 +173,22 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
         tv_pjfZk = footView2.findViewById(R.id.tv_pjfZk);
         listview2.addFooterView(footView2);
         listview2.addHeaderView(headView2);
+
+
     }
 
     private void deleteXspj(String xhStr) {
 
         //{"db":"mycon1","function":"sp_fun_delete_sales_order_detail","xs_id":" AXS2008080001","xh":"1"}
         if(TextUtils.isEmpty(mXsId)) {
-            toastMsg = "请先选择客户";
+            toastMsg = "请先选择供应商";
             mHandler.sendEmptyMessage(TOAST_MSG);
             return;
         }
             Map<String, String> dataMap = new HashMap<>();
             dataMap.put("db", sp.getString(Constance.Data_Source_name));
-            dataMap.put("function", "sp_fun_delete_sales_order_detail");
-            dataMap.put("xs_id", mXsId);
+            dataMap.put("function", "sp_fun_delete_purchase_order_detail");
+            dataMap.put("jhd_id", mXsId);
             dataMap.put("xh", xhStr);
             HttpClient client = new HttpClient();
             client.post(Util.getUrl(), dataMap, new IGetDataListener() {
@@ -236,13 +239,15 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
 
 
 
-    private void showDeletePeijianDialog(final String xh) {
-        OrderDeleteDialog dialog = new OrderDeleteDialog(this, "提示");
+    private void showDeletePeijianDialog(final int index,final String name,final String xh) {
+        OrderDeleteDialog dialog = new OrderDeleteDialog(this, "您要删除"+name+"吗？");
         dialog.setOnClickListener(new OrderDeleteDialog.OnClickListener() {
             @Override
             public void rightBtnClick() {
                 deleteXspj(xh);
                 //mPeijianAdapter.notifyDataSetChanged();
+                xsdInfos.remove(index);
+                mPeijianAdapter.notifyDataSetChanged();
             }
         });
         dialog.show();
@@ -299,7 +304,7 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
             kehuzongjine.setText("总金额："+totalMoney);
             kehumingcheng.setText("客户名称："+mCustomerName);
             xiaoshoudanhao.setText("销售单号："+mXsId);
-            //getXsdInfo();
+            getXsdInfo();
 
         }else if(msgInt==10){
             mPeijianAdapter.notifyDataSetChanged();
@@ -379,8 +384,8 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
 
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_down_sales_order_detail");
-        dataMap.put("xs_id",mXsId);
+        dataMap.put("function", "sp_fun_down_purchase_order_detail");
+        dataMap.put("jhd_id",mXsId);
 
         //dataMap.put("operater_code", sp.getString(Constance.USERNAME));
         HttpClient client = new HttpClient();
@@ -426,11 +431,11 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
                     return;
                 }
                 if(TextUtils.isEmpty(mXsId)){
-                    toastMsg = "请先选择客户";
+                    toastMsg = "请先选择供应商";
                     mHandler.sendEmptyMessage(TOAST_MSG);
                     return;
                 }
-                Intent intent2 = new Intent(RukudanOrderActivity.this,KeHuPeijianSelectActivity.class);
+                Intent intent2 = new Intent(RukudanOrderActivity.this,RukudanPeijianSelectActivity.class);
                 intent2.putExtra("xsdId",mXsId);
                 startActivityForResult(intent2,101);
                 break;
@@ -511,7 +516,7 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
 
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("Scan a barcode");
+        integrator.setPrompt("请扫条形码");
         integrator.setCameraId(0);  // Use a specific camera of the device
 
         integrator.initiateScan();
@@ -525,16 +530,17 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
         // ”comp_code”:”A”,”customer_name”:”客户名称”,
         // ”customer_id”:”A2020N00001”,”operater”:”superuser”,”zje”:”0.00”,”xs_id”:””}
         if(TextUtils.isEmpty(mXsId)){
-            toastMsg = "请先选择客户";
+            toastMsg = "请先选择供应商";
             mHandler.sendEmptyMessage(TOAST_MSG);
             return;
         }
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db",sp.getString(Constance.Data_Source_name));//"asa_to_sql");//sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_upload_sales_order");
+        dataMap.put("function", "sp_fun_update_purchase_order");
         dataMap.put("customer_id", mCustomerId);
         dataMap.put("zje", totalMoney+"");
-        dataMap.put("xs_id", TextUtils.isEmpty(mXsId)?"":mXsId);
+        dataMap.put("tax", "0.0");
+        dataMap.put("jhd_id", TextUtils.isEmpty(mXsId)?"":mXsId);
         dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
         dataMap.put("customer_name", mCustomerName);
         dataMap.put("operater", sp.getString(Constance.USERNAME));
@@ -549,7 +555,7 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
                     String xs_id = (String) resMap.get("xs_id");
                     mXsId = xs_id;
                     //sp.putString(Constance.CUSTOMER_ID,customer_id);
-                    toastMsg = "销售单号："+xs_id+"保存成功";
+                    toastMsg = "入库单号："+xs_id+"保存成功";
                     mHandler.sendEmptyMessage(TOAST_MSG);
 
 
@@ -603,14 +609,118 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "您取消了扫描", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "结果: " + result.getContents(), Toast.LENGTH_LONG).show();
+                setScanPeijian(result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+    private void setScanPeijian(String scanStr) {
+        //{“db”:”mycon1”,”function”:”sp_fun_serch_stock_qrcode”,”comp_code”:”A”,
+        // ”spcode”:”配件条码字符”,”operater”:”superuser”}
+        if(TextUtils.isEmpty(scanStr)){
+            return;
+        }
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db",sp.getString(Constance.Data_Source_name));//"asa_to_sql");//sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_serch_stock_qrcode");
+        dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
+        dataMap.put("spcode", scanStr);
+        dataMap.put("operater", sp.getString(Constance.USERNAME));
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                if ("ok".equals(state)) {
+                    JSONArray dataArray = (JSONArray) resMap.get("data");
+                    List<PartsBean> dataList = JSONArray.parseArray(dataArray.toJSONString(), PartsBean.class);
+                    if(dataList!=null&&dataList.size()>0) {
+                        makeSureData(dataList.get(0));
+                    }
+                } else {
+                    if (resMap.get("msg") != null) {
+                        toastMsg = (String) resMap.get("msg");
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    } else {
+                        toastMsg = "网络异常";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+
+    }
+
+
+
+
+
+
+    private void makeSureData(PartsBean bean){
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_upload_purchase_order_detail");
+        dataMap.put("jhd_id",mXsId);
+        dataMap.put("pjbm",bean.getPjbm());
+        dataMap.put("pjmc",bean.getPjmc());
+        dataMap.put("ck",bean.getCk());
+        dataMap.put("cd",bean.getCd());
+        dataMap.put("cx",bean.getCx());
+        dataMap.put("bz","");
+        dataMap.put("dw","");
+        dataMap.put("cangwei","");
+        dataMap.put("property","");
+        dataMap.put("zt","");
+        dataMap.put("xsj",bean.getXsj());
+        dataMap.put("cb",bean.getCd());
+        dataMap.put("xh","0");
+        dataMap.put("sl",bean.getSl());
+        dataMap.put("comp_code",sp.getString(Constance.COMP_CODE));
+        dataMap.put("operater_code", sp.getString(Constance.USERNAME));
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                if ("ok".equals(state)) {
+                    getXsdInfo();
+
+                } else {
+                    if (resMap.get("msg") != null) {
+                        toastMsg = (String) resMap.get("msg");
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    } else {
+                        toastMsg = "网络异常";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+    }
+
+
 
     String mXsId = "";
     String mCustomerId = "";
@@ -621,15 +731,19 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
         //{“db”:”mycon1”,”function”:”sp_fun_update_sales_order”,
         // ”comp_code”:”A”,”customer_name”:”客户名称”,
         // ”customer_id”:”A2020N00001”,”operater”:”superuser”,”zje”:”0.00”,”xs_id”:””}
+        //{“db”:”mycon1”,”function”:”sp_fun_update_purchase_order”,
+        // ”comp_code”:”A”,”customer_name”:”客户名称”,”customer_id”:”A2020N00001”,
+        // ”operater”:”superuser”,”zje”:”0.00”,”jhd_id”:””,”tax”:”0.13”}
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db",sp.getString(Constance.Data_Source_name));//"asa_to_sql");//sp.getString(Constance.Data_Source_name));
         dataMap.put("function", "sp_fun_update_purchase_order");
         dataMap.put("customer_id", customer_id);
         dataMap.put("zje", "0.00");
-        dataMap.put("jhd_id", "");
+        dataMap.put("jhd_id", mXsId);
         dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
         dataMap.put("customer_name", customer_name);
         dataMap.put("operater", sp.getString(Constance.USERNAME));
+        dataMap.put("tax", "0");
 
 
         HttpClient client = new HttpClient();
@@ -641,7 +755,9 @@ public class RukudanOrderActivity extends BaseActivity implements View.OnClickLi
                 String state = (String) resMap.get("state");
                 if ("ok".equals(state)) {
                     String jhd_id = (String) resMap.get("jhd_id");
-                    mXsId = jhd_id;
+                    if(TextUtils.isEmpty(mXsId)) {
+                        mXsId = jhd_id;
+                    }
                     mCustomerId = customer_id;
                     mCustomerName = customer_name;
                     //sp.putString(Constance.JSD_ID,xs_id);

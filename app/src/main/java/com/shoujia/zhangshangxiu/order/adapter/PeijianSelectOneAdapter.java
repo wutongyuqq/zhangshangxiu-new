@@ -97,7 +97,7 @@ public class PeijianSelectOneAdapter extends BaseAdapter {
         PartsBean bean = listData.get(position);
         if(bean!=null){
             hodler.pj_name.setText("名称："+bean.getPjmc());
-            hodler.pj_cang.setText("仓库："+bean.getCk()+"号仓");
+            hodler.pj_cang.setText("仓库："+bean.getCk());
             hodler.pj_xsj.setText("销售价：￥"+bean.getXsj());
             hodler.pj_gg.setText("规格："+bean.getCd());
             hodler.pj_kcl.setText("库存量："+bean.getKcl());

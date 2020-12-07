@@ -25,6 +25,7 @@ import com.shoujia.zhangshangxiu.db.DBManager;
 import com.shoujia.zhangshangxiu.dialog.OrderDeleteDialog;
 import com.shoujia.zhangshangxiu.entity.CheckBeanInfo;
 import com.shoujia.zhangshangxiu.entity.OrderCarInfo;
+import com.shoujia.zhangshangxiu.entity.PartsBean;
 import com.shoujia.zhangshangxiu.entity.PeijianBean;
 import com.shoujia.zhangshangxiu.entity.RepairInfo;
 import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
@@ -134,18 +135,12 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         infoSupport = new InfoSupport(this);
         mPeijianAdapter = new KeHuPejianProAdapter(this, xsdInfos);
         listview2.setAdapter(mPeijianAdapter);
-
-
-
         mPeijianAdapter.setDeleteClickListener(new KeHuPejianProAdapter.DeleteClickListener() {
             @Override
             public void deleteClick(int position) {
-
                 if( OrderBeanInfo.allBtnUnable){
                     return;
                 }
-
-                //showDeletePeijianDialog("");
             }
 
 
@@ -178,50 +173,6 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         listview2.addHeaderView(headView2);
     }
 
-    private void deleteXspj(String xhStr) {
-
-        //{"db":"mycon1","function":"sp_fun_delete_sales_order_detail","xs_id":" AXS2008080001","xh":"1"}
-        if(TextUtils.isEmpty(mXsId)) {
-            toastMsg = "请先选择客户";
-            mHandler.sendEmptyMessage(TOAST_MSG);
-            return;
-        }
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("db", sp.getString(Constance.Data_Source_name));
-            dataMap.put("function", "sp_fun_delete_sales_order_detail");
-            dataMap.put("xs_id", mXsId);
-            dataMap.put("xh", xhStr);
-            HttpClient client = new HttpClient();
-            client.post(Util.getUrl(), dataMap, new IGetDataListener() {
-                @Override
-                public void onSuccess(String json) {
-                    try {
-                        Log.d("onSuccess--json", json);
-                        System.out.println("11111");
-                        Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
-                        String state = (String) resMap.get("state");
-                        if ("ok".equals(state)) {
-                            getJsdInfo(mCustomerId,mCustomerName);
-                        } else {
-
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-                @Override
-                public void onFail() {
-                    toastMsg = "网络连接异常";
-                    mHandler.sendEmptyMessage(TOAST_MSG);
-                }
-            });
-
-    }
-
-
-
     private void selectDate(final TextView textView){
         CustomDatePicker customDatePicker = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
             @Override
@@ -235,27 +186,6 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         },"2007-01-01 00:00","2025-12-31 00:00");
         customDatePicker.show();
     }
-
-
-
-
-
-    private void showDeletePeijianDialog(final String xh) {
-        OrderDeleteDialog dialog = new OrderDeleteDialog(this, "提示");
-        dialog.setOnClickListener(new OrderDeleteDialog.OnClickListener() {
-            @Override
-            public void rightBtnClick() {
-                deleteXspj(xh);
-                //mPeijianAdapter.notifyDataSetChanged();
-            }
-        });
-        dialog.show();
-    }
-
-
-
-
-
 
     //初始化数据
     private void initData() {
@@ -452,11 +382,8 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 break;
 
             case R.id.car_home_page2:
-
                 startActivityForResult(new Intent(KeHuOrderActivity.this,KeHuQueryActivity.class),100);
                // overridePendingTransition(0,0);
-
-
                 break;
             case R.id.car_home_page:
                 startActivityForResult(new Intent(KeHuOrderActivity.this,KeHuOrderActivity.class),100);
@@ -472,11 +399,8 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 toScanPage();
                 break;
             case R.id.total_jiesuan2:
-
-
                 isToJiesuan=true;
                 Intent intent = new Intent(KeHuOrderActivity.this,ProjectKehuJiesuanActivity.class);
-
                 sp.putString(Constance.XSD_ID,mXsId);
                 sp.putString(Constance.CUSTOMER_NAME,mCustomerName);
                 sp.putString(Constance.CUSTOMER_ID,mCustomerId);
@@ -494,34 +418,74 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 selectDate(select_date_end);
                 break;
             default:
-
                 break;
         }
     }
 
     private void toScanPage() {
-        //Intent sweep = new Intent(KeHuOrderActivity.this, CaptureActivity.class);
-        /*Intent sweep = new Intent("com.google.zxing.client.android.SCAN");
-        sweep.putExtra("SCAN_MODE", "QR_CODE_MODE");
-        startActivityForResult(sweep,1003);*/
-
+        if(TextUtils.isEmpty(mXsId)){
+            toastMsg = "请先选择客户";
+            mHandler.sendEmptyMessage(TOAST_MSG);
+            return;
+        }
         //扫描操作
-   /* IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("请扫描条码"); //底部的提示文字，设为""可以置空
-        integrator.set
-    integrator.initiateScan();*/
-
-
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("Scan a barcode");
+        integrator.setPrompt("请扫描条形码");
         integrator.setCameraId(0);  // Use a specific camera of the device
         integrator.initiateScan();
-
-
     }
 
+
+    private void makeSureData(PartsBean bean){
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db", sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_upload_sales_order_detail");
+        dataMap.put("xs_id",mXsId);
+        dataMap.put("pjbm",bean.getPjbm());
+        dataMap.put("pjmc",bean.getPjmc());
+        dataMap.put("ck",bean.getCk());
+        dataMap.put("cd",bean.getCd());
+        dataMap.put("cx",bean.getCx());
+        dataMap.put("bz","");
+        dataMap.put("dw","");
+        dataMap.put("cangwei","");
+        dataMap.put("property","");
+        dataMap.put("zt","");
+        dataMap.put("xsj",bean.getXsj());
+        dataMap.put("cb",bean.getCd());
+        dataMap.put("xh","0");
+        dataMap.put("sl",bean.getSl());
+        dataMap.put("comp_code",sp.getString(Constance.COMP_CODE));
+        dataMap.put("operater_code", sp.getString(Constance.USERNAME));
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                if ("ok".equals(state)) {
+                    getXsdInfo();
+
+                } else {
+                    if (resMap.get("msg") != null) {
+                        toastMsg = (String) resMap.get("msg");
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    } else {
+                        toastMsg = "网络异常";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+    }
 
     private void saveXsd() {
         //{“db”:”mycon1”,”function”:”sp_fun_update_sales_order”,
@@ -595,6 +559,8 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
                 return;
             }
             String result = data.getExtras().getString("result");
+
+
             if(result!=null) {
                 toastMsg = result;
                 mHandler.sendEmptyMessage(TOAST_MSG);
@@ -606,13 +572,59 @@ public class KeHuOrderActivity extends BaseActivity implements View.OnClickListe
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "取消扫描了", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "结果: " + result.getContents(), Toast.LENGTH_LONG).show();
+                setScanPeijian(result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void setScanPeijian(String scanStr) {
+        //{“db”:”mycon1”,”function”:”sp_fun_serch_stock_qrcode”,”comp_code”:”A”,
+        // ”spcode”:”配件条码字符”,”operater”:”superuser”}
+        if(TextUtils.isEmpty(scanStr)){
+            return;
+        }
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("db",sp.getString(Constance.Data_Source_name));//"asa_to_sql");//sp.getString(Constance.Data_Source_name));
+        dataMap.put("function", "sp_fun_serch_stock_qrcode");
+        dataMap.put("comp_code", sp.getString(Constance.COMP_CODE));
+        dataMap.put("spcode", scanStr);
+        dataMap.put("operater", sp.getString(Constance.USERNAME));
+        HttpClient client = new HttpClient();
+        client.post(Util.getUrl(), dataMap, new IGetDataListener() {
+            @Override
+            public void onSuccess(String json) {
+                System.out.println("11111");
+                Map<String, Object> resMap = (Map<String, Object>) JSON.parse(json);
+                String state = (String) resMap.get("state");
+                if ("ok".equals(state)) {
+                    JSONArray dataArray = (JSONArray) resMap.get("data");
+                    List<PartsBean> dataList = JSONArray.parseArray(dataArray.toJSONString(), PartsBean.class);
+                   if(dataList!=null&&dataList.size()>0) {
+                       makeSureData(dataList.get(0));
+                   }
+                } else {
+                    if (resMap.get("msg") != null) {
+                        toastMsg = (String) resMap.get("msg");
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    } else {
+                        toastMsg = "网络异常";
+                        mHandler.sendEmptyMessage(TOAST_MSG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail() {
+                toastMsg = "网络连接异常";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+            }
+        });
+
     }
 
     String mXsId = "";

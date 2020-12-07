@@ -240,6 +240,24 @@ public class PeijianSelectActivity extends BaseActivity implements View.OnClickL
         totalPostNum = 0;
         if(currentSelectInt ==0 ) {
             totalPostNum = 0;
+
+            boolean hasSelectNumZero=false;
+            String selectName="";
+            for (PartsBean bean : mPartsBeans) {
+                if (bean.isSelected()) {
+                    int sl=Integer.parseInt(bean.getKcl());
+                    if(sl<1){
+                        hasSelectNumZero=true;
+                        selectName=bean.getPjmc();
+                    }
+                }
+            }
+            if(hasSelectNumZero){
+                toastMsg="您选的"+selectName+"库存不足，请重新选择";
+                mHandler.sendEmptyMessage(TOAST_MSG);
+                return;
+            }
+
             for (PartsBean bean : mPartsBeans) {
                 if (bean.isSelected()) {
                     totalPostNum++;

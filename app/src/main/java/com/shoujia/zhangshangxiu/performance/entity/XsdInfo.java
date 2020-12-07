@@ -14,6 +14,7 @@ public class XsdInfo {
     private String sl;
     private String ssj;
     private String je;
+    private String dj;
 
     public String getXs_id() {
         return xs_id;
@@ -93,5 +94,21 @@ public class XsdInfo {
 
     public void setJe(String je) {
         this.je = je;
+    }
+
+    public String getDj() {
+        return dj;
+    }
+
+    public void setDj(String dj) {
+        this.dj = dj;
+    }
+
+    public String getXh() {
+        return xh;
+    }
+
+    public void setXh(String xh) {
+        this.xh = xh;
     }
 }

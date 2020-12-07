@@ -1,6 +1,5 @@
 package com.shoujia.zhangshangxiu.performance;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,9 +19,6 @@ import com.shoujia.zhangshangxiu.home.help.HomeDataHelper;
 import com.shoujia.zhangshangxiu.http.HttpClient;
 import com.shoujia.zhangshangxiu.http.IGetDataListener;
 import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectOneAdapter;
-import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectThreeAdapter;
-import com.shoujia.zhangshangxiu.order.adapter.PeijianSelectTwoAdapter;
-import com.shoujia.zhangshangxiu.order.entity.TwoBean;
 import com.shoujia.zhangshangxiu.support.NavSupport;
 import com.shoujia.zhangshangxiu.util.Constance;
 import com.shoujia.zhangshangxiu.util.SharePreferenceManager;
@@ -37,7 +33,7 @@ import java.util.Map;
  * Created by Administrator on 2017/2/23 0023.
  * 首页
  */
-public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnClickListener {
+public class RukudanPeijianSelectActivity extends BaseActivity implements View.OnClickListener {
 
     private SharePreferenceManager sp;
     private ListView rl_pj_one_list;
@@ -88,14 +84,14 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
                     if (headInput.getText() != null && !TextUtils.isEmpty(headInput.getText().toString().trim())) {
 
                         String contentStr = headInput.getText().toString().trim();
-                        DBManager dbManager = DBManager.getInstanse(KeHuPeijianSelectActivity.this);
+                        DBManager dbManager = DBManager.getInstanse(RukudanPeijianSelectActivity.this);
                         List<PartsBean> beans = dbManager.getPartsListData(contentStr);
                         if (beans != null && beans.size() > 0) {
                             mPartsBeans.addAll(beans);
                             mHandler.sendEmptyMessage(101);
                         }
                     } else {
-                        DBManager dbManager = DBManager.getInstanse(KeHuPeijianSelectActivity.this);
+                        DBManager dbManager = DBManager.getInstanse(RukudanPeijianSelectActivity.this);
                         List<PartsBean> beans = dbManager.getPartsListData();
                         if (beans != null && beans.size() > 0) {
                             mPartsBeans.addAll(beans);
@@ -128,7 +124,7 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
             @Override
             public void onSuccess() {
                 mPartsBeans.clear();
-                DBManager dbManager = DBManager.getInstanse(KeHuPeijianSelectActivity.this);
+                DBManager dbManager = DBManager.getInstanse(RukudanPeijianSelectActivity.this);
                 List<PartsBean> beans = dbManager.getPartsListData();
                 if(beans!=null&&beans.size()>0) {
                     mPartsBeans.addAll(beans);
@@ -182,23 +178,6 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
         totalPostNum = 0;
         if(currentSelectInt ==0 ) {
             totalPostNum = 0;
-
-            boolean hasSelectNumZero=false;
-            String selectName="";
-            for (PartsBean bean : mPartsBeans) {
-                if (bean.isSelected()) {
-                    int sl=Integer.parseInt(bean.getKcl());
-                    if(sl<1){
-                        hasSelectNumZero=true;
-                        selectName=bean.getPjmc();
-                    }
-                }
-            }
-            if(hasSelectNumZero){
-                toastMsg="您选的"+selectName+"库存不足，请重新选择";
-                mHandler.sendEmptyMessage(TOAST_MSG);
-                return;
-            }
             for (PartsBean bean : mPartsBeans) {
                 if (bean.isSelected()) {
                     totalPostNum++;
@@ -221,8 +200,8 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
     private void makeSureData(PartsBean bean){
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("db", sp.getString(Constance.Data_Source_name));
-        dataMap.put("function", "sp_fun_upload_sales_order_detail");
-        dataMap.put("xs_id",getIntent().getStringExtra("xsdId"));
+        dataMap.put("function", "sp_fun_upload_purchase_order_detail");
+        dataMap.put("jhd_id",getIntent().getStringExtra("xsdId"));
         dataMap.put("pjbm",bean.getPjbm());
         dataMap.put("pjmc",bean.getPjmc());
         dataMap.put("ck",bean.getCk());
@@ -233,7 +212,7 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
         dataMap.put("cangwei",bean.getCangwei());
         dataMap.put("property","");
         dataMap.put("zt","");
-        dataMap.put("xsj",bean.getXsj());
+        dataMap.put("dj",bean.getXsj());
         dataMap.put("cb",bean.getCd());
         dataMap.put("xh","0");
         dataMap.put("sl",bean.getSl());
@@ -249,7 +228,8 @@ public class KeHuPeijianSelectActivity extends BaseActivity implements View.OnCl
                 if ("ok".equals(state)) {
                     postNum ++;
                     if(postNum==totalPostNum) {
-                        //mHandler.sendEmptyMessage(103);
+                        toastMsg="入库成功";
+                        mHandler.sendEmptyMessage(103);
                         setResult(101);
                         finish();
                     }

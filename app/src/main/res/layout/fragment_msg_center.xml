@@ -135,7 +135,7 @@
             android:layout_weight="1"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:drawableTop="@drawable/center_work_page"
+            android:drawableTop="@drawable/check_plan"
             android:gravity="center"
             android:drawablePadding="10dp"
             android:text="入库单"/>
